@@ -1,4 +1,4 @@
-import heroebg from "../assets/images/heroe.jpg";
+import heroebg from "../assets/images/heroe2.jpg";
 import popularSearch1bg from "../assets/images/popularSearch1.jpeg";
 import popularSearch2bg from "../assets/images/popularSearch2.jpg";
 import popularSearch3bg from "../assets/images/popularsearch3.jpeg";

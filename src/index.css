@@ -42,7 +42,17 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3);
-  padding: 8rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroe-overlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+
+  padding: 0 1rem;
 }
 
 .overlay:hover {
@@ -72,6 +82,7 @@
   height: 100%;
   width: 100%;
   object-fit: cover;
+  cursor: pointer;
 }
 
 .trip div:nth-child(1) {
@@ -179,7 +190,7 @@
   top: 0;
   right: 0;
   padding-top: 2.2rem;
-  box-shadow: 1px 4px 7px 4px rgba(20,20,20,0.4);
+  box-shadow: 1px 4px 7px 4px rgba(20, 20, 20, 0.4);
   z-index: 5;
 }
 
@@ -197,7 +208,7 @@
   background: white;
   color: gray;
   border-radius: 5px;
-  box-shadow: 1px 4px 7px 4px rgba(20,20,20,0.4);
+  box-shadow: 1px 4px 7px 4px rgba(20, 20, 20, 0.4);
   z-index: 1;
 }
 
@@ -214,14 +225,14 @@
 
 .team-container:hover {
   padding: 5rem 0;
-  background-color: rgba(0,0,0,0.3);
-  transition: all 600ms ease-in-out
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: all 600ms ease-in-out;
 }
 
 .overl {
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   padding: 8rem 0;
 }
 
@@ -231,35 +242,35 @@
   justify-content: center;
 }
 
- .item p {
+.item p {
   margin: 0 1.5rem;
 }
 
- .item:nth-child(even) {
+.item:nth-child(even) {
   flex-direction: row-reverse;
 }
 
- .item .left {
+.item .left {
   flex: 1;
   padding: 0 1rem;
 }
 
- .item .right {
+.item .right {
   flex: 1;
 }
 
- .item .left .img img {
+.item .left .img img {
   transition: var(--transition);
 }
 
- .item:hover .left .img img {
+.item:hover .left .img img {
   transform: scale(1.1);
   z-index: 1;
 }
 
 @layer base {
   body {
-    @apply bg-gray ;
+    @apply bg-gray;
   }
 
   img {

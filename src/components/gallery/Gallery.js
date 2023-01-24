@@ -73,7 +73,7 @@ const Gallery = () => {
     <section className="flex flex-col items-center mt-16">
       <h1 className="text-4xl mb-4">Our gallery</h1>
       {open && (
-        <div className="slider">
+        <div className="slider" onClick={() => setOpen(false)}>
           <div
             className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white absolute top-5 right-5"
             onClick={() => setOpen(false)}
@@ -110,6 +110,7 @@ const Gallery = () => {
                   onClick={() => handleOpen(index)}
                   src={photo.src}
                   alt="gallery"
+                  className="hover:scale-105 duration-500"
                 />
               </div>
             ))}

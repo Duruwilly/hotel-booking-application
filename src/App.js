@@ -3,8 +3,6 @@ import "./App.css";
 import FooterList from "./components/footer/FooterList";
 import Navbar from "./components/navbar/Navbar";
 import { useMediaQueriesContext } from "./context/MediaQueryContext";
-import Hotel from "./pages/hotel/Hotel";
-import List from "./pages/list/List";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import {
@@ -17,6 +15,8 @@ import {
   TravelTeam1,
   TravelTeam2,
   TravelTeam3,
+  SingleHotel,
+  HotelsList
 } from "./pages";
 import { ScrollToTop } from "./components/scrollToTop/ScrollToTop";
 
@@ -37,8 +37,8 @@ function App() {
       <div onClick={closeModal}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/hotels" element={<List />} />
-          <Route path="/hotels/:id" element={<Hotel />} />
+          <Route path="/hotel" element={<SingleHotel />} />
+          <Route path="/destinations/:id" element={<HotelsList />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/about-us/:id" element={<BookWithUs />} />
           <Route path="/reviews" element={<Reviews />} />

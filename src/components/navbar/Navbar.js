@@ -65,7 +65,7 @@ const Navbar = () => {
   return (
     <>
       <header
-        className={`h-24 px-4 bg-primary flex justify-center ${stickyClass} text-whit`}
+        className={`h-24 px-4 bg-primary flex justify-center ${stickyClass}`}
       >
         <div className="w-full max-w-screen-lg flex justify-between items-center">
           <div className="lg:hidden flex items-center justify-center gap-3">
@@ -80,7 +80,7 @@ const Navbar = () => {
             </div>
           </div>
           
-          <div className="hidden lg:flex items-center gap-2 text-gray-200">
+          <div className="hidden lg:flex items-center gap-2 text-gray-300 text-sm">
             <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900">
               <BsFillTelephoneFill className="text-white" />
             </div>
@@ -99,7 +99,7 @@ const Navbar = () => {
             />
           </Link>
           <div className="flex gap-3 justify-between items-center">
-            <div className="text-gray-200 hidden lg:block">
+            <div className="text-gray-300 text-sm hidden lg:block">
               <Link to="/register" className="px-4 border-r-2 border-white">
                 Register
               </Link>

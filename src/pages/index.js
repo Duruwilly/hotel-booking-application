@@ -1,5 +1,6 @@
 export { default as Home } from "./home/Home"
-export { default as Hotel } from "./hotel/Hotel"
+export { default as SingleHotel } from "./SingleHotel/SingleHotel"
+export { default as HotelsList } from "./HotelsList/HotelsList"
 export { default as AboutUs } from './AboutUs/AboutUs'
 export { default as BookWithUs } from "./AboutUs/BookWithUs"
 export { default as Reviews } from "./AboutUs/Reviews"
