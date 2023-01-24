@@ -62,6 +62,7 @@ const Heroe = () => {
 
   return (
     <div style={heroeBg}>
+      <div className="heroe-overlay">
       {matcheState ? (
         <p className="py-32 text-gray-100 text-center md:text-[2.2rem] lg:text-[2.5rem]">
           Helping you find and book the world's
@@ -202,6 +203,7 @@ const Heroe = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };
