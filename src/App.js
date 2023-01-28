@@ -16,18 +16,31 @@ import {
   TravelTeam2,
   TravelTeam3,
   SingleHotel,
-  HotelsList
+  HotelsList,
 } from "./pages";
 import { ScrollToTop } from "./components/scrollToTop/ScrollToTop";
 
 function App() {
-  const { setDropDownHeader, setOpenRoomOptions, setOpenDate } =
-    useMediaQueriesContext();
+  const {
+    setDropdownHeader,
+    dropdownHeader,
+    setOpenRoomOptions,
+    setOpenDate,
+    openDate,
+    openRoomOptions,
+    setHotelDropdownHeader,
+    hotelDropdownHeader,
+  } = useMediaQueriesContext();
 
   const closeModal = () => {
-    setDropDownHeader(false);
-    setOpenDate(false);
-    setOpenRoomOptions(false);
+    setDropdownHeader(!dropdownHeader);
+    setHotelDropdownHeader(!hotelDropdownHeader);
+    // if (openDate) {
+    //   setOpenDate(false);
+    // }
+    // if (openRoomOptions) {
+    //   setOpenRoomOptions(false);
+    // }
   };
 
   return (

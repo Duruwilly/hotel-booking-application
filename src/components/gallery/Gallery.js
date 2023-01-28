@@ -73,21 +73,21 @@ const Gallery = () => {
     <section className="flex flex-col items-center mt-16">
       <h1 className="text-4xl mb-4">Our gallery</h1>
       {open && (
-        <div className="slider" onClick={() => setOpen(false)}>
+        <div className="slider">
           <div
-            className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white absolute top-5 right-5"
+            className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white absolute top-5 right-5 cursor-pointer"
             onClick={() => setOpen(false)}
           >
             <AiOutlineClose />
           </div>
           <div
-            className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white absolute left-5 m-"
+            className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white absolute left-5 cursor-pointer"
             onClick={() => handleMove("l")}
           >
             <AiOutlineArrowLeft className="" />
           </div>
           <div
-            className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white absolute right-5 m-"
+            className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white absolute right-5 cursor-pointer"
             onClick={() => handleMove("r")}
           >
             <AiOutlineArrowRight />

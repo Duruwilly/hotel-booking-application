@@ -1,12 +1,34 @@
 import { useContext, createContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const MediaQueryMatches = createContext();
 
 export const MediaQueryContext = ({ children }) => {
-  const [dropdownHeader, setDropDownHeader] = useState(false);
+  const [dropdownHeader, setDropdownHeader] = useState(false);
+
+  const [hotelDropdownHeader, setHotelDropdownHeader] = useState(false);
 
   const [openDate, setOpenDate] = useState(false);
   const [openRoomOptions, setOpenRoomOptions] = useState(false);
+  const [destination, setDestination] = useState('')
+
+  const [error, setError] = useState(false)
+
+  const [loading, setLoading] = useState(true)
+
+  const [date, setDate] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
+
+  const [roomOptions, setRoomOptions] = useState({
+    adult: 1,
+    children: 0,
+    rooms: 1,
+  });
 
   const [matches, setMatches] = useState(
     window.matchMedia("(min-width: 1050px)").matches
@@ -25,13 +47,23 @@ export const MediaQueryContext = ({ children }) => {
   }, []);
 
   const toggleDate = () => {
-    setOpenDate(!openDate);
+    setOpenDate(prev => !prev);
     setOpenRoomOptions(false);
   };
 
   const toggleRoomOptions = () => {
-    setOpenRoomOptions(!openRoomOptions);
+    setOpenRoomOptions(prev => !prev);
     setOpenDate(false);
+  };
+
+  const handleRoomOption = (name, operation) => {
+    setRoomOptions((prev) => {
+      return {
+        ...prev,
+        [name]:
+          operation === "i" ? roomOptions[name] + 1 : roomOptions[name] - 1,
+      };
+    });
   };
 
   return (
@@ -39,13 +71,26 @@ export const MediaQueryContext = ({ children }) => {
       value={{
         matches,
         dropdownHeader,
-        setDropDownHeader,
+        setDropdownHeader,
         toggleDate,
         toggleRoomOptions,
         setOpenRoomOptions,
         setOpenDate,
         openDate,
-        openRoomOptions
+        openRoomOptions,
+        hotelDropdownHeader,
+        setHotelDropdownHeader,
+        handleRoomOption,
+        roomOptions,
+        setRoomOptions,
+        date,
+        setDate,
+        destination,
+        setDestination,
+        error,
+        setError,
+        loading,
+        setLoading
       }}
     >
       {children}
