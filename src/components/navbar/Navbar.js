@@ -13,7 +13,7 @@ import MobileNav from "./MobileNav";
 const Navbar = () => {
   const location = useLocation()
   
-  const { matches, setDropDownHeader } = useMediaQueriesContext();
+  const { matches, setDropdownHeader } = useMediaQueriesContext();
 
   const [stickyClass, setStickyClass] = useState("relative");
 
@@ -56,7 +56,7 @@ const Navbar = () => {
   };
 
   const toggleDropDownHeader = () => {
-    setDropDownHeader(true);
+    setDropdownHeader(true);
     window.scrollTo(0, 0);
   };
 

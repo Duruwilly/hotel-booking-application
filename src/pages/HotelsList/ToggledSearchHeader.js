@@ -51,6 +51,7 @@ const ToggledSearchHeader = ({
                   type="text"
                   placeholder="Select destination"
                   className="pl-8 w-full placeholder:text-gray-600"
+                  value={destination}
                 />
               </div>
               <div className="flex justify-center items-center gap-6 px-4">
