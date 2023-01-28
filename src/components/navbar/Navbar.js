@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BsFillHeartFill, BsFillTelephoneFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/logo/logo2.png";
 import Header from "../header/Header";
 import { FaBars } from "react-icons/fa";
@@ -11,6 +11,8 @@ import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import MobileNav from "./MobileNav";
 
 const Navbar = () => {
+  const location = useLocation()
+  
   const { matches, setDropDownHeader } = useMediaQueriesContext();
 
   const [stickyClass, setStickyClass] = useState("relative");
@@ -67,7 +69,7 @@ const Navbar = () => {
       <header
         className={`h-24 px-4 bg-primary flex justify-center ${stickyClass}`}
       >
-        <div className="w-full max-w-screen-lg flex justify-between items-center">
+        <div className="w-full max-w-screen-xl flex justify-between items-center">
           <div className="lg:hidden flex items-center justify-center gap-3">
             <FaBars className="text-white text-2xl" onClick={toggleMobileNav} />
             <div
@@ -121,7 +123,7 @@ const Navbar = () => {
       {/* from min-width 1050 and above, remove the search from the heroe and fix it at the top */}
       {matches && <FixedHeroe />}
       {/* from min-width 1050 and above, display the header component else replace it with the demo search component  */}
-      {matches ? <Header /> : <FixedHeader />}
+      {matches ? <Header /> : location.pathname !== "/destinations/abc" ? <FixedHeader /> : null}
     </>
   );
 };

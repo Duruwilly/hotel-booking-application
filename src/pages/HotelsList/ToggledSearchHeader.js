@@ -3,34 +3,46 @@ import { CiSearch } from "react-icons/ci";
 import { BsCalendarEvent } from "react-icons/bs";
 import { RxPerson } from "react-icons/rx";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
-import Button from "../button/SearchButton";
+import Button from "../../components/button/SearchButton";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { AiFillCloseCircle } from "react-icons/ai";
 
-const FixedHeader = () => {
+const ToggledSearchHeader = ({
+  date,
+  setDate,
+  destination,
+  setDestination,
+  roomOptions,
+  setRoomOptions,
+}) => {
   const {
-    dropdownHeader,
-    setDropdownHeader,
+    hotelDropdownHeader,
+    setHotelDropdownHeader,
     openDate,
     openRoomOptions,
     toggleDate,
     toggleRoomOptions,
     matches,
-    destination,
-    setDestination,
-    handleRoomOption,
-    roomOptions,
-    setRoomOptions,
-    date,
-    setDate,
-    error,
   } = useMediaQueriesContext();
+
+    const handleRoomOption = (name, operation) => {
+      setRoomOptions((prev) => {
+        return {
+          ...prev,
+          [name]:
+            operation === "i" ? roomOptions[name] + 1 : roomOptions[name] - 1,
+        };
+      });
+    };
 
   return (
     <>
-      {!dropdownHeader ? (
-        <div className="" onClick={() => setDropdownHeader(!dropdownHeader)}>
+      {!hotelDropdownHeader ? (
+        <div
+          className=""
+          onClick={() => setHotelDropdownHeader(!hotelDropdownHeader)}
+        >
           <div className="w-full ">
             <div className="h-16 bg-white flex items-center justify-between px-4 py-3 w-full">
               <div className="searchItem">
@@ -64,7 +76,6 @@ const FixedHeader = () => {
                   className="pl-8 w-full placeholder:text-gray-600 py-4"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  required
                 />
               </div>
             </div>
@@ -195,4 +206,4 @@ const FixedHeader = () => {
   );
 };
 
-export default FixedHeader;
+export default ToggledSearchHeader;

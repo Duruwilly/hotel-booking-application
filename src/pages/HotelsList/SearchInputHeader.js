@@ -1,51 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { BsCalendarEvent } from "react-icons/bs";
 import { RxPerson } from "react-icons/rx";
-import Button from "../button/SearchButton";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { AiFillCloseCircle } from "react-icons/ai";
+import Button from "../../components/button/SearchButton";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 
-const FixedHeroe = () => {
-  const {
-    openDate,
-    setOpenDate,
-    toggleDate,
-    toggleRoomOptions,
-    date,
-    setDate,
-    roomOptions,
-    setRoomOptions,
-    openRoomOptions,
-    setOpenRoomOptions,
-    destination,
-    setDestination,
-    handleRoomOption,
-    error,
-  } = useMediaQueriesContext();
+const SearchInputHeader = ({
+  date,
+  setDate,
+  destination,
+  setDestination,
+  roomOptions,
+  setRoomOptions,
+}) => {
+  // const { setDate, setDestination, setRoomOptions, handleRoomOption } =
+  //   useMediaQueriesContext();
   const [stickyClass, setStickyClass] = useState("hidden");
+  const [openDate, setOpenDate] = useState(false);
+  const [openRoomOptions, setOpenRoomOptions] = useState(false);
 
-  useEffect(() => {
-    window.addEventListener("scroll", stickNavbar);
+  const handleRoomOption = (name, operation) => {
+    setRoomOptions((prev) => {
+      return {
+        ...prev,
+        [name]:
+          operation === "i" ? roomOptions[name] + 1 : roomOptions[name] - 1,
+      };
+    });
+  };
 
-    return () => {
-      window.removeEventListener("scroll", stickNavbar);
-    };
-  }, []);
+  const toggleDate = () => {
+    setOpenDate(!openDate);
+    setOpenRoomOptions(false);
+  };
 
-  const stickNavbar = () => {
-    if (window !== undefined) {
-      let windowHeight = window.scrollY;
-      windowHeight > 600
-        ? setStickyClass("sticky top-[95px] left-0 z-20")
-        : setStickyClass("hidden");
-    }
+  const toggleRoomOptions = () => {
+    setOpenRoomOptions(!openRoomOptions);
+    setOpenDate(false);
   };
 
   return (
-    <div className={`w-full ${stickyClass}`}>
+    <div className="w-full sticky top-0 left-0 z-20">
       <div className="w-full ">
         <div className="h-20 bg-white flex items-center justify-around py-3 border-b border-black w-full">
           <div className="searchItem">
@@ -54,9 +52,8 @@ const FixedHeroe = () => {
               type="text"
               placeholder="Select destination"
               className="pl-8 w-full placeholder:text-gray-600 py-[1.65rem]"
-              value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              required
+              value={destination}
             />
           </div>
           <div className="searchItem">
@@ -177,4 +174,4 @@ const FixedHeroe = () => {
   );
 };
 
-export default FixedHeroe;
+export default SearchInputHeader;
