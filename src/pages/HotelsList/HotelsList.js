@@ -11,13 +11,11 @@ import ToggledSearchHeader from "./ToggledSearchHeader";
 import Spinner from "../../components/Spinner/Spinner";
 
 const HotelsList = () => {
-  const { matches, loading } = useMediaQueriesContext();
+  const { matches, loading, setHotelDropdownHeader } = useMediaQueriesContext();
   const location = useLocation();
   const [destination, setDestination] = useState(location.state.destination);
   const [date, setDate] = useState(location.state.date);
   const [roomOptions, setRoomOptions] = useState(location.state.roomOptions);
-
-  console.log(roomOptions);
   return (
     <>
       {matches ? (
@@ -58,7 +56,7 @@ const HotelsList = () => {
                 </div>
               </li>
             </ul>
-            <div className="mt-5">
+            <div className="mt-5" onClick={() => setHotelDropdownHeader(false)}>
               <div className="bg-white border border-gray-200 flex flex-col hotelList-card-container mb-7">
                 <div style={{ flex: 3, position: "relative" }}>
                   <Link to="hotel">

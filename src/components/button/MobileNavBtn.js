@@ -1,6 +1,6 @@
 import React from "react";
 
-const RegisterBtn = ({ text }) => {
+export const MobileNavBtn = ({ text }) => {
   return (
     <button
       className="w-full py-3 text-gray-300 rounded-sm"
@@ -10,5 +10,3 @@ const RegisterBtn = ({ text }) => {
     </button>
   );
 };
-
-export default RegisterBtn;

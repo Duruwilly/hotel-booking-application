@@ -27,19 +27,19 @@ const Footer = () => {
           </Link>
         </div>
         <div className="flex justify-center gap-10 text-white text-xl mt-6">
-          <a href="https://instagram.com/theprincewillduru">
+          <a target="_blank" href="https://instagram.com/theprincewillduru">
             <FaInstagram />
           </a>
-          <a href="https://twitter.com/PrincewillDuruU">
+          <a target="_blank"  href="https://twitter.com/PrincewillDuruU">
             <FaTwitter />
           </a>
-          <a href="#">
+          <a target="_blank"  href="#">
             <FaPinterestP />
           </a>
-          <a href="https://facebook.com/prince.duru.355">
+          <a target="_blank"  href="https://facebook.com/prince.duru.355">
             <FaFacebookF />
           </a>
-          <a href="#">
+          <a target="_blank"  href="#">
             <FaYoutube />
           </a>
         </div>

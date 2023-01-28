@@ -39,6 +39,8 @@ const FixedHeader = () => {
                   type="text"
                   placeholder="Select destination"
                   className="pl-8 w-full placeholder:text-gray-600"
+                  value={destination}
+                  readOnly
                 />
               </div>
               <div className="flex justify-center items-center gap-6 px-4">
@@ -64,7 +66,6 @@ const FixedHeader = () => {
                   className="pl-8 w-full placeholder:text-gray-600 py-4"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  required
                 />
               </div>
             </div>
@@ -112,7 +113,7 @@ const FixedHeader = () => {
                   >
                     {`${roomOptions.adult} ${
                       roomOptions.adult === 1 ? `adult` : `adults`
-                    } . ${roomOptions.children} children . ${
+                    } - ${roomOptions.children} children - ${
                       roomOptions.rooms
                     } ${roomOptions.rooms === 1 ? `room` : `rooms`}`}
                   </span>

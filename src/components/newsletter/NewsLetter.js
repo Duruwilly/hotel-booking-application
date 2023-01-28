@@ -4,7 +4,7 @@ const NewsLetter = () => {
   return (
     <div className="flex bg-primary justify-center py-8">
       <div className="flex items-center justify-center flex-col w-full px-4">
-        <h1 className="text-center text-white text-2xl">Sign up to our newsletter</h1>
+        <h1 className="text-center text-white text-xl">Sign up to our newsletter</h1>
         <p className="text-sm text-center text-white">Save money while you enjoy the best deals</p>
         <div className="mt-4">
           <input

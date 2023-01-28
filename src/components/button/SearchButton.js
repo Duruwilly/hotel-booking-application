@@ -14,7 +14,7 @@ const Button = () => {
   };
 
   return (
-    <button onClick={handleSearch} className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-semibold rounded-[3px]">
+    <button onClick={handleSearch} className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-semibold rounded-[3px] cursor-pointer" disabled={destination === ""}>
       search
     </button>
   );

@@ -11,8 +11,8 @@ import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import MobileNav from "./MobileNav";
 
 const Navbar = () => {
-  const location = useLocation()
-  
+  const location = useLocation();
+
   const { matches, setDropdownHeader } = useMediaQueriesContext();
 
   const [stickyClass, setStickyClass] = useState("relative");
@@ -81,7 +81,7 @@ const Navbar = () => {
               />
             </div>
           </div>
-          
+
           <div className="hidden lg:flex items-center gap-2 text-gray-300 text-sm">
             <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900">
               <BsFillTelephoneFill className="text-white" />
@@ -114,7 +114,11 @@ const Navbar = () => {
             </div>
           </div>
           {/* mobile nav */}
-          <div className={`${mobileNav ? "left0" : "left-100"} lg:hidden mobile-wrapper`}>
+          <div
+            className={`${
+              mobileNav ? "left0" : "left-100"
+            } lg:hidden mobile-wrapper`}
+          >
             <div className="mobile-overlay" onClick={toggleMobileNav}></div>
             <MobileNav toggle={toggleMobileNav} />
           </div>
@@ -123,7 +127,11 @@ const Navbar = () => {
       {/* from min-width 1050 and above, remove the search from the heroe and fix it at the top */}
       {matches && <FixedHeroe />}
       {/* from min-width 1050 and above, display the header component else replace it with the demo search component  */}
-      {matches ? <Header /> : location.pathname !== "/destinations/abc" ? <FixedHeader /> : null}
+      {matches ? (
+        <Header />
+      ) : location.pathname !== "/destinations/abc" ? (
+        <FixedHeader />
+      ) : null}
     </>
   );
 };

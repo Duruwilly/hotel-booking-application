@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import RegisterBtn from "../button/RegisterBtn";
 import { FaTimes } from "react-icons/fa";
+import { MobileNavBtn } from "../button/MobileNavBtn";
 
 const MobileNav = ({ toggle }) => {
   return (
@@ -14,11 +14,11 @@ const MobileNav = ({ toggle }) => {
       <div className=" mt-8" onClick={toggle}>
         <div className="pb-5">
           <Link to="/register">
-            <RegisterBtn text="Register" />
+            <MobileNavBtn text="Register" />
           </Link>
         </div>
         <Link to="/login">
-          <RegisterBtn text="Login" />
+          <MobileNavBtn text="Login" />
         </Link>
         <div className="text-gray-300 flex flex-col justify-center items-center py-5">
           <Link to="/" className="py-5 text-center">

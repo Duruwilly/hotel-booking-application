@@ -17,6 +17,8 @@ import {
   TravelTeam3,
   SingleHotel,
   HotelsList,
+  Register,
+  Login
 } from "./pages";
 import { ScrollToTop } from "./components/scrollToTop/ScrollToTop";
 
@@ -33,8 +35,8 @@ function App() {
   } = useMediaQueriesContext();
 
   const closeModal = () => {
-    setDropdownHeader(!dropdownHeader);
-    setHotelDropdownHeader(!hotelDropdownHeader);
+    setDropdownHeader(false);
+    // setHotelDropdownHeader(false);
     // if (openDate) {
     //   setOpenDate(false);
     // }
@@ -50,7 +52,7 @@ function App() {
       <div onClick={closeModal}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/hotel" element={<SingleHotel />} />
+          <Route path="/hotel/:hotelName/:location/:hotelId" element={<SingleHotel />} />
           <Route path="/destinations/:id" element={<HotelsList />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/about-us/:id" element={<BookWithUs />} />
@@ -60,6 +62,8 @@ function App() {
           <Route path="/travel-team/laeti-laura" element={<TravelTeam1 />} />
           <Route path="/travel-team/laura-laura" element={<TravelTeam2 />} />
           <Route path="/travel-team/prince-will" element={<TravelTeam3 />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
       <div onClick={closeModal}>
