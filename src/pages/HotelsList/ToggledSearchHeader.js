@@ -51,6 +51,8 @@ const ToggledSearchHeader = ({
                   type="text"
                   placeholder="Select destination"
                   className="pl-8 w-full placeholder:text-gray-600"
+                  value={destination}
+                  readOnly
                 />
               </div>
               <div className="flex justify-center items-center gap-6 px-4">
@@ -123,7 +125,7 @@ const ToggledSearchHeader = ({
                   >
                     {`${roomOptions.adult} ${
                       roomOptions.adult === 1 ? `adult` : `adults`
-                    } . ${roomOptions.children} children . ${
+                    } - ${roomOptions.children} children - ${
                       roomOptions.rooms
                     } ${roomOptions.rooms === 1 ? `room` : `rooms`}`}
                   </span>

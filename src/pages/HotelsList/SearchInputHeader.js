@@ -94,7 +94,7 @@ const SearchInputHeader = ({
             >
               {`${roomOptions.adult} ${
                 roomOptions.adult === 1 ? `adult` : `adults`
-              } . ${roomOptions.children} children . ${roomOptions.rooms} ${
+              } - ${roomOptions.children} children - ${roomOptions.rooms} ${
                 roomOptions.rooms === 1 ? `room` : `rooms`
               }`}
             </span>

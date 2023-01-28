@@ -11,7 +11,7 @@ const PhoneContact = () => {
         <div className="flex items-center gap-3">
           <BsFillTelephoneFill />
           <p className="text-sm font-semibold">
-            call a Will Trip travel specialist on{" "}
+            Call a Will Trip travel specialist on{" "}
             <a href="tel:+2349000000000" className="border-b-2 border-white">
               +234 900 0000 000
             </a>

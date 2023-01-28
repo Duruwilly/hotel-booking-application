@@ -56,7 +56,6 @@ const FixedHeroe = () => {
               className="pl-8 w-full placeholder:text-gray-600 py-[1.65rem]"
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              required
             />
           </div>
           <div className="searchItem">
@@ -97,7 +96,7 @@ const FixedHeroe = () => {
             >
               {`${roomOptions.adult} ${
                 roomOptions.adult === 1 ? `adult` : `adults`
-              } . ${roomOptions.children} children . ${roomOptions.rooms} ${
+              } - ${roomOptions.children} children - ${roomOptions.rooms} ${
                 roomOptions.rooms === 1 ? `room` : `rooms`
               }`}
             </span>
