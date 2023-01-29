@@ -16,6 +16,11 @@ const SingleHotel = () => {
     "These 22sq rooms have their own unique charm, with large georgian windows, original cornices and soft-hued fabrics. Situated on lower floors of the building, these rooms overlook the idyllic street or garden. Retro touches such as deco lampshades and rotary dial phones add character, the queen-size bed is a delight and the bathroom’s walk-in shower, classic metro tiles and Carrara marble details are a joy. There’s also a TV, desk, Bramley toiletries and tea- and coffee-making kit (on request)"
   );
   // console.log(roomOptions.children+=roomOptions.adult);
+
+  let num1 = roomOptions.children
+  let num2 = roomOptions.adult
+
+  console.log(num1+num2);
   return (
     <>
       {/* {matches ? (
@@ -70,7 +75,7 @@ const SingleHotel = () => {
               >
                 <h1 className="pt-5 text-2xl font-semibold">5 Star Room</h1>
                 <p className="py-3">
-                  {`${(roomOptions.adult += roomOptions.children)} guest`}
+                  {`${(roomOptions.adult + roomOptions.children)} ${roomOptions.adult + roomOptions.children > 1 ? `guests` : `guest`}`}
                 </p>
                 <p className="pr-4 font-normal text-sm leading-relaxed">
                   {!open ? description.slice(0, 200) + "...." : description}
