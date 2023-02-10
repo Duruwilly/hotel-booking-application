@@ -18,7 +18,9 @@ import {
   SingleHotel,
   HotelsList,
   Register,
-  Login
+  Login,
+  Basket,
+  PaymentPage
 } from "./pages";
 import { ScrollToTop } from "./components/scrollToTop/ScrollToTop";
 
@@ -53,7 +55,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/hotel/:hotelName/:location/:hotelId" element={<SingleHotel />} />
-          <Route path="/destinations/:id" element={<HotelsList />} />
+          <Route path="/destinations/:id/hotels" element={<HotelsList />} />
+          <Route path="/destinations/hotels" element={<HotelsList />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/about-us/:id" element={<BookWithUs />} />
           <Route path="/reviews" element={<Reviews />} />
@@ -64,6 +67,8 @@ function App() {
           <Route path="/travel-team/prince-will" element={<TravelTeam3 />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/basket" element={<Basket />} />
+          <Route path="/payment" element={<PaymentPage />} />
         </Routes>
       </div>
       <div onClick={closeModal}>

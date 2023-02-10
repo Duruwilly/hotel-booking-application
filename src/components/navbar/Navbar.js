@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BsFillHeartFill, BsFillTelephoneFill } from "react-icons/bs";
+import { BsBagCheck, BsFillHeartFill, BsFillTelephoneFill } from "react-icons/bs";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/logo/logo2.png";
 import Header from "../header/Header";
@@ -9,11 +9,15 @@ import FixedHeroe from "../heroe/FixedHeroe";
 import FixedHeader from "../header/FixedHeader";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import MobileNav from "./MobileNav";
+import { useAuthContext } from "../../context/AuthContext";
+import { IoIosArrowDown } from "react-icons/io";
 
 const Navbar = () => {
   const location = useLocation();
 
-  const { matches, setDropdownHeader } = useMediaQueriesContext();
+  const { matches, setDropdownHeader, destination } = useMediaQueriesContext();
+
+  const { user } = useAuthContext();
 
   const [stickyClass, setStickyClass] = useState("relative");
 
@@ -101,17 +105,32 @@ const Navbar = () => {
             />
           </Link>
           <div className="flex gap-3 justify-between items-center">
-            <div className="text-gray-300 text-sm hidden lg:block">
-              <Link to="/register" className="px-4 border-r-2 border-white">
-                Register
-              </Link>
-              <Link to="/login" className="px-4">
-                Login
-              </Link>
-            </div>
-            <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white">
+            {user ? (
+              <div className="text-gray-300 text-sm hidden lg:block relative cursor-pointer dropdown">
+                <div className="flex justify-center items-center gap-1">
+                  <span className="capitalize">{`hi, ${user.fullname}`}</span>
+                  <IoIosArrowDown className="text-inherit text-xl" />
+                </div>
+                <ul>
+                  <li>logout</li>
+                </ul>
+              </div>
+            ) : (
+              <div className="text-gray-300 text-sm hidden lg:block">
+                <Link to="/register" className="px-4 border-r-2 border-white">
+                  Register
+                </Link>
+                <Link to="/login" className="px-4">
+                  Login
+                </Link>
+              </div>
+            )}
+            <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer">
               <BsFillHeartFill />
             </div>
+            <Link to='/basket' className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer">
+              <BsBagCheck />
+            </Link>
           </div>
           {/* mobile nav */}
           <div
@@ -127,11 +146,7 @@ const Navbar = () => {
       {/* from min-width 1050 and above, remove the search from the heroe and fix it at the top */}
       {matches && <FixedHeroe />}
       {/* from min-width 1050 and above, display the header component else replace it with the demo search component  */}
-      {matches ? (
-        <Header />
-      ) : location.pathname !== "/destinations/abc" ? (
-        <FixedHeader />
-      ) : null}
+      {matches ? <Header /> : <FixedHeader />}
     </>
   );
 };

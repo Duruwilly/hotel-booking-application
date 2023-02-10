@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 import { MobileNavBtn } from "../button/MobileNavBtn";
+import { useAuthContext } from "../../context/AuthContext";
+import { IoIosArrowDown } from "react-icons/io";
 
 const MobileNav = ({ toggle }) => {
+  const { user } = useAuthContext();
+
   return (
     <nav className="mobile-nav_content bg-primary">
       <span
@@ -11,16 +15,30 @@ const MobileNav = ({ toggle }) => {
       >
         <FaTimes />
       </span>
-      <div className=" mt-8" onClick={toggle}>
-        <div className="pb-5">
-          <Link to="/register">
-            <MobileNavBtn text="Register" />
-          </Link>
-        </div>
-        <Link to="/login">
-          <MobileNavBtn text="Login" />
-        </Link>
-        <div className="text-gray-300 flex flex-col justify-center items-center py-5">
+      <div className=" mt-8">
+        {user ? (
+          <div className="text-gray-300 text-sm relative cursor-pointer dropdown">
+            <div className="flex justify-center items-center gap-1">
+              <span className="flex justify-center items-center capitalize text-center">{`hi, ${user.fullname}`}</span>
+              <IoIosArrowDown className="text-inherit text-xl" />
+            </div>
+            <ul onClick={toggle}>
+              <li className="text-center">logout</li>
+            </ul>
+          </div>
+        ) : (
+          <>
+            <div className="pb-5" onClick={toggle}>
+              <Link to="/register">
+                <MobileNavBtn text="Register" />
+              </Link>
+            </div>
+            <Link to="/login">
+              <MobileNavBtn text="Login" />
+            </Link>
+          </>
+        )}
+        <div className="text-gray-300 flex flex-col justify-center items-center py-5" onClick={toggle}>
           <Link to="/" className="py-5 text-center">
             Who we are
           </Link>

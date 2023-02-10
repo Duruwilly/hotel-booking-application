@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
+import { useAuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
 const LoginPage = () => {
   const inputStyle =
@@ -12,13 +14,44 @@ const LoginPage = () => {
     setShowPassword((prevState) => !prevState);
   };
 
+  const [userDetails, setUserDetails] = useState({
+    email: undefined,
+    password: undefined,
+  });
+
+  const navigate = useNavigate();
+
+  const { loading, error, dispatch } = useAuthContext();
+
+  const handleChange = (e) => {
+    setUserDetails((prev) => ({
+      ...prev,
+      [e.target.id]: e.target.value,
+    }));
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    dispatch({ type: "LOGIN_START" });
+    try {
+      const res = await axios.post(
+        "http://localhost:8800/api/v1/auth/login",
+        userDetails
+      );
+      dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+      navigate("/");
+    } catch (error) {
+      dispatch({ type: "LOGIN_FAILURE", payload: error.response.data });
+    }
+  };
+
   return (
     <section className="py-5">
       <main className="flex items-center justify-center">
         <div className="max-w-4xl w-full px-4">
           <div className="max-w-4xl w-full space-y-5">
             <h2 className="text-center text-xl font-medium">Sign in</h2>
-            <form className="space-y-2">
+            <form className="space-y-2" onSubmit={handleLogin}>
               {/* <input type="hidden" name="remember" defaultValue="true" /> */}
               <input
                 type="email"
@@ -27,6 +60,8 @@ const LoginPage = () => {
                 autoComplete="email"
                 placeholder="Email address"
                 className={inputStyle}
+                onChange={handleChange}
+                required
               />
               <div className="relative">
                 <input
@@ -36,6 +71,8 @@ const LoginPage = () => {
                   autoComplete="current-password"
                   placeholder="Password"
                   className={inputStyle}
+                  onChange={handleChange}
+                  required
                 />
                 {showPassword && (
                   <FaEye
@@ -60,8 +97,24 @@ const LoginPage = () => {
                 </p>
               </Link>
 
-              <RegisterSignupBtn text="Sign in" />
+              {/* <button
+                type="submit"
+                className="group relative w-full flex justify-center py-3 px-4 font-medium rounded-sm text-white bg-red-900 focus:outline-none"
+                disabled={userDetails.email === undefined && userDetails.password === undefined}
+              >
+                {loading ? "loading..." : "Sign in"}
+              </button> */}
+              <RegisterSignupBtn
+                disabled={
+                  userDetails.email === undefined &&
+                  userDetails.password === undefined
+                }
+                text={loading ? "loading..." : "Sign in"}
+              />
             </form>
+            {error && (
+              <p className="text-red-700 text-center">{error.message}</p>
+            )}
 
             <p className="text-center">
               Don't have an account?{" "}

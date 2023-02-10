@@ -15,6 +15,7 @@ const SearchInputHeader = ({
   setDestination,
   roomOptions,
   setRoomOptions,
+  reFetch,
 }) => {
   // const { setDate, setDestination, setRoomOptions, handleRoomOption } =
   //   useMediaQueriesContext();
@@ -167,7 +168,13 @@ const SearchInputHeader = ({
               </div>
             )}
           </div>
-          <Button />
+          <button
+            onClick={() => reFetch()}
+            className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-semibold rounded-[3px] cursor-pointer"
+            disabled={destination === ""}
+          >
+            search
+          </button>
         </div>
       </div>
     </div>
