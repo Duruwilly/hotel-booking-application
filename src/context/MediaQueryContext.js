@@ -1,5 +1,4 @@
 import { useContext, createContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 
 const MediaQueryMatches = createContext();
 
@@ -12,9 +11,8 @@ export const MediaQueryContext = ({ children }) => {
   const [openRoomOptions, setOpenRoomOptions] = useState(false);
   const [destination, setDestination] = useState('')
 
-  const [error, setError] = useState(false)
-
-  const [loading, setLoading] = useState(true)
+  const [steps, setSteps] = useState(0);
+  const list = ["Choose", "confirm", "Pay"];
 
   const [date, setDate] = useState([
     {
@@ -87,10 +85,9 @@ export const MediaQueryContext = ({ children }) => {
         setDate,
         destination,
         setDestination,
-        error,
-        setError,
-        loading,
-        setLoading
+        steps,
+        setSteps,
+        list
       }}
     >
       {children}

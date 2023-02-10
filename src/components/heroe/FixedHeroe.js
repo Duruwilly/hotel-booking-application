@@ -7,6 +7,7 @@ import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
+import { useLocation } from "react-router-dom";
 
 const FixedHeroe = () => {
   const {
@@ -25,6 +26,7 @@ const FixedHeroe = () => {
     handleRoomOption,
     error,
   } = useMediaQueriesContext();
+  const location = useLocation()
   const [stickyClass, setStickyClass] = useState("hidden");
 
   useEffect(() => {

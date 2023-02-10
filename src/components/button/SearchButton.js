@@ -1,20 +1,31 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
+import { useSharedSearchContext } from "../../context/SearchContext";
+import useFetch from "../../hooks/useFetch";
 
 const Button = () => {
-  const { destination, date, roomOptions, setError, setLoading } = useMediaQueriesContext();
+  const { destination, date, roomOptions } = useMediaQueriesContext();
+  const { dispatch } = useSharedSearchContext()
+  const { reFetch } = useFetch()
   const navigate = useNavigate();
 
+  let url = ""
+  if(destination !== "") {
+    url = `/destinations/${destination}/hotels`
+  } else {
+    url = '/destinations/hotels'
+  }
   const handleSearch = () => {
-    navigate("/destinations/abc", { state: { destination, date, roomOptions } });
-    setTimeout(() => {
-      setLoading(false)
-    },1200)
+    dispatch({ type: "NEW_SEARCH", payload: { destination, date, roomOptions }})
+    navigate(url, { state: { destination, date, roomOptions } });
+    // setTimeout(() => {
+    //   setLoading(false)
+    // },1200)
   };
 
   return (
-    <button onClick={handleSearch} className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-semibold rounded-[3px] cursor-pointer" disabled={destination === ""}>
+    <button onClick={handleSearch} className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-semibold rounded-[3px] cursor-pointer">
       search
     </button>
   );

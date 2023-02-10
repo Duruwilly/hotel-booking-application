@@ -15,6 +15,7 @@ const ToggledSearchHeader = ({
   setDestination,
   roomOptions,
   setRoomOptions,
+  reFetch,
 }) => {
   const {
     hotelDropdownHeader,
@@ -26,15 +27,15 @@ const ToggledSearchHeader = ({
     matches,
   } = useMediaQueriesContext();
 
-    const handleRoomOption = (name, operation) => {
-      setRoomOptions((prev) => {
-        return {
-          ...prev,
-          [name]:
-            operation === "i" ? roomOptions[name] + 1 : roomOptions[name] - 1,
-        };
-      });
-    };
+  const handleRoomOption = (name, operation) => {
+    setRoomOptions((prev) => {
+      return {
+        ...prev,
+        [name]:
+          operation === "i" ? roomOptions[name] + 1 : roomOptions[name] - 1,
+      };
+    });
+  };
 
   return (
     <>
@@ -200,7 +201,13 @@ const ToggledSearchHeader = ({
                 </div>
               </div>
             </div>
-            <Button />
+            <button
+              onClick={() => reFetch()}
+              className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-semibold rounded-[3px] cursor-pointer"
+              disabled={destination === ""}
+            >
+              search
+            </button>
           </div>
         </div>
       )}

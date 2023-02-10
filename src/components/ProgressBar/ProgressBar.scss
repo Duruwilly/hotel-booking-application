@@ -1,0 +1,121 @@
+// @import "../../utilities/styles/colors";
+
+.step-wizard {
+  //   margin-top: 1.5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-list {
+    list-style-type: none;
+    position: relative;
+    display: flex;
+    z-index: 10;
+    width: 100%;
+  }
+
+  &-item {
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.25rem;
+    align-items: center;
+    text-align: center;
+    // min-width: 100%;
+    position: relative;
+
+    + .step-wizard-item::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 30%;
+      width: 90%;
+      height: 2px;
+      background: green;
+      transform: translateX(-50%);
+      z-index: -10;
+
+      @media screen and (max-width: 374px) {
+        top: 43.75%;
+      }
+    }
+
+    .progress {
+      &-count {
+        height: 30px;
+        width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 auto;
+        position: relative;
+        z-index: 10;
+        color: green;
+        // border: 1px solid green;
+        // font-family: "Montserrat", sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        transition: 1s ease-in-out;
+
+        &::after {
+          content: "";
+          height: 35px;
+          width: 35px;
+          background: white;
+          border: 1px solid green;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          border-radius: 50%;
+          z-index: -10;
+        }
+     
+      }
+      &-label {
+        color: green;
+        font-family: "Poppins", sans-serif;
+        text-transform: capitalize;
+        font-size: 14px;
+        font-weight: 500;
+
+        @media screen and (max-width: 374px) {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.current-item .progress-count:before,
+.current-item ~ .step-wizard-item .progress-count::before {
+  display: none;
+}
+
+.current-item ~ .step-wizard-item {
+  .progress-count {
+    color: rgba(196, 196, 196, 1);
+    &::after {
+      border: 1px solid rgba(196, 196, 196, 1);
+      background: white;
+      color: rgba(196, 196, 196, 1);
+    }
+  }
+  .progress-label {
+    color: rgba(196, 196, 196, 1);
+  }
+}
+
+.current-item .progress-count::after {
+  background: green;
+  border: 1px solid green;
+}
+
+.current-item .progress-count {
+  color: white;
+}
