@@ -78,13 +78,9 @@ export const MediaQueryContext = ({ children }) => {
         openRoomOptions,
         hotelDropdownHeader,
         setHotelDropdownHeader,
-        handleRoomOption,
-        roomOptions,
-        setRoomOptions,
-        date,
-        setDate,
-        destination,
-        setDestination,
+        
+        
+        
         steps,
         setSteps,
         list

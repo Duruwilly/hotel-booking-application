@@ -29,10 +29,6 @@ const SearchList = ({ roomOptions, hotel, days }) => {
         </h2>
         <h1 className="font-semibold capitalize text-xl py-2">{hotel.name}</h1>
         <p className="text-gray-600 font-light">
-          {/* Sleeps{" "}
-          {`${roomOptions.adult + roomOptions.children} ${
-            roomOptions.adult + roomOptions.children > 1 ? `guests` : `guest`
-          }`}{" "} */}
           {`${
             roomOptions.adult + roomOptions.children === 1
               ? `Sleeps up to ${hotel.guests} guests`
@@ -51,7 +47,7 @@ const SearchList = ({ roomOptions, hotel, days }) => {
               ${[hotel.price].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
             </p>
             <span className="font-semibold text-sm pb-3">
-              for {days} nights
+              for {days === 0 ? `1` : days} nights
             </span>
             <Link
               to={`/hotel/${hotel.name}/${hotel.country}/${hotel._id}`}

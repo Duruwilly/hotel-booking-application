@@ -13,13 +13,15 @@ import { useSharedSearchContext } from "../../context/SearchContext";
 import { useAuthContext } from "../../context/AuthContext";
 import { MdOutlineSingleBed, MdOutlineKingBed } from "react-icons/md";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
+import useDaysCalculate from "../../hooks/useDaysCalculate";
+import { useSelector } from "react-redux";
 
 const SingleHotel = () => {
-  const { matches, setHotelDropdownHeader, roomOptions } =
-    useMediaQueriesContext();
-  const { date } = useSharedSearchContext();
+  // const { matches, setHotelDropdownHeader, roomOptions } =
+  //   useMediaQueriesContext();
   const { user } = useAuthContext();
   const [open, setOpen] = useState(false);
+  let { roomOptions } = useSelector((state) => state.searchState);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,16 +31,6 @@ const SingleHotel = () => {
     `http://localhost:8800/api/v1/hotels/find/${id}`
   );
 
-  const Milliseconds_Per_Day = 1000 * 60 * 60 * 24;
-  // subtract the starting date from the ending date and divide it by one whole day
-  function dayDifference(date1, date2) {
-    const timeDiff = Math.abs(date2?.getTime() - date1?.getTime());
-    const diffDays = Math.ceil(timeDiff / Milliseconds_Per_Day);
-    return diffDays;
-  }
-
-  const days = dayDifference(date[0]?.endDate, date[0]?.startDate);
-
   const confirmBooking = () => {
     if (user) {
       navigate("/basket");
@@ -46,6 +38,8 @@ const SingleHotel = () => {
       navigate("/login ");
     }
   };
+
+  let { days } = useDaysCalculate();
 
   return (
     <>
@@ -146,7 +140,8 @@ const SingleHotel = () => {
                           </span>
                         ) : data?.guests === 3 ? (
                           <span className="flex justify-cente items-center gap-1 text-sm font-semibold">
-                            <MdOutlineKingBed className="text-3xl" /> x 2 <MdOutlineSingleBed className="text-3xl" /> x1{" "}
+                            <MdOutlineKingBed className="text-3xl" /> x 2{" "}
+                            <MdOutlineSingleBed className="text-3xl" /> x1{" "}
                           </span>
                         ) : data?.guests === 4 ? (
                           <span className="flex justify-cente items-center gap-1 text-sm font-semibold">
@@ -154,7 +149,8 @@ const SingleHotel = () => {
                           </span>
                         ) : (
                           <span className="flex justify-cente items-center gap-1 text-sm font-semibold">
-                            <MdOutlineKingBed className="text-3xl"/> x 2 <MdOutlineSingleBed className="text-3xl" /> x1{" "}
+                            <MdOutlineKingBed className="text-3xl" /> x 2{" "}
+                            <MdOutlineSingleBed className="text-3xl" /> x1{" "}
                           </span>
                         )}
                       </div>
@@ -182,7 +178,11 @@ const SingleHotel = () => {
                         Total stay
                         <span className="font-semibold text-xl">
                           $
-                          {[data?.price * days * roomOptions.rooms]
+                          {[
+                            data?.price * `${days === 0
+                              ? `1`
+                              : days}` * roomOptions.rooms,
+                          ]
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                         </span>
