@@ -12,13 +12,13 @@ import ToggledSearchHeader from "./ToggledSearchHeader";
 import Spinner from "../../components/Spinner/Spinner";
 import SearchList from "../../components/searchList/SearchList";
 import useFetch from "../../hooks/useFetch";
+import { useSelector } from "react-redux";
+import useDaysCalculate from "../../hooks/useDaysCalculate";
 
 const HotelsList = () => {
   const { matches, setHotelDropdownHeader } = useMediaQueriesContext();
   const location = useLocation();
-  const [destination, setDestination] = useState(location.state.destination);
-  const [date, setDate] = useState(location.state.date);
-  const [roomOptions, setRoomOptions] = useState(location.state.roomOptions);
+  let { roomOptions, destination } = useSelector((state) => state.searchState);
 
   const { data, loading, error, reFetch } = useFetch(
     destination !== ""
@@ -26,19 +26,7 @@ const HotelsList = () => {
       : "http://localhost:8800/api/v1/hotels"
   );
 
-  const Milliseconds_Per_Day = 1000 * 60 * 60 * 24;
-  // subtract the starting date from the ending date and divide it by one whole day
-  function dayDifference(date1, date2) {
-    const timeDiff = Math.abs(date2?.getTime() - date1?.getTime());
-    const diffDays = Math.ceil(timeDiff / Milliseconds_Per_Day);
-    return diffDays;
-  }
-
-  const days = dayDifference(date[0]?.endDate, date[0]?.startDate);
-
-  // if (location.pathname !== "/") {
-  //   reFetch();
-  // }
+  let { days } = useDaysCalculate();
 
   return (
     <>

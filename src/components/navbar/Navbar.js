@@ -112,7 +112,8 @@ const Navbar = () => {
                   <IoIosArrowDown className="text-inherit text-xl" />
                 </div>
                 <ul>
-                  <li>logout</li>
+                  <li className="capitalize">profile</li>
+                  <li className="capitalize">logout</li>
                 </ul>
               </div>
             ) : (

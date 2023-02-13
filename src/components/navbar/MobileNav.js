@@ -23,7 +23,8 @@ const MobileNav = ({ toggle }) => {
               <IoIosArrowDown className="text-inherit text-xl" />
             </div>
             <ul onClick={toggle}>
-              <li className="text-center">logout</li>
+              <li className="text-center capitalize">profile</li>
+              <li className="text-center capitalize">logout</li>
             </ul>
           </div>
         ) : (

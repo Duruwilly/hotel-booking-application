@@ -8,42 +8,24 @@ import Button from "../button/SearchButton";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { AiFillCloseCircle } from "react-icons/ai";
+import {
+  setDate,
+  setDestination,
+  handleRoomOption,
+} from "../../redux/searchStateSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Heroe = () => {
   const {
     openDate,
-    setOpenDate,
     toggleDate,
     toggleRoomOptions,
-    date,
-    setDate,
-    roomOptions,
-    setRoomOptions,
     openRoomOptions,
-    setOpenRoomOptions,
-    destination,
-    setDestination,
-    handleRoomOption,
-    error,
   } = useMediaQueriesContext();
-  // const [openDate, setOpenDate] = useState(false);
-  // const [openRoomOptions, setOpenRoomOptions] = useState(false);
-  // const [destination, setDestination] = useState("");
-
-  // const [date, setDate] = useState([
-  //   {
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //     key: "selection",
-  //   },
-  // ]);
-
-  // const [roomOptions, setRoomOptions] = useState({
-  //   adult: 1,
-  //   children: 0,
-  //   rooms: 1,
-  // });
-
+  let { roomOptions, date } = useSelector(
+    (state) => state.searchState
+  );
+  const dispatch = useDispatch();
   const { matches } = useMediaQueriesContext();
   const [matcheState, setMatcheState] = useState(
     window.matchMedia("(min-width: 768px)").matches
@@ -54,27 +36,6 @@ const Heroe = () => {
       .matchMedia("(min-width: 768px)")
       .addEventListener("change", (e) => setMatcheState(e.matches));
   }, []);
-
-  // const handleRoomOption = (name, operation) => {
-  //   setRoomOptions((prev) => {
-  //     return {
-  //       ...prev,
-  //       [name]:
-  //         operation === "i" ? roomOptions[name] + 1 : roomOptions[name] - 1,
-  //     };
-  //   });
-  //   console.log(roomOptions[name]);
-  // };
-
-  // const toggleDate = () => {
-  //   setOpenDate(!openDate);
-  //   setOpenRoomOptions(false);
-  // };
-
-  // const toggleRoomOptions = () => {
-  //   setOpenRoomOptions(!openRoomOptions);
-  //   setOpenDate(false);
-  // };
 
   return (
     <div style={heroeBg}>
@@ -100,8 +61,9 @@ const Heroe = () => {
                     type="text"
                     placeholder="Select destination"
                     className="pl-8 w-full placeholder:text-gray-600 py-[1.65rem]"
-                    value={destination}
-                    onChange={(e) => setDestination(e.target.value)}
+                    onChange={(e) => {
+                      dispatch(setDestination(e.target.value));
+                    }}
                   />
                 </div>
                 <div className="searchItem">
@@ -119,7 +81,9 @@ const Heroe = () => {
                     <div>
                       <DateRange
                         editableDateInputs={true}
-                        onChange={(item) => setDate([item.selection])}
+                        onChange={(item) => {
+                          dispatch(setDate({ ...item.selection }));
+                        }}
                         moveRangeOnFirstSelection={false}
                         ranges={date}
                         className="date"
@@ -158,7 +122,14 @@ const Heroe = () => {
                         <div className="flex items-center gap-2 text-xs text-black">
                           <button
                             className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900 btn-disabled"
-                            onClick={() => handleRoomOption("adult", "d")}
+                            onClick={() =>
+                              dispatch(
+                                handleRoomOption({
+                                  name: "adult",
+                                  operation: "d",
+                                })
+                              )
+                            }
                             disabled={roomOptions.adult <= 1}
                           >
                             -
@@ -166,7 +137,14 @@ const Heroe = () => {
                           <span>{roomOptions.adult}</span>
                           <button
                             className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900"
-                            onClick={() => handleRoomOption("adult", "i")}
+                            onClick={() =>
+                              dispatch(
+                                handleRoomOption({
+                                  name: "adult",
+                                  operation: "i",
+                                })
+                              )
+                            }
                           >
                             +
                           </button>
@@ -178,7 +156,14 @@ const Heroe = () => {
                         <div className="flex items-center gap-2 text-xs text-black">
                           <button
                             className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900 btn-disabled"
-                            onClick={() => handleRoomOption("children", "d")}
+                            onClick={() =>
+                              dispatch(
+                                handleRoomOption({
+                                  name: "children",
+                                  operation: "d",
+                                })
+                              )
+                            }
                             disabled={roomOptions.children <= 0}
                           >
                             -
@@ -186,7 +171,14 @@ const Heroe = () => {
                           <span>{roomOptions.children}</span>
                           <button
                             className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900"
-                            onClick={() => handleRoomOption("children", "i")}
+                            onClick={() =>
+                              dispatch(
+                                handleRoomOption({
+                                  name: "children",
+                                  operation: "i",
+                                })
+                              )
+                            }
                           >
                             +
                           </button>
@@ -198,7 +190,14 @@ const Heroe = () => {
                         <div className="flex items-center gap-2 text-xs text-black">
                           <button
                             className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900 btn-disabled"
-                            onClick={() => handleRoomOption("rooms", "d")}
+                            onClick={() =>
+                              dispatch(
+                                handleRoomOption({
+                                  name: "rooms",
+                                  operation: "d",
+                                })
+                              )
+                            }
                             disabled={roomOptions.rooms <= 1}
                           >
                             -
@@ -206,7 +205,14 @@ const Heroe = () => {
                           <span>{roomOptions.rooms}</span>
                           <button
                             className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900"
-                            onClick={() => handleRoomOption("rooms", "i")}
+                            onClick={() =>
+                              dispatch(
+                                handleRoomOption({
+                                  name: "rooms",
+                                  operation: "i",
+                                })
+                              )
+                            }
                           >
                             +
                           </button>
