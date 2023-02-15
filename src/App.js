@@ -27,31 +27,17 @@ import { ScrollToTop } from "./components/scrollToTop/ScrollToTop";
 function App() {
   const {
     setDropdownHeader,
-    dropdownHeader,
-    setOpenRoomOptions,
-    setOpenDate,
-    openDate,
-    openRoomOptions,
-    setHotelDropdownHeader,
-    hotelDropdownHeader,
   } = useMediaQueriesContext();
 
   const closeModal = () => {
     setDropdownHeader(false);
-    // setHotelDropdownHeader(false);
-    // if (openDate) {
-    //   setOpenDate(false);
-    // }
-    // if (openRoomOptions) {
-    //   setOpenRoomOptions(false);
-    // }
   };
 
   return (
     <BrowserRouter>
       <ScrollToTop />
       <Navbar />
-      <div onClick={closeModal}>
+     
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/hotel/:hotelName/:location/:hotelId" element={<SingleHotel />} />
@@ -70,7 +56,7 @@ function App() {
           <Route path="/basket" element={<Basket />} />
           <Route path="/payment" element={<PaymentPage />} />
         </Routes>
-      </div>
+     
       <div onClick={closeModal}>
         <FooterList />
       </div>

@@ -7,9 +7,9 @@ import useFetch from "../../hooks/useFetch";
 
 const Button = () => {
   const { dispatch } = useSharedSearchContext()
-  const { reFetch } = useFetch()
+  const { setFetchHotelStatus, setDropdownHeader } = useMediaQueriesContext()
   const navigate = useNavigate();
-  let { roomOptions, destination, date } = useSelector(
+  let { destination } = useSelector(
     (state) => state.searchState
   );
 
@@ -22,10 +22,9 @@ const Button = () => {
   const handleSearch = () => {
     // dispatch({ type: "NEW_SEARCH", payload: { destination, date, roomOptions }})
     // navigate(url, { state: { destination, date, roomOptions } });
+    setFetchHotelStatus("idle")
+    setDropdownHeader(false)
     navigate(url)
-    // setTimeout(() => {
-    //   setLoading(false)
-    // },1200)
   };
 
   return (

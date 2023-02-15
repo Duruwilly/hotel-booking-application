@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { MdOutlineKingBed } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
+import { format } from "date-fns";
 
 const Basket = () => {
-  const {steps, setSteps, list} = useMediaQueriesContext()
+  const { steps, setSteps, list } = useMediaQueriesContext();
   return (
     <section className="flex justify-center">
       <div className="w-full max-w-screen-sm py- px-4">
         <div className=" m-auto">
           <ProgressBar step={steps} list={list} />
         </div>
-        <Confirmation setSteps={setSteps} /> 
+        <Confirmation setSteps={setSteps} />
       </div>
     </section>
   );
@@ -22,15 +24,17 @@ const Basket = () => {
 export default Basket;
 
 const Confirmation = ({ setSteps }) => {
-  const navigate = useNavigate()
+  let { destination, dateSearch } = useSelector((state) => state.searchState);
+  console.log(format(new Date(dateSearch[0].startDate), "dd/MM/yyyy"));
+  const navigate = useNavigate();
   useEffect(() => {
     setSteps(() => 1);
   }, []);
 
   const buttonNavigate = () => {
     setSteps(() => 2);
-    navigate('/payment')
-  }
+    navigate("/payment");
+  };
 
   return (
     <section className="py-12">
@@ -59,7 +63,12 @@ const Confirmation = ({ setSteps }) => {
         </div>
         <div className="flex flex-wrap justify-between items-center pb-6">
           <p className="text-gray-400 capitalize">dates</p>
-          <span className="font-extralight capitalize">22, february 2023 - 24 february 2023(2 nights)</span>
+          <span className="font-extralight capitalize">
+            {`${format(
+              new Date(dateSearch[0].startDate),
+              "dd MMMM yyyy"
+            )} - ${format(new Date(dateSearch[0].endDate), "dd MMMM yyyy")}`}
+          </span>
         </div>
         <div className="flex justify-between items-center pb-6">
           <p className="text-gray-400 capitalize">guests</p>

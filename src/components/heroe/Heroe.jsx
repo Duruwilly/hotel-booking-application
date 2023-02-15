@@ -7,6 +7,7 @@ import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import Button from "../button/SearchButton";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
+import moment from "moment";
 import { AiFillCloseCircle } from "react-icons/ai";
 import {
   setDate,
@@ -16,15 +17,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 const Heroe = () => {
-  const {
-    openDate,
-    toggleDate,
-    toggleRoomOptions,
-    openRoomOptions,
-  } = useMediaQueriesContext();
-  let { roomOptions, date } = useSelector(
-    (state) => state.searchState
-  );
+  const { openDate, toggleDate, toggleRoomOptions, openRoomOptions } =
+    useMediaQueriesContext();
+  let { roomOptions, dateSearch } = useSelector((state) => {
+    console.log(state);
+    return state.searchState;
+  });
   const dispatch = useDispatch();
   const { matches } = useMediaQueriesContext();
   const [matcheState, setMatcheState] = useState(
@@ -72,8 +70,11 @@ const Heroe = () => {
                     onClick={toggleDate}
                     className="pl-8 w-full py-[1.65rem] cursor-pointer"
                   >
-                    {`${format(date[0].startDate, "dd/MM/yyyy")} to ${format(
-                      date[0].endDate,
+                    {`${format(
+                      new Date(dateSearch[0].startDate),
+                      "dd/MM/yyyy"
+                    )} to ${format(
+                      new Date(dateSearch[0].endDate),
                       "dd/MM/yyyy"
                     )}`}
                   </span>
@@ -85,7 +86,13 @@ const Heroe = () => {
                           dispatch(setDate({ ...item.selection }));
                         }}
                         moveRangeOnFirstSelection={false}
-                        ranges={date}
+                        ranges={[
+                          {
+                            startDate: new Date(dateSearch[0].startDate),
+                            endDate: new Date(dateSearch[0].endDate),
+                            key: dateSearch[0].key,
+                          },
+                        ]}
                         className="date"
                         minDate={new Date()}
                       />

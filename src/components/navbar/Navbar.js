@@ -11,11 +11,14 @@ import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import MobileNav from "./MobileNav";
 import { useAuthContext } from "../../context/AuthContext";
 import { IoIosArrowDown } from "react-icons/io";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const location = useLocation();
 
-  const { matches, setDropdownHeader, destination } = useMediaQueriesContext();
+  const { matches, setDropdownHeader } = useMediaQueriesContext();
+
+  // let { destination } = useSelector((state) => state.searchState);
 
   const { user } = useAuthContext();
 
@@ -68,25 +71,27 @@ const Navbar = () => {
     setMobileNav(!mobileNav);
   };
 
+  // let toggleDropDownSearchHeader = location.pathname === "/" && location.pathname === '/destinations/hotels' && location.pathname === `/destinations/${destination}/hotels` && location.pathname === "/hotel/:hotelName/:location/:hotelId"
+
   return (
     <>
       <header
         className={`h-24 px-4 bg-primary flex justify-center ${stickyClass}`}
       >
         <div className="w-full max-w-screen-xl flex justify-between items-center">
-          <div className="lg:hidden flex items-center justify-center gap-3">
+          <div className="navIconsToggle flex items-center justify-center gap-3">
             <FaBars className="text-white text-2xl" onClick={toggleMobileNav} />
-            <div
+            {location.pathname !== "/basket" && location.pathname !== "/payment" ? <div
               className={`h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white ${stickySearchIcon}`}
             >
               <CiSearch
                 className="text-white text-2xl"
                 onClick={toggleDropDownHeader}
               />
-            </div>
+            </div> : null}
           </div>
 
-          <div className="hidden lg:flex items-center gap-2 text-gray-300 text-sm">
+          <div className="hidden navTelephone items-center gap-2 text-gray-300 text-sm">
             <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900">
               <BsFillTelephoneFill className="text-white" />
             </div>
@@ -137,7 +142,7 @@ const Navbar = () => {
           <div
             className={`${
               mobileNav ? "left0" : "left-100"
-            } lg:hidden mobile-wrapper`}
+            } navMobileVisibility mobile-wrapper`}
           >
             <div className="mobile-overlay" onClick={toggleMobileNav}></div>
             <MobileNav toggle={toggleMobileNav} />
@@ -145,9 +150,11 @@ const Navbar = () => {
         </div>
       </header>
       {/* from min-width 1050 and above, remove the search from the heroe and fix it at the top */}
-      {matches && <FixedHeroe />}
+      {matches && location.pathname === "/" ? <FixedHeroe /> : null}
+      {/* {matches && <FixedHeroe /> } */}
       {/* from min-width 1050 and above, display the header component else replace it with the demo search component  */}
-      {matches ? <Header /> : <FixedHeader />}
+      {/* {matches ? <Header /> : <FixedHeader />} */}
+      {matches ? <Header /> : location.pathname === "/" ? <FixedHeader /> : null}
     </>
   );
 };

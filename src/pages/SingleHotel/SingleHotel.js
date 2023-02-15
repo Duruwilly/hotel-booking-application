@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { heroeBg } from "../../BgImageStyles/styles";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import SearchInputHeader from "../HotelsList/SearchInputHeader";
@@ -17,8 +17,14 @@ import useDaysCalculate from "../../hooks/useDaysCalculate";
 import { useSelector } from "react-redux";
 
 const SingleHotel = () => {
-  // const { matches, setHotelDropdownHeader, roomOptions } =
-  //   useMediaQueriesContext();
+  const { setFetchHotelStatus, setDropdownHeader } = useMediaQueriesContext()
+  useEffect(() => {
+    setFetchHotelStatus("idle")
+  }, [])
+
+  const { matches } =
+    useMediaQueriesContext();
+
   const { user } = useAuthContext();
   const [open, setOpen] = useState(false);
   let { roomOptions } = useSelector((state) => state.searchState);
@@ -41,20 +47,18 @@ const SingleHotel = () => {
 
   let { days } = useDaysCalculate();
 
+  const addToBasket = async () => {
+    
+  }
+
   return (
     <>
-      {/* {matches ? (
-        <SearchInputHeader
-        />
-      ) : (
-        <ToggledSearchHeader
-        />
-      )} */}
+      {matches ? <SearchInputHeader /> : <ToggledSearchHeader />}
       {loading ? (
         <Spinner />
       ) : (
         <>
-          <section style={heroeBg}>
+          <section style={heroeBg} onClick={() =>  setDropdownHeader(false)}>
             <div className="flex justify-center">
               <div className="w-full max-w-screen-xl flex flex-col md:flex-row justify-between text-gray-100 absolute bottom-0">
                 <div className="flex justify-center items-center gap-4">

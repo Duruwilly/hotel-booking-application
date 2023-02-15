@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   destination: "",
-  date: [
+  dateSearch: [
     {
       startDate: new Date(),
       endDate: new Date(),
@@ -32,7 +32,7 @@ const searchStateSlice = createSlice({
     },
     setDate(state, action) {
       const { startDate, endDate, key } = action.payload;
-      state.date = [
+      state.dateSearch = [
         {
           startDate,
           endDate,

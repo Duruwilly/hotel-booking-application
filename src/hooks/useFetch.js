@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useMediaQueriesContext } from "../context/MediaQueryContext";
 
 const useFetch = (url) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const {fetchHotelStatus, setFetchHotelStatus} = useMediaQueriesContext()
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      setFetchHotelStatus('pending')
       try {
         const res = await axios.get(url);
+        setFetchHotelStatus(res.status)
         setData(res.data.data);
       } catch (error) {
         setError(error);
@@ -19,8 +23,8 @@ const useFetch = (url) => {
         setLoading(false);
       }, 500);
     };
-    fetchData();
-  }, []);
+    if(fetchHotelStatus === "idle") fetchData();
+  }, [fetchHotelStatus]);
 
   const reFetch = async () => {
     setLoading(true);

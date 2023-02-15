@@ -7,43 +7,45 @@ import Button from "../../components/button/SearchButton";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { AiFillCloseCircle } from "react-icons/ai";
-
-const ToggledSearchHeader = ({
-  date,
+import { useDispatch, useSelector } from "react-redux";
+import {
   setDate,
-  destination,
   setDestination,
-  roomOptions,
-  setRoomOptions,
-  reFetch,
-}) => {
+  handleRoomOption,
+} from "../../redux/searchStateSlice";
+
+const ToggledSearchHeader = () => {
   const {
     hotelDropdownHeader,
     setHotelDropdownHeader,
+    dropdownHeader,
+    setDropdownHeader,
     openDate,
     openRoomOptions,
     toggleDate,
     toggleRoomOptions,
     matches,
   } = useMediaQueriesContext();
+  let { roomOptions, destination, dateSearch } = useSelector(
+    (state) => state.searchState
+  );
+  const dispatch = useDispatch();
+  // console.log(dropdownHeader, "hello");
 
-  const handleRoomOption = (name, operation) => {
-    setRoomOptions((prev) => {
-      return {
-        ...prev,
-        [name]:
-          operation === "i" ? roomOptions[name] + 1 : roomOptions[name] - 1,
-      };
-    });
-  };
+  // const handleRoomOption = (name, operation) => {
+  //   setRoomOptions((prev) => {
+  //     return {
+  //       ...prev,
+  //       [name]:
+  //         operation === "i" ? roomOptions[name] + 1 : roomOptions[name] - 1,
+  //     };
+  //   });
+  // };
 
   return (
     <>
-      {!hotelDropdownHeader ? (
-        <div
-          className=""
-          onClick={() => setHotelDropdownHeader(!hotelDropdownHeader)}
-        >
+      {!dropdownHeader ? (
+        <div className="" onClick={() => setDropdownHeader(!dropdownHeader)}>
           <div className="w-full ">
             <div className="h-16 bg-white flex items-center justify-between px-4 py-3 w-full">
               <div className="searchItem">
@@ -78,7 +80,9 @@ const ToggledSearchHeader = ({
                   placeholder="Select destination"
                   className="pl-8 w-full placeholder:text-gray-600 py-4"
                   value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
+                  onChange={(e) => {
+                    dispatch(setDestination(e.target.value));
+                  }}
                 />
               </div>
             </div>
@@ -86,35 +90,46 @@ const ToggledSearchHeader = ({
               {
                 <div className="h- bg-white py- w-full">
                   <div className="searchItem">
-                    <BsCalendarEvent className="searchIcons" />
-                    <span
-                      className="pl-8 w-full py-4 cursor-pointer"
-                      onClick={toggleDate}
-                    >
-                      {`${format(date[0].startDate, "dd/MM/yyyy")} to ${format(
-                        date[0].endDate,
-                        "dd/MM/yyyy"
-                      )}`}
-                    </span>
-                    {openDate && (
-                      <div>
-                        <DateRange
-                          editableDateInputs={true}
-                          onChange={(item) => setDate([item.selection])}
-                          moveRangeOnFirstSelection={false}
-                          ranges={date}
-                          className="date"
-                          minDate={new Date()}
-                        />
-                        <button
-                          className="py-1 px-9 text-white bg-red-900 date-btn"
-                          onClick={toggleDate}
-                        >
-                          select date
-                        </button>
-                      </div>
-                    )}
-                  </div>
+                  <BsCalendarEvent className="searchIcons" />
+                  <span
+                    onClick={toggleDate}
+                    className="pl-8 w-full py-[1.65rem] cursor-pointer"
+                  >
+                    {`${format(
+                      new Date(dateSearch[0].startDate),
+                      "dd/MM/yyyy"
+                    )} to ${format(
+                      new Date(dateSearch[0].endDate),
+                      "dd/MM/yyyy"
+                    )}`}
+                  </span>
+                  {openDate && (
+                    <div>
+                      <DateRange
+                        editableDateInputs={true}
+                        onChange={(item) => {
+                          dispatch(setDate({ ...item.selection }));
+                        }}
+                        moveRangeOnFirstSelection={false}
+                        ranges={[
+                          {
+                            startDate: new Date(dateSearch[0].startDate),
+                            endDate: new Date(dateSearch[0].endDate),
+                            key: dateSearch[0].key,
+                          },
+                        ]}
+                        className="date"
+                        minDate={new Date()}
+                      />
+                      <button
+                        className="py-1 px-9 text-white bg-red-900 date-btn"
+                        onClick={toggleDate}
+                      >
+                        select date
+                      </button>
+                    </div>
+                  )}
+                </div>
                 </div>
               }
               <div className="h- bg-white py- w-full">
@@ -142,7 +157,14 @@ const ToggledSearchHeader = ({
                         <div className="flex items-center gap-2 text-xs text-black">
                           <button
                             className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900 btn-disabled"
-                            onClick={() => handleRoomOption("adult", "d")}
+                            onClick={() =>
+                              dispatch(
+                                handleRoomOption({
+                                  name: "adult",
+                                  operation: "d",
+                                })
+                              )
+                            }
                             disabled={roomOptions.adult <= 1}
                           >
                             -
@@ -150,7 +172,14 @@ const ToggledSearchHeader = ({
                           <span>{roomOptions.adult}</span>
                           <button
                             className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900 btn-disabled"
-                            onClick={() => handleRoomOption("adult", "i")}
+                            onClick={() =>
+                              dispatch(
+                                handleRoomOption({
+                                  name: "adult",
+                                  operation: "i",
+                                })
+                              )
+                            }
                           >
                             +
                           </button>
@@ -162,7 +191,14 @@ const ToggledSearchHeader = ({
                         <div className="flex items-center gap-2 text-xs text-black">
                           <button
                             className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900 btn-disabled"
-                            onClick={() => handleRoomOption("children", "d")}
+                            onClick={() =>
+                              dispatch(
+                                handleRoomOption({
+                                  name: "children",
+                                  operation: "d",
+                                })
+                              )
+                            }
                             disabled={roomOptions.children <= 0}
                           >
                             -
@@ -170,7 +206,14 @@ const ToggledSearchHeader = ({
                           <span>{roomOptions.children}</span>
                           <button
                             className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900 btn-disabled"
-                            onClick={() => handleRoomOption("children", "i")}
+                            onClick={() =>
+                              dispatch(
+                                handleRoomOption({
+                                  name: "children",
+                                  operation: "i",
+                                })
+                              )
+                            }
                           >
                             +
                           </button>
@@ -182,7 +225,14 @@ const ToggledSearchHeader = ({
                         <div className="flex items-center gap-2 text-xs text-black">
                           <button
                             className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900 btn-disabled"
-                            onClick={() => handleRoomOption("rooms", "d")}
+                            onClick={() =>
+                              dispatch(
+                                handleRoomOption({
+                                  name: "rooms",
+                                  operation: "d",
+                                })
+                              )
+                            }
                             disabled={roomOptions.rooms <= 1}
                           >
                             -
@@ -190,7 +240,14 @@ const ToggledSearchHeader = ({
                           <span>{roomOptions.rooms}</span>
                           <button
                             className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900 btn-disabled"
-                            onClick={() => handleRoomOption("rooms", "i")}
+                            onClick={() =>
+                              dispatch(
+                                handleRoomOption({
+                                  name: "rooms",
+                                  operation: "i",
+                                })
+                              )
+                            }
                           >
                             +
                           </button>
@@ -201,13 +258,7 @@ const ToggledSearchHeader = ({
                 </div>
               </div>
             </div>
-            <button
-              onClick={() => reFetch()}
-              className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-semibold rounded-[3px] cursor-pointer"
-              disabled={destination === ""}
-            >
-              search
-            </button>
+            <Button />
           </div>
         </div>
       )}
