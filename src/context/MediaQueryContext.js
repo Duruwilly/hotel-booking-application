@@ -4,29 +4,15 @@ const MediaQueryMatches = createContext();
 
 export const MediaQueryContext = ({ children }) => {
   const [dropdownHeader, setDropdownHeader] = useState(false);
+  const [fetchHotelStatus, setFetchHotelStatus] = useState('idle')
 
   const [hotelDropdownHeader, setHotelDropdownHeader] = useState(false);
 
   const [openDate, setOpenDate] = useState(false);
   const [openRoomOptions, setOpenRoomOptions] = useState(false);
-  const [destination, setDestination] = useState('')
 
   const [steps, setSteps] = useState(0);
   const list = ["Choose", "confirm", "Pay"];
-
-  const [date, setDate] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
-
-  const [roomOptions, setRoomOptions] = useState({
-    adult: 1,
-    children: 0,
-    rooms: 1,
-  });
 
   const [matches, setMatches] = useState(
     window.matchMedia("(min-width: 1050px)").matches
@@ -54,15 +40,6 @@ export const MediaQueryContext = ({ children }) => {
     setOpenDate(false);
   };
 
-  const handleRoomOption = (name, operation) => {
-    setRoomOptions((prev) => {
-      return {
-        ...prev,
-        [name]:
-          operation === "i" ? roomOptions[name] + 1 : roomOptions[name] - 1,
-      };
-    });
-  };
 
   return (
     <MediaQueryMatches.Provider
@@ -78,7 +55,8 @@ export const MediaQueryContext = ({ children }) => {
         openRoomOptions,
         hotelDropdownHeader,
         setHotelDropdownHeader,
-        
+        fetchHotelStatus,
+        setFetchHotelStatus,
         
         
         steps,

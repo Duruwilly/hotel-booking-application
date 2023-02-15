@@ -40,19 +40,19 @@ const MobileNav = ({ toggle }) => {
           </>
         )}
         <div className="text-gray-300 flex flex-col justify-center items-center py-5" onClick={toggle}>
-          <Link to="/" className="py-5 text-center">
+          <Link to="/about-us" className="py-5 text-center">
             Who we are
           </Link>
-          <Link to="/" className="py-5 text-center">
+          <Link to="/about-us/book-with-us" className="py-5 text-center">
             Who book with us
           </Link>
-          <Link to="/" className="py-5 text-center">
+          <Link to="/reviews" className="py-5 text-center">
             Reviews from our members
           </Link>
-          <Link to="/" className="py-5 text-center">
+          <Link to="/travel-team" className="py-5 text-center">
             Our in-house travel team
           </Link>
-          <Link to="/" className="py-5 text-center">
+          <Link to="/contact" className="py-5 text-center">
             Contact us
           </Link>
         </div>

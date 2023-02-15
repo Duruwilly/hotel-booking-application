@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FixedHeader from "../../components/header/FixedHeader";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import SearchInputHeader from "./SearchInputHeader";
@@ -16,11 +16,11 @@ import { useSelector } from "react-redux";
 import useDaysCalculate from "../../hooks/useDaysCalculate";
 
 const HotelsList = () => {
-  const { matches, setHotelDropdownHeader } = useMediaQueriesContext();
+  const { matches, setDropdownHeader, setFetchHotelStatus } = useMediaQueriesContext();
   const location = useLocation();
   let { roomOptions, destination } = useSelector((state) => state.searchState);
 
-  const { data, loading, error, reFetch } = useFetch(
+  const { data, loading, error } = useFetch(
     destination !== ""
       ? `http://localhost:8800/api/v1/hotels?country=${destination}`
       : "http://localhost:8800/api/v1/hotels"
@@ -28,33 +28,17 @@ const HotelsList = () => {
 
   let { days } = useDaysCalculate();
 
+  useEffect(() => {
+    setFetchHotelStatus("idle")
+  }, [])
+
   return (
     <>
-      {/* {matches ? (
-        <SearchInputHeader
-          date={date}
-          setDate={setDate}
-          destination={destination}
-          setDestination={setDestination}
-          roomOptions={roomOptions}
-          setRoomOptions={setRoomOptions}
-          reFetch={reFetch}
-        />
-      ) : (
-        <ToggledSearchHeader
-          date={date}
-          setDate={setDate}
-          destination={destination}
-          setDestination={setDestination}
-          roomOptions={roomOptions}
-          setRoomOptions={setRoomOptions}
-          reFetch={reFetch}
-        />
-      )} */}
+      {matches ? <SearchInputHeader /> : <ToggledSearchHeader />}
       {loading ? (
         <Spinner />
       ) : (
-        <section className="flex justify-center">
+        <section className="flex justify-center" onClick={() =>  setDropdownHeader(false)}>
           <div className="w-full max-w-screen-xl py-5 px-4">
             <ul className="flex my-0 mx-auto list-none">
               <li className="uppercase text-xs border border-gray-900 bg-primary py-3 w-full text-white text-center list-none font-semibold">
@@ -70,7 +54,7 @@ const HotelsList = () => {
                 </div>
               </li>
             </ul>
-            <div className="mt-5" onClick={() => setHotelDropdownHeader(false)}>
+            <div className="mt-5" onClick={() => setDropdownHeader(false)}>
               {data.length !== 0 ? (
                 data.map((hotel) => (
                   <SearchList

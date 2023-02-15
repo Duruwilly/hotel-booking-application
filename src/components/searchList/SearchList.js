@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import image1 from "../../assets/images/heroe.jpg";
 import image2 from "../../assets/images/heroe2.jpg";
 import { AiFillHeart } from "react-icons/ai";
+import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 
 const SearchList = ({ roomOptions, hotel, days }) => {
   return (
@@ -47,7 +48,8 @@ const SearchList = ({ roomOptions, hotel, days }) => {
               ${[hotel.price].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
             </p>
             <span className="font-semibold text-sm pb-3">
-              for {days === 0 ? `1` : days} nights
+              {/* for {days === 0 ? `1` : days} nights */}
+              per night
             </span>
             <Link
               to={`/hotel/${hotel.name}/${hotel.country}/${hotel._id}`}

@@ -4,7 +4,7 @@ import { BsCalendarEvent } from "react-icons/bs";
 import { RxPerson } from "react-icons/rx";
 import Button from "../button/SearchButton";
 import { DateRange } from "react-date-range";
-import { format } from "date-fns";
+import { format, parse, parseISO } from "date-fns";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,16 +17,13 @@ import {
 import { useSelector } from "react-redux";
 
 const FixedHeroe = () => {
-  const {
-    openDate,
-    toggleDate,
-    toggleRoomOptions,
-    openRoomOptions,
-  } = useMediaQueriesContext();
+  const { openDate, toggleDate, toggleRoomOptions, openRoomOptions } =
+    useMediaQueriesContext();
 
   const dispatch = useDispatch();
-  let { roomOptions, destination, date } = useSelector((state) => state.searchState);
-
+  let { roomOptions, destination, dateSearch } = useSelector(
+    (state) => state.searchState
+  );
   const location = useLocation();
   const [stickyClass, setStickyClass] = useState("hidden");
 
@@ -69,10 +66,10 @@ const FixedHeroe = () => {
               onClick={toggleDate}
               className="pl-8 w-full py-[1.65rem] cursor-pointer"
             >
-              {`${format(date[0].startDate, "dd/MM/yyyy")} to ${format(
-                date[0].endDate,
+              {`${format(
+                new Date(dateSearch[0].startDate),
                 "dd/MM/yyyy"
-              )}`}
+              )} to ${format(new Date(dateSearch[0].endDate), "dd/MM/yyyy")}`}
             </span>
             {openDate && (
               <div>
@@ -82,7 +79,13 @@ const FixedHeroe = () => {
                     dispatch(setDate({ ...item.selection }));
                   }}
                   moveRangeOnFirstSelection={false}
-                  ranges={date}
+                  ranges={[
+                    {
+                      startDate: new Date(dateSearch[0].startDate),
+                      endDate: new Date(dateSearch[0].endDate),
+                      key: dateSearch[0].key,
+                    },
+                  ]}
                   className="date"
                   minDate={new Date()}
                 />

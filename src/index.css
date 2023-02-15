@@ -43,6 +43,7 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -463,6 +464,18 @@
 
  .lines::before {
   right: 0;
+ }
+
+ @media screen and (min-width: 1050px) {
+  .navIconsToggle {
+    display: none
+  }
+  .navTelephone {
+    display: flex;
+  }
+  .navMobileVisibility {
+    display: none;
+  }
  }
 
 @layer base {
