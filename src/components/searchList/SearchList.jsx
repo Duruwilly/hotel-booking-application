@@ -29,13 +29,16 @@ const SearchList = ({ roomOptions, hotel, days }) => {
           {hotel.country + "," + " " + hotel.state}
         </h2>
         <h1 className="font-semibold capitalize text-xl py-2">{hotel.name}</h1>
-        <p className="text-gray-600 font-light">
-          {`${
-            roomOptions.adult + roomOptions.children === 1
-              ? `Sleeps up to ${hotel.guests} guests`
-              : `Sleeps ${hotel.guests} guests`
-          }`}
-        </p>
+        <div className="pr-4">
+          <div className="font-ligh py-3 text-center" style={{ background: "#eee", fontSize: ".9rem" }}>
+            {/* {`${
+            roomOptions.adult + roomOptions.children < hotel.guests
+            ? `Sleeps up to ${hotel.guests} guests`
+            : `Sleeps ${hotel.guests} guests`
+          }`} */}
+          <span className="text-red-900 font-semibold capitalize px-2">Free includes</span> {hotel.feature}
+          </div>
+        </div>
         <div className="price-container">
           <div className="py-4 font-semibold text-sm">
             <span className="text-green-600">Best-price guarantee</span>

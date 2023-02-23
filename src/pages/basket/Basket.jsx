@@ -1,32 +1,151 @@
 import React, { useEffect, useState } from "react";
-import { MdOutlineKingBed } from "react-icons/md";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
-import { format } from "date-fns";
+import BasketItem from "../../components/basketItems/BasketItem";
+import useDaysCalculate from "../../hooks/useDaysCalculate";
+import SearchInputHeader from "../HotelsList/SearchInputHeader";
+import ToggledSearchHeader from "../HotelsList/ToggledSearchHeader";
+import { paymentBg } from "../../BgImageStyles/styles";
+import { useTitle } from "../../hooks/useTitle";
+import { FaTimes } from "react-icons/fa";
+import { getCountries } from "../../utils/getCountries";
 
 const Basket = () => {
-  const { steps, setSteps, list } = useMediaQueriesContext();
+  useTitle("Book the world best hotel");
+  const [countries, setCountries] = useState([]);
+  const inputStyles =
+    "w-full focus:outline-none border border-gray-300 p-3 placeholder:text-sm block rounded-md";
+  const { steps, setSteps, list, matches } = useMediaQueriesContext();
+  const { basketItems } = useSelector((state) => state.basket);
+  const [openModal, setOpenModal] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setOpenModal(true);
+    }, 10000);
+  }, []);
+
+  useEffect(() => {
+    getCountries().then((data) => {
+      setCountries(data);
+    });
+  }, []);
+
   return (
-    <section className="flex justify-center">
-      <div className="w-full max-w-screen-sm py- px-4">
-        <div className=" m-auto">
-          <ProgressBar step={steps} list={list} />
+    // <section className="flex justify-center">
+    //   <div className="w-full max-w-screen-sm py- px-4">
+    //     <div className=" m-auto">
+    //       {basketItems > 0 ? <ProgressBar step={steps} list={list} /> : matches ? <SearchInputHeader /> : <ToggledSearchHeader />}
+    //     </div>
+    //     <Confirmation setSteps={setSteps} />
+    //   </div>
+    // </section>
+    <>
+      {basketItems.length > 0 ? (
+        <ProgressBar step={steps} list={list} />
+      ) : matches ? (
+        <SearchInputHeader />
+      ) : (
+        <ToggledSearchHeader />
+      )}
+      <section className="flex justify-center relative">
+        <div className="w-full max-w-screen-sm px-4">
+          <Confirmation setSteps={setSteps} />
         </div>
-        <Confirmation setSteps={setSteps} />
-      </div>
-    </section>
+        {openModal && (
+          <div
+            className=" w-screen h-screen fixed top-0 left-0 flex items-center justify-center z-[5] px-2"
+            style={{ background: "rgba(255, 255, 255, 0.6)" }}
+          >
+            <div className="bg-white relative w-full max-w-screen-sm shadow-md">
+              <div style={paymentBg}></div>
+              <FaTimes
+                onClick={() => setOpenModal(false)}
+                className="text-white absolute top-4 right-4 text-3xl cursor-pointer"
+              />
+              <div>
+                <div className="py-8">
+                  <h1 className="text-3xl text-center uppercase font-normal">
+                    need some time?
+                  </h1>
+                  <p
+                    className="text-center text-base pt-6 pb-4"
+                    style={{ color: "#4e4e4e" }}
+                  >
+                    If you're still thinking it over, just fill in the below and
+                    we'll email you the details.
+                  </p>
+                  <form>
+                    <div className=" space-y-6 px-8">
+                      <div className="flex modalInputs gap-5">
+                        <input
+                          type="text"
+                          className={inputStyles}
+                          placeholder="First name"
+                          id="firstName"
+                        />
+                        <input
+                          type="text"
+                          className={inputStyles}
+                          placeholder="Last name"
+                          id="lastName"
+                        />
+                      </div>
+                      <div className="flex modalInputs gap-5">
+                        <input
+                          type="text"
+                          className={inputStyles}
+                          placeholder="Phone number"
+                          id="mobileNumber"
+                        />
+                        <select
+                          name="country"
+                          id="country"
+                          className={`${inputStyles} text-sm`}
+                        >
+                          <option value="">Select Country</option>
+                          {countries.map((country) => (
+                            <option value={country.name}>{country.name}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="flex justify-center">
+                        <button className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-light cursor-pointer w-full">
+                          submit
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+    </>
   );
 };
 
 export default Basket;
 
 const Confirmation = ({ setSteps }) => {
-  let { destination, dateSearch } = useSelector((state) => state.searchState);
-  console.log(format(new Date(dateSearch[0].startDate), "dd/MM/yyyy"));
+  let { roomOptions } = useSelector((state) => state.searchState);
+  let { basketItems } = useSelector((state) => state.basket);
   const navigate = useNavigate();
+
+  console.log();
+
+  let { days } = useDaysCalculate();
+
+  let total = 0;
+
+  basketItems.forEach((item) => {
+    total += item.quantity * item[0].price * days * roomOptions.rooms;
+  });
+
   useEffect(() => {
     setSteps(() => 1);
   }, []);
@@ -38,78 +157,56 @@ const Confirmation = ({ setSteps }) => {
 
   return (
     <section className="py-12">
-      <div className="flex flex-col lg:flex-row justify-between items-center">
-        <h1 className="text-center text-4xl font-light pb-5 lg:pb-0">
-          Your basket
-        </h1>
-        <PriceConversion />
-      </div>
-      <div
-        className="pb-1 pt-12"
-        style={{ borderBottom: "1px solid rgba(107,114,128,.1)" }}
-      >
-        <span className="text-gray-400 uppercase text-xs font-light ">
-          Madrid, spain
-        </span>
-        <h2 className="text-3xl font-light">Name of the hotel</h2>
-      </div>
-      <div
-        className="pt-6"
-        style={{ borderBottom: "1px solid rgba(107,114,128,.1)" }}
-      >
-        <div className="flex justify-between items-center pb-6">
-          <p className="font-semibold capitalize">room</p>
-          <span className="font-semibold capitalize">superior</span>
+      {basketItems.length > 0 ? (
+        <div className="flex flex-col lg:flex-row justify-between items-center">
+          <h1 className="text-center text-4xl font-light pb-5 lg:pb-0">
+            Your basket
+          </h1>
+          <PriceConversion />
         </div>
-        <div className="flex flex-wrap justify-between items-center pb-6">
-          <p className="text-gray-400 capitalize">dates</p>
-          <span className="font-extralight capitalize">
-            {`${format(
-              new Date(dateSearch[0].startDate),
-              "dd MMMM yyyy"
-            )} - ${format(new Date(dateSearch[0].endDate), "dd MMMM yyyy")}`}
-          </span>
+      ) : null}
+      {basketItems.length > 0 ? (
+        <div>
+          {basketItems.map((basket) => (
+            <div key={basket[0]._id}>
+              <BasketItem {...basket} />
+            </div>
+          ))}
+          <div
+            className="pt- py-3 flex justify-between items-center"
+            style={{ borderBottom: "1px solid rgba(107,114,128,.1)" }}
+          >
+            <span className="text-xl font-light capitalize">total price</span>
+            <p className="text-3xl font-light">
+              ${[total].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+            </p>
+          </div>
+          <div className="mt-4">
+            <button
+              className="bg-green-700 text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs"
+              onClick={buttonNavigate}
+            >
+              confirm booking
+            </button>
+          </div>
         </div>
-        <div className="flex justify-between items-center pb-6">
-          <p className="text-gray-400 capitalize">guests</p>
-          <span className="font-extralight capitalize">2 adults</span>
+      ) : (
+        <div className="flex justify-center flex-col items-center pt-10">
+          <h1 className="font-light text-xl mb- text-gray-90  py-">
+            Your basket is currently empty. For inspiration, try our{" "}
+            <Link to="/" className="text-red-800">
+              popular searches in the home page{" "}
+            </Link>
+            or add your keywords to the search bar above
+          </h1>
+          {/* <Link
+            to="/menu"
+            className="bg-primar w-full text-center p-6 text-whit rounded-lg"
+          >
+            Start Shopping
+          </Link> */}
         </div>
-        <div className="flex justify-between items-center pb-6">
-          <p className="text-gray-400 capitalize">beds</p>
-          <span className="flex justify-cente items-center gap-1 text-sm font-semibold">
-            <MdOutlineKingBed className="text-3xl" />{" "}
-            <span className="text-red-900">x 1</span>
-          </span>
-        </div>
-        <div className="flex flex-wrap justify-between items-center pb-1">
-          <p className="text-gray-400 capitalize">includes</p>
-          <span className="font-extralight capitalize">
-            this is a room only rate
-          </span>
-        </div>
-      </div>
-      <div
-        className="flex justify-between items-center pt-6 pb-1"
-        style={{ borderBottom: "1px solid rgba(107,114,128,.1)" }}
-      >
-        <span className="text-xl font-light">Total price</span>
-        <p className="text-3xl font-light">$1,204</p>
-      </div>
-      <div className="flex flex-col sm:flex-row gap-2 sm:gap-12 justify-between items-center pt-6">
-        <button className="capitalize relative w-full py-4 font-medium rounded-sm text-white bg-red-900 focus:outline-none tracking-widest text-xs">
-          remove
-        </button>
-        <button
-          className="bg-green-700 text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs"
-          onClick={buttonNavigate}
-        >
-          confirm booking
-        </button>
-      </div>
+      )}
     </section>
   );
-};
-
-const Form2 = () => {
-  return <div>Form 2</div>;
 };

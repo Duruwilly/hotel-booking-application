@@ -7,7 +7,6 @@ import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import Button from "../button/SearchButton";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
-import moment from "moment";
 import { AiFillCloseCircle } from "react-icons/ai";
 import {
   setDate,
@@ -19,10 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 const Heroe = () => {
   const { openDate, toggleDate, toggleRoomOptions, openRoomOptions } =
     useMediaQueriesContext();
-  let { roomOptions, dateSearch } = useSelector((state) => {
-    console.log(state);
-    return state.searchState;
-  });
+  let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
   const dispatch = useDispatch();
   const { matches } = useMediaQueriesContext();
   const [matcheState, setMatcheState] = useState(

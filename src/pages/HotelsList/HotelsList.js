@@ -3,7 +3,7 @@ import FixedHeader from "../../components/header/FixedHeader";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import SearchInputHeader from "./SearchInputHeader";
 import { BiSort } from "react-icons/bi";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import image1 from "../../assets/images/heroe.jpg";
 import image2 from "../../assets/images/heroe2.jpg";
 import { AiFillHeart } from "react-icons/ai";
@@ -12,33 +12,59 @@ import ToggledSearchHeader from "./ToggledSearchHeader";
 import Spinner from "../../components/Spinner/Spinner";
 import SearchList from "../../components/searchList/SearchList";
 import useFetch from "../../hooks/useFetch";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useDaysCalculate from "../../hooks/useDaysCalculate";
+import { setDestination } from "../../redux/searchStateSlice";
+import { useTitle } from "../../hooks/useTitle";
 
 const HotelsList = () => {
-  const { matches, setDropdownHeader, setFetchHotelStatus } = useMediaQueriesContext();
+  const [searchParams, setSearchParams] = useSearchParams();
+  useTitle(`Best luxury hotels in ${searchParams.get("query")}`)
+  const { id } = useParams();
+  // console.log(id);
+  const dispatch = useDispatch();
+  const { matches, setDropdownHeader, setFetchHotelStatus, fetchHotelStatus } =
+    useMediaQueriesContext();
+    console.log(searchParams.get("query"));
   const location = useLocation();
+  // console.log(location.search.split(" "));
   let { roomOptions, destination } = useSelector((state) => state.searchState);
 
-  const { data, loading, error } = useFetch(
-    destination !== ""
-      ? `http://localhost:8800/api/v1/hotels?country=${destination}`
-      : "http://localhost:8800/api/v1/hotels"
-  );
+  const url = `http://localhost:8800/api/v1/hotels?country=${destination}`;
+    // destination !== ""
+    //   ? `http://localhost:8800/api/v1/hotels?country=${id}`
+    //   : "http://localhost:8800/api/v1/hotels";
+
+  const { data, loading, error } = useFetch(url);
+  console.log(data);
+
+  useEffect(() => {
+    if(searchParams.get("query") && searchParams.get("query") !== "") dispatch(setDestination(searchParams.get("query")));
+  }, [searchParams.get("query")]);
 
   let { days } = useDaysCalculate();
 
   useEffect(() => {
-    setFetchHotelStatus("idle")
-  }, [])
+    setFetchHotelStatus("idle");
+  }, []);
+
+  useEffect(() => {
+    window.onpopstate = () => {
+      setFetchHotelStatus("idle");
+    };
+  }, []);
 
   return (
     <>
       {matches ? <SearchInputHeader /> : <ToggledSearchHeader />}
+      {/* {fetchHotelStatus === "pending" && loading === true  } */}
       {loading ? (
         <Spinner />
       ) : (
-        <section className="flex justify-center" onClick={() =>  setDropdownHeader(false)}>
+        <section
+          className="flex justify-center"
+          onClick={() => setDropdownHeader(false)}
+        >
           <div className="w-full max-w-screen-xl py-5 px-4">
             <ul className="flex my-0 mx-auto list-none">
               <li className="uppercase text-xs border border-gray-900 bg-primary py-3 w-full text-white text-center list-none font-semibold">

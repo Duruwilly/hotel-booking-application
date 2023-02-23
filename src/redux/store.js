@@ -1,4 +1,5 @@
 import searchStateReducer from "./searchStateSlice";
+import basketReducer from "./basketSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
 import thunk from "redux-thunk";
@@ -22,7 +23,7 @@ const persistConfig = {
 
   const rootReducer = combineReducers({
     searchState: persistReducer(persistConfig, searchStateReducer),
-    // cart: persistReducer(persistConfig, cartReducer),
+    basket: persistReducer(persistConfig, basketReducer),
     // save: persistReducer(persistConfig, savedReducer),
   })
 
