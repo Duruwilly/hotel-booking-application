@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { BsBagCheck, BsFillHeartFill, BsFillTelephoneFill } from "react-icons/bs";
+import {
+  BsBagCheck,
+  BsFillHeartFill,
+  BsFillTelephoneFill,
+} from "react-icons/bs";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/logo/logo2.png";
 import Header from "../header/Header";
@@ -18,7 +22,7 @@ const Navbar = () => {
 
   const { matches, setDropdownHeader } = useMediaQueriesContext();
 
-  // let { destination } = useSelector((state) => state.searchState);
+  let { totalQuantity } = useSelector((state) => state.basket);
 
   const { user } = useAuthContext();
 
@@ -81,14 +85,17 @@ const Navbar = () => {
         <div className="w-full max-w-screen-xl flex justify-between items-center">
           <div className="navIconsToggle flex items-center justify-center gap-3">
             <FaBars className="text-white text-2xl" onClick={toggleMobileNav} />
-            {location.pathname !== "/basket" && location.pathname !== "/payment" ? <div
-              className={`h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white ${stickySearchIcon}`}
-            >
-              <CiSearch
-                className="text-white text-2xl"
-                onClick={toggleDropDownHeader}
-              />
-            </div> : null}
+            {location.pathname !== "/basket" &&
+            location.pathname !== "/payment" ? (
+              <div
+                className={`h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white ${stickySearchIcon}`}
+              >
+                <CiSearch
+                  className="text-white text-2xl"
+                  onClick={toggleDropDownHeader}
+                />
+              </div>
+            ) : null}
           </div>
 
           <div className="hidden navTelephone items-center gap-2 text-gray-300 text-sm">
@@ -134,9 +141,20 @@ const Navbar = () => {
             <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer">
               <BsFillHeartFill />
             </div>
-            <Link to='/basket' className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer">
-              <BsBagCheck />
-            </Link>
+            <div className="relative">
+              <Link to="/basket" className="">
+                <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer">
+                  <BsBagCheck />
+                </div>
+                {totalQuantity === 0
+                  ? false
+                  : true && (
+                      <div className="amount-container">
+                        <p className="total-amount">{totalQuantity}</p>
+                      </div>
+                    )}
+              </Link>
+            </div>
           </div>
           {/* mobile nav */}
           <div
@@ -150,11 +168,15 @@ const Navbar = () => {
         </div>
       </header>
       {/* from min-width 1050 and above, remove the search from the heroe and fix it at the top */}
-      {matches && location.pathname === "/" ? <FixedHeroe /> : null}
+      {matches || location.pathname === "/" ? <FixedHeroe /> : null}
       {/* {matches && <FixedHeroe /> } */}
       {/* from min-width 1050 and above, display the header component else replace it with the demo search component  */}
       {/* {matches ? <Header /> : <FixedHeader />} */}
-      {matches ? <Header /> : location.pathname === "/" ? <FixedHeader /> : null}
+      {matches ? (
+        <Header />
+      ) : location.pathname === "/" ? (
+        <FixedHeader />
+      ) : null}
     </>
   );
 };

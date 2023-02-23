@@ -13,6 +13,7 @@ import travelTeam2 from "../assets/images/team2.jpeg";
 import travelTeam3 from "../assets/images/team3.jpeg";
 import tower from "../assets/images/parisTower.jpeg";
 import stays from "../assets/images/gallery7.jpeg";
+import paymentModalBg from "../assets/images/pay5.jpg";
 
 export const heroeBg = {
   width: "100%",
@@ -247,4 +248,14 @@ export const adsStyle = {
     height: '20rem',
     color: 'white',
     textTransform: 'capitalize'
+   }
+
+   export const paymentBg = {
+    width: "100%",
+    padding: "0",
+    backgroundImage: `url(${paymentModalBg})`,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    height: "13rem"
    }

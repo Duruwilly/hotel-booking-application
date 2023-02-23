@@ -180,7 +180,7 @@ const SearchInputHeader = () => {
                       className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900"
                       onClick={() =>
                         dispatch(
-                          handleRoomOption({ name: "adult", operation: "i" })
+                          handleRoomOption({ name: "rooms", operation: "i" })
                         )
                       }
                     >

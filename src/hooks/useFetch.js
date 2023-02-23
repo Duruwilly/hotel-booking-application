@@ -16,6 +16,7 @@ const useFetch = (url) => {
         const res = await axios.get(url);
         setFetchHotelStatus(res.status)
         setData(res.data.data);
+        // console.log(res.data.data);
       } catch (error) {
         setError(error);
       }
@@ -23,23 +24,24 @@ const useFetch = (url) => {
         setLoading(false);
       }, 500);
     };
+    // console.log(data.status);
     if(fetchHotelStatus === "idle") fetchData();
   }, [fetchHotelStatus]);
 
-  const reFetch = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(url);
-      setData(res.data.data);
-    } catch (error) {
-      setError(error);
-    }
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
-  };
+  // const reFetch = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await axios.get(url);
+  //     setData(res.data.data);
+  //   } catch (error) {
+  //     setError(error);
+  //   }
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 500);
+  // };
 
-  return { loading, data, error, reFetch };
+  return { loading, data, error };
 };
 
 export default useFetch;
