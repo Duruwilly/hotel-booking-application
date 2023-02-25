@@ -7,7 +7,6 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import useDaysCalculate from "../../hooks/useDaysCalculate";
 import BookingSummaryCard from "../../components/bookingSummaryCard/BookingSummaryCard";
-import { Link } from "react-router-dom";
 import { useTitle } from "../../hooks/useTitle";
 import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
 
@@ -33,7 +32,6 @@ const Payment = () => {
 export default Payment;
 
 const PaymentCard = () => {
-  let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
   let { basketItems } = useSelector((state) => state.basket);
 
   let { days } = useDaysCalculate();
@@ -41,7 +39,7 @@ const PaymentCard = () => {
   let total = 0;
 
   basketItems.forEach((item) => {
-    total += item.quantity * item[0].price * days * roomOptions.rooms;
+    total += item.quantity * item[0].price * item.days;
   });
 
   const [userPaymentData, setUserPaymentData] = useState({
@@ -59,8 +57,6 @@ const PaymentCard = () => {
       [e.target.id]: e.target.value,
     }));
   };
-
-  console.log(basketItems.map((hi) => hi[0].roomNumbers.map((id) => id._id)));
 
   const inputStyles =
     "w-full focus:outline-none border border-gray-300 p-3 placeholder:text-sm block";

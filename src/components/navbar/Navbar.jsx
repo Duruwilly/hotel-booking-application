@@ -168,7 +168,7 @@ const Navbar = () => {
         </div>
       </header>
       {/* from min-width 1050 and above, remove the search from the heroe and fix it at the top */}
-      {matches || location.pathname === "/" ? <FixedHeroe /> : null}
+      {matches && location.pathname === "/" ? <FixedHeroe /> : null}
       {/* {matches && <FixedHeroe /> } */}
       {/* from min-width 1050 and above, display the header component else replace it with the demo search component  */}
       {/* {matches ? <Header /> : <FixedHeader />} */}

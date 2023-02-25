@@ -17,11 +17,17 @@ import {
 import { useSelector } from "react-redux";
 
 const FixedHeroe = () => {
-  const { openDate, toggleDate, toggleRoomOptions, openRoomOptions } =
-    useMediaQueriesContext();
+  const {
+    openDate,
+    toggleDate,
+    toggleRoomOptions,
+    openRoomOptions,
+    date,
+    setDates,
+  } = useMediaQueriesContext();
 
   const dispatch = useDispatch();
-  let { roomOptions, destination, dateSearch } = useSelector(
+  let { roomOptions, destination, dateSearch, searchQueryDates } = useSelector(
     (state) => state.searchState
   );
   const location = useLocation();
@@ -66,14 +72,28 @@ const FixedHeroe = () => {
               onClick={toggleDate}
               className="pl-8 w-full py-[1.65rem] cursor-pointer"
             >
-              {`${format(
+              {/* {`${format(
                 new Date(dateSearch[0].startDate),
                 "dd/MM/yyyy"
-              )} to ${format(new Date(dateSearch[0].endDate), "dd/MM/yyyy")}`}
+              )} to ${format(new Date(dateSearch[0].endDate), "dd/MM/yyyy")}`} */}
+              {/* {`${format(date[0].startDate, "dd/MM/yyyy")} to ${format(
+                date[0].endDate,
+                "dd/MM/yyyy"
+              )}`} */}
+              {searchQueryDates[0].searchQueryStartDates === undefined &&
+              searchQueryDates[0].searchQueryEndDates === undefined
+                ? "check-in - check-out"
+                : `${format(
+                    new Date(dateSearch[0].startDate),
+                    "dd MMM yyyy"
+                  )} - ${format(
+                    new Date(dateSearch[0].endDate),
+                    "dd MMM yyyy"
+                  )}`}
             </span>
             {openDate && (
               <div>
-                <DateRange
+                {/* <DateRange
                   editableDateInputs={true}
                   onChange={(item) => {
                     dispatch(setDate({ ...item.selection }));
@@ -86,6 +106,17 @@ const FixedHeroe = () => {
                       key: dateSearch[0].key,
                     },
                   ]}
+                  className="date"
+                  minDate={new Date()}
+                /> */}
+                <DateRange
+                  editableDateInputs={true}
+                  onChange={(item) => {
+                    setDates([item.selection]);
+                    dispatch(setDate({ ...item.selection }));
+                  }}
+                  moveRangeOnFirstSelection={false}
+                  ranges={date}
                   className="date"
                   minDate={new Date()}
                 />
@@ -106,9 +137,7 @@ const FixedHeroe = () => {
             >
               {`${roomOptions.adult} ${
                 roomOptions.adult === 1 ? `adult` : `adults`
-              } - ${roomOptions.children} children - ${roomOptions.rooms} ${
-                roomOptions.rooms === 1 ? `room` : `rooms`
-              }`}
+              } - ${roomOptions.children} children`}
             </span>
             {openRoomOptions && (
               <div className="options">
@@ -165,34 +194,6 @@ const FixedHeroe = () => {
                       onClick={() =>
                         dispatch(
                           handleRoomOption({ name: "children", operation: "i" })
-                        )
-                      }
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-                {/* rooms */}
-                <div className="w-52 flex justify-between py-2 px-4">
-                  <span className="text-black">Rooms</span>
-                  <div className="flex items-center gap-2 text-xs text-black">
-                    <button
-                      className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900 btn-disabled"
-                      onClick={() =>
-                        dispatch(
-                          handleRoomOption({ name: "rooms", operation: "d" })
-                        )
-                      }
-                      disabled={roomOptions.rooms <= 1}
-                    >
-                      -
-                    </button>
-                    <span>{roomOptions.rooms}</span>
-                    <button
-                      className="w-7 h-7 cursor-pointer text-gray-900 border border-gray-900"
-                      onClick={() =>
-                        dispatch(
-                          handleRoomOption({ name: "adult", operation: "i" })
                         )
                       }
                     >

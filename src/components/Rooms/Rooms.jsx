@@ -16,15 +16,12 @@ import useRoomsAvailabilityCheck, {
 
 const Rooms = ({
   hotelID,
-  price,
   hotelName,
   hotelCountry,
   hotelState,
   feature,
 }) => {
   const { user } = useAuthContext();
-
-  const { setFetchHotelStatus, setDropdownHeader } = useMediaQueriesContext();
 
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
@@ -37,7 +34,7 @@ const Rooms = ({
     try {
       let url = `http://localhost:8800/api/v1/hotels/room/${hotelID}`;
       const res = await axios.get(url);
-      console.log(res.data.data);
+      // console.log(res.data.data);
       setData(res.data.data);
     } catch (error) {
       console.log(error);
@@ -52,7 +49,9 @@ const Rooms = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
+  let { roomOptions, dateSearch, searchQueryDates } = useSelector((state) => state.searchState);
+  let { days } = useDaysCalculate();
+  let { isAvailable } = useRoomsAvailabilityCheck();
 
   const addToBasket = (id) => {
     const item = data.filter((itemId) => itemId._id === id);
@@ -63,6 +62,7 @@ const Rooms = ({
           ...item,
           roomOptions,
           dateSearch,
+          days,
           hotelName,
           hotelCountry,
           hotelState,
@@ -76,25 +76,15 @@ const Rooms = ({
     }
   };
 
-  let { days } = useDaysCalculate();
-  let { isAvailable } = useRoomsAvailabilityCheck();
-
   //   useEffect(() => {
   //     setFetchHotelStatus("idle");
   //   }, [hotelID]);
-
-  const hello = (item) => {
-    // const hi = data.filter((itemId) => itemId._id === item)
-    // console.log(hi[0].roomNumbers);
-    const hi = item.map((roomId) => roomId._id);
-    console.log(hi);
-  };
 
   return (
     <>
       {data.map((room) => (
         <div className="mt-3" key={room._id}>
-          {roomOptions.adult + roomOptions.children > room.maxPeople ? (
+          {isAvailable(room.roomNumbers) && roomOptions.adult + roomOptions.children > room.maxPeople ? (
             <div
               className="py-4 text-center text-white font-light text-lg"
               style={{ background: "#758496" }}
@@ -169,7 +159,7 @@ const Rooms = ({
                 </div>
                 {!isAvailable(room.roomNumbers) ? (
                   <p className="text-red-800 capitalize">room unavailable</p>
-                ) : null}
+                ) : <p className="text-red-800 font-semibold">kindly select a date to see room availability</p>}
                 <p className="text-sm">
                   For more details{" "}
                   <Link
@@ -195,9 +185,7 @@ const Rooms = ({
                   <span className="font-semibold text-xl">
                     $
                     {[
-                      room?.price *
-                        `${days === 0 ? `1` : days}` *
-                        roomOptions.rooms,
+                      room?.price * days
                     ]
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
@@ -206,6 +194,7 @@ const Rooms = ({
                 <button
                   onClick={() => addToBasket(room._id)}
                   disabled={!isAvailable(room.roomNumbers)}
+                  // onClick={() => !isAvailable(room.roomNumbers)}
                   className={`${
                     !isAvailable(room.roomNumbers)
                       ? `bg-green-700 disabled:opacity-70`

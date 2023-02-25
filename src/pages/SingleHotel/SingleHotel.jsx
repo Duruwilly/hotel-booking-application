@@ -1,21 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { heroeBg } from "../../BgImageStyles/styles";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import SearchInputHeader from "../HotelsList/SearchInputHeader";
 import ToggledSearchHeader from "../HotelsList/ToggledSearchHeader";
 import { AiFillHeart } from "react-icons/ai";
-import image1 from "../../assets/images/heroe.jpg";
-import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import Spinner from "../../components/Spinner/Spinner";
-import { useSharedSearchContext } from "../../context/SearchContext";
-import { useAuthContext } from "../../context/AuthContext";
-import { MdOutlineSingleBed, MdOutlineKingBed } from "react-icons/md";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
-import useDaysCalculate from "../../hooks/useDaysCalculate";
-import { useDispatch, useSelector } from "react-redux";
-import { addItem } from "../../redux/basketSlice";
 import { useTitle } from "../../hooks/useTitle";
 import Rooms from "../../components/Rooms/Rooms";
 
@@ -25,17 +17,40 @@ const SingleHotel = () => {
   const { data, loading, error } = useFetch(
     `http://localhost:8800/api/v1/hotels/find/${id}`
   );
-  console.log({ hello: data.country, hi: data.state });
 
   useTitle(`Rooms at ${data?.country}, ${data?.state}`);
 
-  const { setFetchHotelStatus, setDropdownHeader } = useMediaQueriesContext();
+  const {
+    setFetchHotelStatus,
+    setDropdownHeader,
+  } = useMediaQueriesContext();
 
   useEffect(() => {
     setFetchHotelStatus("idle");
   }, []);
 
   const { matches } = useMediaQueriesContext();
+
+  // console.log(searchQueryDates);
+  // useEffect(() => {
+  //   setSearchQueryDates([
+  //     {
+  //       searchQueryStartDates: new Date(),
+  //       searchQueryEndDates: new Date(),
+  //     },
+  //   ]);
+  // }, []);
+
+  // useEffect(() => {
+  //  window.onpopstate = () => {
+  //   setSearchQueryDates([
+  //     {
+  //       searchQueryStartDates: new Date(),
+  //       searchQueryEndDates: new Date(),
+  //     },
+  //   ]);
+  //  }
+  // }, [])
 
   return (
     <>
