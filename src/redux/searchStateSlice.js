@@ -12,8 +12,13 @@ const initialState = {
   roomOptions: {
     adult: 1,
     children: 0,
-    rooms: 1,
   },
+  searchQueryDates: [
+    {
+      searchQueryStartDates: undefined,
+      searchQueryEndDates: undefined,
+    },
+  ],
 };
 
 const searchStateSlice = createSlice({
@@ -40,12 +45,21 @@ const searchStateSlice = createSlice({
         },
       ];
     },
+    setSearchQueryDates(state, action) {
+      const { searchQueryStartDates, searchQueryEndDates } = action.payload;
+      state.searchQueryDates = [
+        {
+          searchQueryStartDates,
+          searchQueryEndDates,
+        },
+      ];
+    },
     setDestination(state, action) {
       state.destination = action.payload;
     },
   },
 });
 
-export const { handleRoomOption, setDate, setDestination } =
+export const { handleRoomOption, setDate, setDestination, setSearchQueryDates } =
   searchStateSlice.actions;
 export default searchStateSlice.reducer;

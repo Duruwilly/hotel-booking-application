@@ -16,9 +16,8 @@ const basketSlice = createSlice({
       const existingItem = state.basketItems.find(
         (item) => item[0]._id === newItem[0]._id
       );
-      if(existingItem) {
-        existingItem.quantity++;
-      } else {
+      if(!existingItem) {
+        
         state.basketItems.push({
             ...newItem,
             quantity: 1,

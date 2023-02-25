@@ -5,7 +5,6 @@ import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import BasketItem from "../../components/basketItems/BasketItem";
-import useDaysCalculate from "../../hooks/useDaysCalculate";
 import SearchInputHeader from "../HotelsList/SearchInputHeader";
 import ToggledSearchHeader from "../HotelsList/ToggledSearchHeader";
 import { paymentBg } from "../../BgImageStyles/styles";
@@ -35,14 +34,6 @@ const Basket = () => {
   }, []);
 
   return (
-    // <section className="flex justify-center">
-    //   <div className="w-full max-w-screen-sm py- px-4">
-    //     <div className=" m-auto">
-    //       {basketItems > 0 ? <ProgressBar step={steps} list={list} /> : matches ? <SearchInputHeader /> : <ToggledSearchHeader />}
-    //     </div>
-    //     <Confirmation setSteps={setSteps} />
-    //   </div>
-    // </section>
     <>
       {basketItems.length > 0 ? (
         <ProgressBar step={steps} list={list} />
@@ -55,7 +46,7 @@ const Basket = () => {
         <div className="w-full max-w-screen-sm px-4">
           <Confirmation setSteps={setSteps} />
         </div>
-        {openModal && (
+        {basketItems.length > 0 && openModal && (
           <div
             className=" w-screen h-screen fixed top-0 left-0 flex items-center justify-center z-[5] px-2"
             style={{ background: "rgba(255, 255, 255, 0.6)" }}
@@ -107,8 +98,10 @@ const Basket = () => {
                           className={`${inputStyles} text-sm`}
                         >
                           <option value="">Select Country</option>
-                          {countries.map((country) => (
-                            <option value={country.name}>{country.name}</option>
+                          {countries?.map((country) => (
+                            <option value={country?.name}>
+                              {country?.name}
+                            </option>
                           ))}
                         </select>
                       </div>
@@ -132,18 +125,13 @@ const Basket = () => {
 export default Basket;
 
 const Confirmation = ({ setSteps }) => {
-  let { roomOptions } = useSelector((state) => state.searchState);
   let { basketItems } = useSelector((state) => state.basket);
   const navigate = useNavigate();
-
-  console.log();
-
-  let { days } = useDaysCalculate();
 
   let total = 0;
 
   basketItems.forEach((item) => {
-    total += item.quantity * item[0].price * days * roomOptions.rooms;
+    total += item.quantity * item[0].price * item.days;
   });
 
   useEffect(() => {
@@ -199,12 +187,6 @@ const Confirmation = ({ setSteps }) => {
             </Link>
             or add your keywords to the search bar above
           </h1>
-          {/* <Link
-            to="/menu"
-            className="bg-primar w-full text-center p-6 text-whit rounded-lg"
-          >
-            Start Shopping
-          </Link> */}
         </div>
       )}
     </section>

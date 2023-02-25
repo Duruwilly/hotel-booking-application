@@ -12,6 +12,8 @@ const BookingSummaryCard = (props) => {
     feature,
     roomOptions,
     dateSearch,
+    // date,
+    // searchQueryDates,
     price,
     guests,
     quantity,
@@ -19,12 +21,12 @@ const BookingSummaryCard = (props) => {
     hotelState,
     hotelName,
   } = props;
-//   console.log(props[0].roomNumbers);
+  //   console.log(props[0].roomNumbers);
   return (
     <div className="p-4 bg-white border border-gray-300 h-fit">
       <h2 className="text-3xl font-normal capitalize">{hotelName}</h2>
       <p className="capitalize pt-2 font-extralight">
-      {hotelCountry + "," + " " + hotelState}
+        {hotelCountry + "," + " " + hotelState}
       </p>
       <div className="pt-6">
         <div className="flex pb-2">
@@ -40,10 +42,17 @@ const BookingSummaryCard = (props) => {
             dates
           </p>
           <span className="capitalize font-light text-sm" style={{ flex: 4 }}>
-            {`${format(
-              new Date(dateSearch[0].startDate),
+            {/* {`${format(
+              new Date(date[0]?.startDate),
               "dd MMMM yyyy"
-            )} - ${format(new Date(dateSearch[0].endDate), "dd MMMM yyyy")}`}
+            )} - ${format(new Date(date[0]?.endDate), "dd MMMM yyyy")}`} */}
+            {`${format(
+              new Date(dateSearch[0]?.startDate),
+              "dd MMMM yyyy"
+            )} - ${format(
+              new Date(dateSearch[0]?.endDate),
+              "dd MMMM yyyy"
+            )}`}
           </span>
         </div>
         <div className="flex  pb-2">

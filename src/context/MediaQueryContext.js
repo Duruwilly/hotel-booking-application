@@ -5,11 +5,25 @@ const MediaQueryMatches = createContext();
 export const MediaQueryContext = ({ children }) => {
   const [dropdownHeader, setDropdownHeader] = useState(false);
   const [fetchHotelStatus, setFetchHotelStatus] = useState('idle')
+  const [searchQueryDates, setSearchQueryDates] = useState([
+    {
+      searchQueryStartDates: undefined,
+      searchQueryEndDates: undefined,
+    }
+  ])
 
   const [hotelDropdownHeader, setHotelDropdownHeader] = useState(false);
 
   const [openDate, setOpenDate] = useState(false);
   const [openRoomOptions, setOpenRoomOptions] = useState(false);
+
+  const [date, setDates] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
 
   const [steps, setSteps] = useState(0);
   const list = ["Choose", "confirm", "Pay"];
@@ -57,11 +71,13 @@ export const MediaQueryContext = ({ children }) => {
         setHotelDropdownHeader,
         fetchHotelStatus,
         setFetchHotelStatus,
-        
-        
+        date,
+        setDates,
         steps,
         setSteps,
-        list
+        list,
+        searchQueryDates,
+        setSearchQueryDates
       }}
     >
       {children}
