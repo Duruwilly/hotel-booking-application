@@ -10,6 +10,7 @@ import Spinner from "../../components/Spinner/Spinner";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import { useTitle } from "../../hooks/useTitle";
 import Rooms from "../../components/Rooms/Rooms";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
 const SingleHotel = () => {
   const location = useLocation();
@@ -45,6 +46,8 @@ const SingleHotel = () => {
     };
   }, []);
 
+  const [restTabModal, setRestTabModal] = useState(false);
+
   // console.log(searchQueryDates);
   // useEffect(() => {
   //   setSearchQueryDates([
@@ -68,9 +71,7 @@ const SingleHotel = () => {
 
   const tabsList = useRef([
     {
-      panel: (
-        <p>on it</p>
-      ),
+      panel: <p>on it</p>,
       name: "overview",
       value: "overview",
     },
@@ -131,15 +132,17 @@ const SingleHotel = () => {
   }, [tabsList, activeTab]);
 
   const tabsListSmallScreenDisplay = useMemo(() => {
-    return tabsList?.current?.map((tab) => (
+    let smallScreenTab = [...tabsList.current];
+    smallScreenTab.splice(1, 2);
+    // console.log(smallScreenTab.map((tab) => tab[0]));
+    return smallScreenTab?.map((tab) => (
       <div key={tab?.value} className="relative text-gray-400 ">
         <button
           className={`${
             activeTab === tab?.value
-              ? "singleHotelActive text-white cursor-pointer py-5 w-full"
+              ? "singleHotelActive text-white cursor-pointer py-5 px-10"
               : " cursor-pointer py-5 px-10"
           } uppercase`}
-          onClick={() => setActiveTab(tab?.value)}
         >
           {tab?.name}
         </button>
@@ -150,6 +153,27 @@ const SingleHotel = () => {
   const activeTabPanel = useMemo(() => {
     return tabsList.current?.find((tab) => tab?.value === activeTab)?.panel;
   }, [tabsList, activeTab]);
+
+  const restSmallScreenTabsList = useMemo(() => {
+    let restSmallScreenTab = [...tabsList.current];
+    let newArr = restSmallScreenTab.slice(0, 3);
+    return newArr?.map((tab) => (
+      <div key={tab?.value} className="relative text-gray-400 ">
+        <button
+          className={`${
+            activeTab === tab?.value
+              ? "singleHotelActive text-white cursor-pointer py-5 px- w-full"
+              : " cursor-pointer py-5 px-10"
+          } uppercase`}
+          onClick={() => {setActiveTab(tab?.value); setRestTabModal(false)}}
+        >
+          {tab?.name}
+        </button>
+      </div>
+    ));
+  });
+
+  console.log(tabsListSmallScreenDisplay[0].props.children.props.onClick);
 
   return (
     <>
@@ -191,8 +215,9 @@ const SingleHotel = () => {
             </div>
           </section>
           <section className="flex flex-col items-center justify-center">
-            <div className="bg-primary h-  w-full">
-              {/* <ul className="text-gray-400 font-mediu text-xl flex justify-around py-">
+            <div className="relative w-full">
+              <div className="bg-primary h-  w-full relative">
+                {/* <ul className="text-gray-400 font-mediu text-xl flex justify-around py-">
                 <li
                   className={
                     activeTab === "tab2"
@@ -234,8 +259,26 @@ const SingleHotel = () => {
                   select a room
                 </li>
               </ul> */}
-              <div className="text-gray-400 font-medium text-sm flex flex-col sm:flex-row justify-around uppercase">
-                {tabScreenmatches ? tabsListBigScreenDisplay : tabsListSmallScreenDisplay}
+                <div className="text-gray-400 font-medium text-sm flex justify-around uppercase">
+                  {tabScreenmatches ? (
+                    tabsListBigScreenDisplay
+                  ) : (
+                    <>
+                      <div onClick={() => setRestTabModal(true)} className="flex justify-center items-center">
+                        {tabsListSmallScreenDisplay[0]}
+                        <MdOutlineKeyboardArrowDown className="text-3xl" />
+                      </div>
+                      <div onClick={() => setActiveTab("select-a-room")}>
+                        {tabsListSmallScreenDisplay[1]}
+                      </div>
+                    </>
+                  )}
+                </div>
+                {restTabModal && (
+                  <div className="absolute top-0 z-20 bg-primary w-2/4">
+                    {restSmallScreenTabsList}
+                  </div>
+                )}
               </div>
             </div>
             <div className="w-full max-w-screen-lg mt-12 mb-16 px-4">

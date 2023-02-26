@@ -7,7 +7,7 @@ import { useSharedSearchContext } from "../../context/SearchContext";
 
 const Button = () => {
   const { dispatch } = useSharedSearchContext();
-  const { setFetchHotelStatus, setDropdownHeader, date } =
+  const { setFetchHotelStatus, fetchHotelStatus, setDropdownHeader, date } =
     useMediaQueriesContext();
   const navigate = useNavigate();
   let { destination, dateSearch } = useSelector((state) => state.searchState);
