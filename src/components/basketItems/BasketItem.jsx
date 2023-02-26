@@ -17,10 +17,8 @@ const BasketItem = (props) => {
     hotelName,
   } = props;
   const navigate = useNavigate();
-    console.log(props);
 
   // const { days } = useDaysCalculate();
-
 
   const dispatch = useDispatch();
   // console.log(searchQueryDates);

@@ -504,6 +504,11 @@
   font-size: 0.7rem;
 }
 
+/* single hotel tabs */
+.singleHotelActive {
+  background: rgba(31, 41, 55, 1);
+}
+
 @layer base {
   body {
     @apply bg-gray;
