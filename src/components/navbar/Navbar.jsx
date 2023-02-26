@@ -124,7 +124,9 @@ const Navbar = () => {
                   <IoIosArrowDown className="text-inherit text-xl" />
                 </div>
                 <ul>
-                  <li className="capitalize">profile</li>
+                  <Link to="/profile">
+                    <li className="capitalize">profile</li>
+                  </Link>
                   <li className="capitalize">logout</li>
                 </ul>
               </div>
@@ -138,12 +140,17 @@ const Navbar = () => {
                 </Link>
               </div>
             )}
-            <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer">
-              <BsFillHeartFill />
-            </div>
-            <div className="relative">
-              <Link to="/basket" className="">
+            <div className="tooltip relative">
+              <Link to="/favourite">
                 <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer">
+                  <BsFillHeartFill />
+                </div>
+              </Link>
+              <span className="tooltiptext">Favourite</span>
+            </div>
+            <div className="relative tooltip">
+              <Link to="/basket" className="">
+                <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer relative toolti">
                   <BsBagCheck />
                 </div>
                 {totalQuantity === 0
@@ -154,6 +161,7 @@ const Navbar = () => {
                       </div>
                     )}
               </Link>
+              <span className="tooltiptext">Basket</span>
             </div>
           </div>
           {/* mobile nav */}

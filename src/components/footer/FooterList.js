@@ -6,12 +6,12 @@ import FooterLinks from './FooterLinks'
 
 const FooterList = () => {
   return (
-    <div>
+    <>
         <PhoneContact />
         <NewsLetter />
         <FooterLinks />
         <Footer />
-    </div>
+    </>
   )
 }
 
