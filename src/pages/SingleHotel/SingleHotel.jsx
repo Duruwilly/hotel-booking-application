@@ -165,7 +165,10 @@ const SingleHotel = () => {
               ? "singleHotelActive text-white cursor-pointer py-5 px- w-full"
               : " cursor-pointer py-5 px-10"
           } uppercase`}
-          onClick={() => {setActiveTab(tab?.value); setRestTabModal(false)}}
+          onClick={() => {
+            setActiveTab(tab?.value);
+            setRestTabModal(false);
+          }}
         >
           {tab?.name}
         </button>
@@ -216,7 +219,7 @@ const SingleHotel = () => {
           </section>
           <section className="flex flex-col items-center justify-center">
             <div className="relative w-full">
-              <div className="bg-primary h-  w-full relative">
+              <div className="bg-primary  w-full relative">
                 {/* <ul className="text-gray-400 font-mediu text-xl flex justify-around py-">
                 <li
                   className={
@@ -264,7 +267,10 @@ const SingleHotel = () => {
                     tabsListBigScreenDisplay
                   ) : (
                     <>
-                      <div onClick={() => setRestTabModal(true)} className="flex justify-center items-center">
+                      <div
+                        onClick={() => setRestTabModal(true)}
+                        className="flex justify-center items-center"
+                      >
                         {tabsListSmallScreenDisplay[0]}
                         <MdOutlineKeyboardArrowDown className="text-3xl" />
                       </div>
