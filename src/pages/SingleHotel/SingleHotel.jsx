@@ -219,7 +219,7 @@ const SingleHotel = () => {
           </section>
           <section className="flex flex-col items-center justify-center">
             <div className="relative w-full">
-              <div className="bg-primary  w-full relative">
+              <div className="bg-primary  w-full relative overflow-hidde overflow-x-hidde">
                 {/* <ul className="text-gray-400 font-mediu text-xl flex justify-around py-">
                 <li
                   className={
@@ -262,7 +262,7 @@ const SingleHotel = () => {
                   select a room
                 </li>
               </ul> */}
-                <div className="text-gray-400 font-medium text-sm flex justify-around uppercase">
+                <div className="text-gray-400 font-medium text-sm flex justify-around uppercase overflow-x-hidden">
                   {tabScreenmatches ? (
                     tabsListBigScreenDisplay
                   ) : (
@@ -274,7 +274,12 @@ const SingleHotel = () => {
                         {tabsListSmallScreenDisplay[0]}
                         <MdOutlineKeyboardArrowDown className="text-3xl" />
                       </div>
-                      <div onClick={() => setActiveTab("select-a-room")}>
+                      <div
+                        onClick={() => {
+                          setActiveTab("select-a-room");
+                          setRestTabModal(false);
+                        }}
+                      >
                         {tabsListSmallScreenDisplay[1]}
                       </div>
                     </>
@@ -288,7 +293,7 @@ const SingleHotel = () => {
               </div>
             </div>
             <div className="w-full max-w-screen-lg mt-12 mb-16 px-4">
-              {activeTab === "select-a-room" && <PriceConversion />}
+              {/* {activeTab === "select-a-room" && <PriceConversion />} */}
               {activeTabPanel}
             </div>
           </section>

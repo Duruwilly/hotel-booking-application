@@ -13,6 +13,7 @@ import axios from "axios";
 import useRoomsAvailabilityCheck, {
   isAvailable,
 } from "../../utils/useRoomsAvailabilityCheck";
+import PriceConversion from "../PriceConversion/PriceConversion";
 
 const Rooms = ({
   hotelID,
@@ -82,6 +83,7 @@ const Rooms = ({
 
   return (
     <>
+    <PriceConversion />
       {data.map((room) => (
         <div className="mt-3" key={room._id}>
           {isAvailable(room.roomNumbers) && roomOptions.adult + roomOptions.children > room.maxPeople ? (
