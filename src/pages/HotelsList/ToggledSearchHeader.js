@@ -16,8 +16,6 @@ import {
 
 const ToggledSearchHeader = () => {
   const {
-    hotelDropdownHeader,
-    setHotelDropdownHeader,
     dropdownHeader,
     setDropdownHeader,
     openDate,
@@ -32,17 +30,6 @@ const ToggledSearchHeader = () => {
     (state) => state.searchState
   );
   const dispatch = useDispatch();
-  // console.log(dropdownHeader, "hello");
-
-  // const handleRoomOption = (name, operation) => {
-  //   setRoomOptions((prev) => {
-  //     return {
-  //       ...prev,
-  //       [name]:
-  //         operation === "i" ? roomOptions[name] + 1 : roomOptions[name] - 1,
-  //     };
-  //   });
-  // };
 
   return (
     <>
@@ -97,13 +84,6 @@ const ToggledSearchHeader = () => {
                       onClick={toggleDate}
                       className="pl-8 w-full py-[1.65rem] cursor-pointer"
                     >
-                      {/* {`${format(
-                        new Date(dateSearch[0].startDate),
-                        "dd/MM/yyyy"
-                      )} to ${format(
-                        new Date(dateSearch[0].endDate),
-                        "dd/MM/yyyy"
-                      )}`} */}
                       {searchQueryDates[0].searchQueryStartDates ===
                         undefined &&
                       searchQueryDates[0].searchQueryEndDates === undefined

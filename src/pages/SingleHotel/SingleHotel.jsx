@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { heroeBg } from "../../BgImageStyles/styles";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import SearchInputHeader from "../HotelsList/SearchInputHeader";
@@ -20,16 +20,30 @@ const SingleHotel = () => {
 
   useTitle(`Rooms at ${data?.country}, ${data?.state}`);
 
-  const {
-    setFetchHotelStatus,
-    setDropdownHeader,
-  } = useMediaQueriesContext();
+  const { setFetchHotelStatus, setDropdownHeader } = useMediaQueriesContext();
 
   useEffect(() => {
     setFetchHotelStatus("idle");
   }, []);
 
   const { matches } = useMediaQueriesContext();
+
+  const [activeTab, setActiveTab] = useState("select-a-room");
+  const [tabScreenmatches, setTabScreenMatches] = useState(
+    window.matchMedia("(min-width: 640px)").matches
+  );
+
+  useEffect(() => {
+    window
+      .matchMedia("(min-width: 640px)")
+      .addEventListener("change", (e) => setTabScreenMatches(e.matches));
+
+    return () => {
+      window
+        .matchMedia("(min-width: 640px)")
+        .removeEventListener("change", (e) => setTabScreenMatches(e.matches));
+    };
+  }, []);
 
   // console.log(searchQueryDates);
   // useEffect(() => {
@@ -51,6 +65,91 @@ const SingleHotel = () => {
   //   ]);
   //  }
   // }, [])
+
+  const tabsList = useRef([
+    {
+      panel: (
+        <p>on it</p>
+      ),
+      name: "overview",
+      value: "overview",
+    },
+    {
+      panel: <p>world</p>,
+      name: "review",
+      value: "review",
+    },
+    {
+      panel: <p>hello</p>,
+      name: "location",
+      value: "location",
+    },
+    {
+      panel: (
+        <Rooms
+          hotelID={id}
+          price={data?.price}
+          hotelName={data?.name}
+          hotelCountry={data?.country}
+          hotelState={data?.state}
+          feature={data?.feature}
+        />
+      ),
+      name: "select a room",
+      value: "select-a-room",
+    },
+  ]);
+
+  const tabsListBigScreenDisplay = useMemo(() => {
+    return tabsList?.current?.map((tab) => (
+      <div key={tab?.value} className="relative text-gray-400 ">
+        <button
+          className={`${
+            activeTab === tab?.value
+              ? "singleHotelActive text-white cursor-pointer py-5 px-10"
+              : " cursor-pointer py-5 px-10"
+          } uppercase`}
+          onClick={() => setActiveTab(tab?.value)}
+        >
+          {tab?.name}
+        </button>
+        <span
+          className="bg-gray"
+          style={{
+            display: tab?.value === activeTab ? "block" : "none",
+            position: "absolute",
+            bottom: "-5px",
+            left: "50%",
+            right: "50%",
+            width: "10px",
+            height: "10px",
+            transform: "rotate(45deg)",
+          }}
+        ></span>
+      </div>
+    ));
+  }, [tabsList, activeTab]);
+
+  const tabsListSmallScreenDisplay = useMemo(() => {
+    return tabsList?.current?.map((tab) => (
+      <div key={tab?.value} className="relative text-gray-400 ">
+        <button
+          className={`${
+            activeTab === tab?.value
+              ? "singleHotelActive text-white cursor-pointer py-5 w-full"
+              : " cursor-pointer py-5 px-10"
+          } uppercase`}
+          onClick={() => setActiveTab(tab?.value)}
+        >
+          {tab?.name}
+        </button>
+      </div>
+    ));
+  }, [tabsList, activeTab]);
+
+  const activeTabPanel = useMemo(() => {
+    return tabsList.current?.find((tab) => tab?.value === activeTab)?.panel;
+  }, [tabsList, activeTab]);
 
   return (
     <>
@@ -91,17 +190,57 @@ const SingleHotel = () => {
               </div>
             </div>
           </section>
-          <section className="flex justify-center">
+          <section className="flex flex-col items-center justify-center">
+            <div className="bg-primary h-  w-full">
+              {/* <ul className="text-gray-400 font-mediu text-xl flex justify-around py-">
+                <li
+                  className={
+                    activeTab === "tab2"
+                      ? "active cursor-pointer py-5 px-10"
+                      : "cursor-pointer py-5 px-10"
+                  }
+                  onClick={() => toggleTab("tab2")}
+                >
+                  overview
+                </li>
+                <li
+                  className={
+                    activeTab === "tab3"
+                      ? "active cursor-pointer py-5 px-10"
+                      : "cursor-pointer py-5 px-10"
+                  }
+                  onClick={() => toggleTab("tab3")}
+                >
+                  location
+                </li>
+                <li
+                  className={
+                    activeTab === "tab4"
+                      ? "active cursor-pointer py-5 px-10"
+                      : "cursor-pointer py-5 px-10"
+                  }
+                  onClick={() => toggleTab("tab4")}
+                >
+                  reviews
+                </li>
+                <li
+                  className={
+                    activeTab === "tab1"
+                      ? "active cursor-pointer py-5 px-10"
+                      : "cursor-pointer py-5 px-10"
+                  }
+                  onClick={() => toggleTab("tab1")}
+                >
+                  select a room
+                </li>
+              </ul> */}
+              <div className="text-gray-400 font-medium text-sm flex flex-col sm:flex-row justify-around uppercase">
+                {tabScreenmatches ? tabsListBigScreenDisplay : tabsListSmallScreenDisplay}
+              </div>
+            </div>
             <div className="w-full max-w-screen-lg mt-12 mb-16 px-4">
-              <PriceConversion />
-              <Rooms
-                hotelID={id}
-                price={data?.price}
-                hotelName={data?.name}
-                hotelCountry={data?.country}
-                hotelState={data?.state}
-                feature={data?.feature}
-              />
+              {activeTab === "select-a-room" && <PriceConversion />}
+              {activeTabPanel}
             </div>
           </section>
         </>

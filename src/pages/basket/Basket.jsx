@@ -98,8 +98,8 @@ const Basket = () => {
                           className={`${inputStyles} text-sm`}
                         >
                           <option value="">Select Country</option>
-                          {countries?.map((country) => (
-                            <option value={country?.name}>
+                          {countries?.map((country, index) => (
+                            <option value={country?.name} key={index}>
                               {country?.name}
                             </option>
                           ))}

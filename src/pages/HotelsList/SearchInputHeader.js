@@ -34,7 +34,6 @@ const SearchInputHeader = () => {
     setOpenDate(false);
   };
 
-  // console.log(searchQueryDates[0].searchQueryStartDates);
   return (
     <div className="w-full sticky top-0 left-0 z-20">
       <div className="w-full ">
@@ -57,10 +56,6 @@ const SearchInputHeader = () => {
               onClick={toggleDate}
               className="pl-8 w-full py-[1.65rem] cursor-pointer"
             >
-              {/* {`${format(
-                new Date(dateSearch[0].startDate),
-                "dd/MM/yyyy"
-              )} to ${format(new Date(dateSearch[0].endDate), "dd/MM/yyyy")}`} */}
               {searchQueryDates[0].searchQueryStartDates === undefined &&
               searchQueryDates[0].searchQueryEndDates === undefined
                 ? "check-in - check-out"
