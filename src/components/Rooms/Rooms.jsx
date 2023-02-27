@@ -120,35 +120,27 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
                 }`}
               </p>
               <p className="pr-4 font-normal text-sm leading-relaxed">
-                {/* {!open
-                  ? room?.description?.slice(0, 200) + "...."
-                  : room?.description} */}
-                {/* {
-                     open === false && room?._id !== activeOpen? room?.description?.slice(0, 200) + "..." :  room?._id === activeOpen ? room?.description : !open && room?.description?.slice(0, 200) + "..."
-                  } */}
                 {room?._id !== activeOpen
-                  ? room?.description?.slice(0, 200) + "..."
-                  : open && room?._id === activeOpen
-                  ? room?.description
-                  : room?.description?.slice(0, 200) + "..."}
+                  ? room?.description?.slice(0, 200) + "...."
+                  : room?.description}
               </p>
               <div
                 className="flex items-center gap-3 mt-4 text-red-900 hover:text-red-700 cursor-pointer w-32"
                 onClick={() => {
-                  setOpen(!open);
-                  setActiveOpen(room._id);
-                  // toggleDescription();
+                  room?._id === activeOpen
+                    ? setActiveOpen("")
+                    : setActiveOpen(room?._id);
                 }}
               >
-                {open && activeOpen === room._id ? (
-                  <>
-                    <p className="text-sm">Read less</p>
-                    <IoIosArrowUp />
-                  </>
-                ) : (
+                {room?._id !== activeOpen ? (
                   <>
                     <p className="text-sm">Read more</p>
                     <IoIosArrowDown />
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm">Read less</p>
+                    <IoIosArrowUp />
                   </>
                 )}
               </div>
