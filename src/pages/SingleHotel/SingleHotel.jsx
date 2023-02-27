@@ -109,7 +109,7 @@ const SingleHotel = () => {
             activeTab === tab?.value
               ? "singleHotelActive text-white cursor-pointer py-5 px-10"
               : " cursor-pointer py-5 px-10"
-          } uppercase`}
+          } uppercase hover:text-white`}
           onClick={() => setActiveTab(tab?.value)}
         >
           {tab?.name}
@@ -134,7 +134,6 @@ const SingleHotel = () => {
   const tabsListSmallScreenDisplay = useMemo(() => {
     let smallScreenTab = [...tabsList.current];
     smallScreenTab.splice(1, 2);
-    // console.log(smallScreenTab.map((tab) => tab[0]));
     return smallScreenTab?.map((tab) => (
       <div key={tab?.value} className="relative text-gray-400 ">
         <button
@@ -142,7 +141,7 @@ const SingleHotel = () => {
             activeTab === tab?.value
               ? "singleHotelActive text-white cursor-pointer py-5 px-10"
               : " cursor-pointer py-5 px-10"
-          } uppercase`}
+          } uppercase hover:text-white`}
         >
           {tab?.name}
         </button>
@@ -164,7 +163,7 @@ const SingleHotel = () => {
             activeTab === tab?.value
               ? "singleHotelActive text-white cursor-pointer py-5 px- w-full"
               : " cursor-pointer py-5 px-10"
-          } uppercase`}
+          } uppercase hover:text-white`}
           onClick={() => {
             setActiveTab(tab?.value);
             setRestTabModal(false);
@@ -175,8 +174,6 @@ const SingleHotel = () => {
       </div>
     ));
   });
-
-  console.log(tabsListSmallScreenDisplay[0].props.children.props.onClick);
 
   return (
     <>
@@ -262,7 +259,7 @@ const SingleHotel = () => {
                   select a room
                 </li>
               </ul> */}
-                <div className="text-gray-400 font-medium text-sm flex justify-around uppercase overflow-x-hidden">
+                <div className="text-gray-400 font-medium text-sm flex justify-around uppercase overflow-x-hidden overflow-y-hidden">
                   {tabScreenmatches ? (
                     tabsListBigScreenDisplay
                   ) : (
@@ -293,7 +290,6 @@ const SingleHotel = () => {
               </div>
             </div>
             <div className="w-full max-w-screen-lg mt-12 mb-16 px-4">
-              {/* {activeTab === "select-a-room" && <PriceConversion />} */}
               {activeTabPanel}
             </div>
           </section>
