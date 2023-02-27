@@ -85,33 +85,33 @@ const FooterLinks = () => {
    
         <div className=" flex flex-col md:flex-row justify-between gap-12 md:gap-0 items-cente px-20  py-8" >
           <ul className="text-gray-500 ">
-            <p className="uppercase text-white">about us</p>
+            <p className="uppercase text-white text-sm font-semibold">about us</p>
             <Link to="/about-us">
-              <li>Who we are</li>
+              <li className="hover:text-gray-300">Who we are</li>
             </Link>
             <Link to="/about-us/book-with-us">
-              <li>Why book with us?</li>
+              <li className="hover:text-gray-300">Why book with us?</li>
             </Link>
             <Link to="/reviews">
-              <li>Reviews from our members</li>
+              <li className="hover:text-gray-300">Reviews from our members</li>
             </Link>
             <Link to="/travel-team">
-              <li>Our in-house travel team</li>
+              <li className="hover:text-gray-300">Our in-house travel team</li>
             </Link>
             <Link to="/contact">
-              <li>Contact us</li>
+              <li className="hover:text-gray-300">Contact us</li>
             </Link>
           </ul>
-          <ul className="text-gray-500">
-            <p className="uppercase text-white">policies</p>
+          <ul className="text-gray-500 ">
+            <p className="uppercase text-white text-sm font-semibold">policies</p>
             <Link to="/privacy-policies">
-              <li>Privacy Policy</li>
+              <li className="hover:text-gray-300">Privacy policy</li>
             </Link>
             <Link to="/terms-of-use">
-              <li>Terms of use</li>
+              <li className="hover:text-gray-300">Terms of use</li>
             </Link>
             <Link to="/accessibility">
-              <li>Accessibility</li>
+              <li className="hover:text-gray-300">Accessibility</li>
             </Link>
           </ul>
           {/* <NewsLetter /> */}

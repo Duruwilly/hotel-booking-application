@@ -15,16 +15,11 @@ import useRoomsAvailabilityCheck, {
 } from "../../utils/useRoomsAvailabilityCheck";
 import PriceConversion from "../PriceConversion/PriceConversion";
 
-const Rooms = ({
-  hotelID,
-  hotelName,
-  hotelCountry,
-  hotelState,
-  feature,
-}) => {
+const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
   const { user } = useAuthContext();
 
   const [open, setOpen] = useState(false);
+  const [activeOpen, setActiveOpen] = useState("");
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -50,7 +45,9 @@ const Rooms = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  let { roomOptions, dateSearch, searchQueryDates } = useSelector((state) => state.searchState);
+  let { roomOptions, dateSearch, searchQueryDates } = useSelector(
+    (state) => state.searchState
+  );
   let { days } = useDaysCalculate();
   let { isAvailable } = useRoomsAvailabilityCheck();
 
@@ -77,16 +74,27 @@ const Rooms = ({
     }
   };
 
+  const toggleDescription = () => {
+    // let roomsId = data.find((roomsid) => roomsid._id);
+    // console.log(activeOpen);
+    // if (roomsId._id === activeOpen) {
+    // } else {
+    //   setOpen(false);
+    // }
+    setOpen(!open);
+  };
+
   //   useEffect(() => {
   //     setFetchHotelStatus("idle");
   //   }, [hotelID]);
 
   return (
     <>
-    <PriceConversion />
+      <PriceConversion />
       {data.map((room) => (
         <div className="mt-3" key={room._id}>
-          {isAvailable(room.roomNumbers) && roomOptions.adult + roomOptions.children > room.maxPeople ? (
+          {isAvailable(room.roomNumbers) &&
+          roomOptions.adult + roomOptions.children > room.maxPeople ? (
             <div
               className="py-4 text-center text-white font-light text-lg"
               style={{ background: "#758496" }}
@@ -112,15 +120,27 @@ const Rooms = ({
                 }`}
               </p>
               <p className="pr-4 font-normal text-sm leading-relaxed">
-                {!open
+                {/* {!open
                   ? room?.description?.slice(0, 200) + "...."
-                  : room?.description}
+                  : room?.description} */}
+                {/* {
+                     open === false && room?._id !== activeOpen? room?.description?.slice(0, 200) + "..." :  room?._id === activeOpen ? room?.description : !open && room?.description?.slice(0, 200) + "..."
+                  } */}
+                {room?._id !== activeOpen
+                  ? room?.description?.slice(0, 200) + "..."
+                  : open && room?._id === activeOpen
+                  ? room?.description
+                  : room?.description?.slice(0, 200) + "..."}
               </p>
               <div
                 className="flex items-center gap-3 mt-4 text-red-900 hover:text-red-700 cursor-pointer w-32"
-                onClick={() => setOpen(!open)}
+                onClick={() => {
+                  setOpen(!open);
+                  setActiveOpen(room._id);
+                  // toggleDescription();
+                }}
               >
-                {open ? (
+                {open && activeOpen === room._id ? (
                   <>
                     <p className="text-sm">Read less</p>
                     <IoIosArrowUp />
@@ -161,7 +181,11 @@ const Rooms = ({
                 </div>
                 {!isAvailable(room.roomNumbers) ? (
                   <p className="text-red-800 capitalize">room unavailable</p>
-                ) : <p className="text-red-800 font-semibold">kindly select a date to see room availability</p>}
+                ) : (
+                  <p className="text-red-800 font-semibold">
+                    kindly select a date to see room availability
+                  </p>
+                )}
                 <p className="text-sm">
                   For more details{" "}
                   <Link
@@ -186,9 +210,7 @@ const Rooms = ({
                   Total stay
                   <span className="font-semibold text-xl">
                     $
-                    {[
-                      room?.price * days
-                    ]
+                    {[room?.price * days]
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </span>
