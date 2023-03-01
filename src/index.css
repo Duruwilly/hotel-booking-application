@@ -62,7 +62,6 @@
   padding: 0 1rem;
 }
 
-
 .transition {
   transition: all 400ms ease-in-out;
 }
@@ -191,7 +190,6 @@
 .left-100 {
   left: -150%;
 }
-
 
 /* calendar */
 .date {
@@ -424,43 +422,47 @@
   transform-origin: top center;
   -webkit-transform: scaleY(0) translateZ(100px);
   transform: scaleY(0) translateZ(100px);
-  -webkit-transition: opacity 200ms ease, visibility 200ms ease, -webkit-transform 400ms ease;
-  transition: opacity 200ms ease, visibility 200ms ease, -webkit-transform 400ms ease;
+  -webkit-transition: opacity 200ms ease, visibility 200ms ease,
+    -webkit-transform 400ms ease;
+  transition: opacity 200ms ease, visibility 200ms ease,
+    -webkit-transform 400ms ease;
   transition: opacity 200ms ease, visibility 200ms ease, transform 400ms ease;
-  transition: opacity 200ms ease, visibility 200ms ease, transform 400ms ease, -webkit-transform 400ms ease;
+  transition: opacity 200ms ease, visibility 200ms ease, transform 400ms ease,
+    -webkit-transform 400ms ease;
   z-index: 99;
- }
+}
 
- .dropdown ul {
-  margin-top: 8px
- }
+.dropdown ul {
+  margin-top: 8px;
+}
 
- .dropdown:hover>ul {
+.dropdown:hover > ul {
   opacity: 1;
   visibility: visible;
   -webkit-transform: scaleY(1) translateZ(0px);
   transform: scaleY(1) translateZ(0px);
- }
+}
 
- .dropdown ul li {
+.dropdown ul li {
   /* flex: 1 1 100%; */
   /* width: 100%; */
- display: block;
- color: inherit;
- font-size: 16px;
- /* line-height: 28px;x */
- /* font-weight: 500; */
- padding: 10px 20px;
- transition: 500ms;
- }
+  display: block;
+  color: inherit;
+  font-size: 16px;
+  /* line-height: 28px;x */
+  /* font-weight: 500; */
+  padding: 10px 20px;
+  transition: 500ms;
+}
 
- .lines {
+.lines {
   width: 30%;
   height: 45px;
   position: relative;
- }
+}
 
- .lines::after, .lines::before {
+.lines::after,
+.lines::before {
   content: "";
   position: absolute;
   margin: auto;
@@ -468,19 +470,19 @@
   background: rgb(21 128 61);
   width: 43%;
   top: 40%;
- }
+}
 
- .lines::after {
+.lines::after {
   left: 0;
- }
+}
 
- .lines::before {
+.lines::before {
   right: 0;
- }
+}
 
- @media screen and (min-width: 1050px) {
+@media screen and (min-width: 1050px) {
   .navIconsToggle {
-    display: none
+    display: none;
   }
   .navTelephone {
     display: flex;
@@ -488,18 +490,18 @@
   .navMobileVisibility {
     display: none;
   }
- }
+}
 
- /* basket modal */
- @media screen and (max-width: 600px) {
+/* basket modal */
+@media screen and (max-width: 600px) {
   .modalInputs {
     display: flex;
     flex-direction: column;
   }
- }
+}
 
- /* basket quantity */
- .amount-container {
+/* basket quantity */
+.amount-container {
   position: absolute;
   top: -0.9rem;
   right: -0.9rem;
@@ -533,8 +535,8 @@
   text-align: center;
   /* border-radius: 6px; */
   padding: 1px 15px;
-  font-size: .7rem;
-  
+  font-size: 0.7rem;
+
   /* Position the tooltip */
   position: absolute;
   z-index: 1;
@@ -545,10 +547,13 @@
   transform-origin: top center;
   -webkit-transform: scaleY(0) translateZ(100px);
   transform: scaleY(0) translateZ(100px);
-  -webkit-transition: opacity 200ms ease, visibility 200ms ease, -webkit-transform 400ms ease;
-  transition: opacity 200ms ease, visibility 200ms ease, -webkit-transform 400ms ease;
+  -webkit-transition: opacity 200ms ease, visibility 200ms ease,
+    -webkit-transform 400ms ease;
+  transition: opacity 200ms ease, visibility 200ms ease,
+    -webkit-transform 400ms ease;
   transition: opacity 200ms ease, visibility 200ms ease, transform 400ms ease;
-  transition: opacity 200ms ease, visibility 200ms ease, transform 400ms ease, -webkit-transform 400ms ease;
+  transition: opacity 200ms ease, visibility 200ms ease, transform 400ms ease,
+    -webkit-transform 400ms ease;
 }
 
 .tooltip:hover .tooltiptext {
@@ -556,6 +561,30 @@
   -webkit-transform: scaleY(1) translateZ(0px);
   transform: scaleY(1) translateZ(0px);
   /* transition: opacity 200ms ease, visibility 200ms ease, transform 400ms ease, -webkit-transform 400ms ease; */
+}
+
+/* top hotel carousel */
+.owl-carousel .owl-nav button.owl-next,
+.owl-carousel .owl-nav button.owl-prev {
+  font: inherit;
+  width: 30px;
+  height: 30px;
+  line-height: 50px;
+  background: rgba(127, 29, 29, 1) !important;
+  border-radius: 10px;
+  color: #fff !important;
+  font-size: 29px; 
+  font-weight: 700;
+  transition: all 200ms linear;
+  transition-delay: 0.1s;
+}
+
+
+.owl-carousel .owl-nav button.owl-next:hover,
+.owl-carousel .owl-nav button.owl-prev:hover {
+  border: 1px solid rgba(17, 24, 39, 1) !important;
+  color: black !important;
+  background: transparent !important;
 }
 
 @layer base {

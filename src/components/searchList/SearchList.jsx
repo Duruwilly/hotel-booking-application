@@ -4,8 +4,31 @@ import image1 from "../../assets/images/heroe.jpg";
 import image2 from "../../assets/images/heroe2.jpg";
 import { AiFillHeart } from "react-icons/ai";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem, removeItem, setLikedBtnColor } from "../../redux/Favourites";
+import useLikedItemCheck from "../../utils/useLikedItemCheck";
 
-const SearchList = ({ roomOptions, hotel, days }) => {
+const SearchList = ({ roomOptions, hotel, days, data }) => {
+  const dispatch = useDispatch();
+  let { likedBtnnColor } = useSelector(
+    (state) => state.favourite
+  );
+  const { likedItemCheck } = useLikedItemCheck()
+
+  let allArr = likedItemCheck();
+  const toggleLikedBtn = (itemId) => {
+    const dataItem = data.filter((item) => item?._id === itemId);
+    if (allArr.includes(itemId)) {
+      dispatch(removeItem(itemId));
+      return;
+    } else {
+      dispatch(setLikedBtnColor("text-red-600"));
+      dispatch(addItem(...dataItem));
+      return;
+    }
+  };
+
   return (
     <div className="bg-white border border-gray-200 flex flex-col hotelList-card-container mb-7">
       <div style={{ flex: 3, position: "relative" }}>
@@ -14,10 +37,15 @@ const SearchList = ({ roomOptions, hotel, days }) => {
         </Link>
         <div className="absolute top-0 right-0">
           <button
-            className="rounded-full w-12 h-12 p-0 border-0 inline-flex items-center justify-center text-3xl text-gray-200"
+            className={`rounded-full w-12 h-12 p-0 border-0 inline-flex items-center justify-center text-3xl ${
+              allArr.includes(hotel._id) ? likedBtnnColor : `text-gray-200`
+            }`}
             style={{ background: "rgba(0,0,0,0.4)" }}
           >
-            <AiFillHeart className="" />
+            <AiFillHeart
+              className=""
+              onClick={() => toggleLikedBtn(hotel._id)}
+            />
           </button>
         </div>
       </div>
@@ -30,13 +58,19 @@ const SearchList = ({ roomOptions, hotel, days }) => {
         </h2>
         <h1 className="font-semibold capitalize text-xl py-2">{hotel.name}</h1>
         <div className="pr-4">
-          <div className="font-ligh py-3 text-center" style={{ background: "#eee", fontSize: ".9rem" }}>
+          <div
+            className="font-ligh py-3 text-center px-2"
+            style={{ background: "#eee", fontSize: ".9rem" }}
+          >
             {/* {`${
             roomOptions.adult + roomOptions.children < hotel.guests
             ? `Sleeps up to ${hotel.guests} guests`
             : `Sleeps ${hotel.guests} guests`
           }`} */}
-          <span className="text-red-900 font-semibold capitalize px-2">Free includes</span> {hotel.feature}
+            <span className="text-red-900 font-semibold capitalize">
+              Free includes
+            </span>{" "}
+            {hotel.feature}
           </div>
         </div>
         <div className="price-container">

@@ -74,16 +74,6 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
     }
   };
 
-  const toggleDescription = () => {
-    // let roomsId = data.find((roomsid) => roomsid._id);
-    // console.log(activeOpen);
-    // if (roomsId._id === activeOpen) {
-    // } else {
-    //   setOpen(false);
-    // }
-    setOpen(!open);
-  };
-
   //   useEffect(() => {
   //     setFetchHotelStatus("idle");
   //   }, [hotelID]);

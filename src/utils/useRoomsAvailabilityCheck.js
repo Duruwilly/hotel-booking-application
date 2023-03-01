@@ -26,11 +26,9 @@ const useRoomsAvailabilityCheck = () => {
   };
 
   const allDates = getDatesInRanges(dateSearch[0]?.startDate, dateSearch[0]?.endDate);
-  console.log(allDates);
   
 
   let datesInBasket = basketItems.map((getRoomId) => getRoomId.dateSearch[0]);
-  // console.log(datesInBasket);
 
   const getDatesInRangesInBasket = (startDate, endDate) => {
     // we get the current date from the state
@@ -51,8 +49,6 @@ const useRoomsAvailabilityCheck = () => {
   };
 
   const allDatesInBasket = getDatesInRangesInBasket(datesInBasket[0]?.searchQueryStartDates, datesInBasket[0]?.searchQueryEndDates);
-
-  console.log(allDatesInBasket);
 
   // map through the roomNumbers in the database. if some of the date includes the
   const isAvailable = (roomsNumber) => {

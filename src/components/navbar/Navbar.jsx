@@ -23,6 +23,7 @@ const Navbar = () => {
   const { matches, setDropdownHeader } = useMediaQueriesContext();
 
   let { totalQuantity } = useSelector((state) => state.basket);
+  let { totalFavQuantity } = useSelector((state) => state.favourite);
 
   const { user } = useAuthContext();
 
@@ -145,6 +146,13 @@ const Navbar = () => {
                 <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer">
                   <BsFillHeartFill />
                 </div>
+                {totalFavQuantity === 0
+                  ? false
+                  : true && (
+                      <div className="amount-container">
+                        <p className="total-amount">{totalFavQuantity}</p>
+                      </div>
+                    )}
               </Link>
               <span className="tooltiptext">Favourite</span>
             </div>

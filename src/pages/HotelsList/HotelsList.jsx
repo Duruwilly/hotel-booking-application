@@ -88,7 +88,7 @@ const HotelsList = () => {
   const formattedEndDate = endDate.toLocaleString("en-US", options);
   // console.log(formattedEndDate);
 
-  // The search button navigate to this page passing the date, and location query strings and when we click on the search button without selecting a date, it is going to use the current date and send it to the query strings. 
+  // The search button navigate to this page passing the date, and location query strings and when we click on the search button without selecting a date, it is going to use the current date and send it to the query strings.
 
   // when we navigate to this page we dispatch the date from the query strings to our redux state and persist it there.
   useEffect(() => {
@@ -99,6 +99,8 @@ const HotelsList = () => {
       })
     );
   }, [searchParams.get("date_from"), searchParams.get("date_to")]);
+
+  // console.log(data);
 
   return (
     <>
@@ -112,7 +114,7 @@ const HotelsList = () => {
           onClick={() => setDropdownHeader(false)}
         >
           <div className="w-full max-w-screen-xl py-5 px-4">
-            <ul className="flex my-0 mx-auto list-none">
+            <ul className="flex my-0 mx-auto list-none relative">
               <li className="uppercase text-xs border border-gray-900 bg-primary py-3 w-full text-white text-center list-none font-semibold">
                 {data.length} hotels
               </li>
@@ -125,6 +127,18 @@ const HotelsList = () => {
                   view on map
                 </div>
               </li>
+              <span
+                className="bg-primary"
+                style={{
+                  display: "block",
+                  position: "absolute",
+                  bottom: "-7px",
+                  left: "10%",
+                  width: "15px",
+                  height: "15px",
+                  transform: "rotate(45deg)",
+                }}
+              ></span>
             </ul>
             <div className="mt-5" onClick={() => setDropdownHeader(false)}>
               {data.length !== 0 ? (
@@ -134,6 +148,7 @@ const HotelsList = () => {
                     roomOptions={roomOptions}
                     hotel={hotel}
                     days={days}
+                    data={data}
                   />
                 ))
               ) : (
