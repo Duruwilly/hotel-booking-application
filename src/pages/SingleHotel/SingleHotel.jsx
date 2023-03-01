@@ -11,28 +11,65 @@ import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import { useTitle } from "../../hooks/useTitle";
 import Rooms from "../../components/Rooms/Rooms";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import useLikedItemCheck from "../../utils/useLikedItemCheck";
+import { addItem, removeItem, setLikedBtnColor } from "../../redux/Favourites";
+import axios from "axios";
 
 const SingleHotel = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[4];
-  const { data, loading, error } = useFetch(
-    `http://localhost:8800/api/v1/hotels/find/${id}`
-  );
+  const [singleHotel, setSinglehotel] = useState();
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  let { destination } = useSelector((state) => state.searchState);
+
+  const url = `http://localhost:8800/api/v1/hotels?country=${destination}`;
+  const { data } = useFetch(url);
 
   useTitle(`Rooms at ${data?.country}, ${data?.state}`);
 
-  const { setFetchHotelStatus, setDropdownHeader } = useMediaQueriesContext();
-
   useEffect(() => {
-    setFetchHotelStatus("idle");
-  }, []);
+    const fetchHotelRooms = async () => {
+      setLoading(true);
+      const url = `http://localhost:8800/api/v1/hotels/find/${id}`;
+      try {
+        const res = await axios.get(url);
+        setSinglehotel(res.data.data);
+      } catch (error) {
+        setError(error);
+      }
 
-  const { matches } = useMediaQueriesContext();
+      setLoading(false);
+    };
+    fetchHotelRooms();
+  }, []);
+  const { matches, setFetchHotelStatus, setDropdownHeader } =
+    useMediaQueriesContext();
+
+  const dispatch = useDispatch();
+  let { likedBtnnColor } = useSelector((state) => state.favourite);
+  const { likedItemCheck } = useLikedItemCheck();
+
+  let allArr = likedItemCheck();
+  const toggleLikedBtn = (itemId) => {
+    const dataItem = data?.filter((item) => item?._id === itemId);
+    if (allArr.includes(itemId)) {
+      dispatch(removeItem(itemId));
+      return;
+    } else {
+      dispatch(setLikedBtnColor("text-red-600"));
+      dispatch(addItem(...dataItem));
+      return;
+    }
+  };
 
   const [activeTab, setActiveTab] = useState("select-a-room");
   const [tabScreenmatches, setTabScreenMatches] = useState(
     window.matchMedia("(min-width: 640px)").matches
   );
+  const [restTabModal, setRestTabModal] = useState(false);
 
   useEffect(() => {
     window
@@ -46,28 +83,9 @@ const SingleHotel = () => {
     };
   }, []);
 
-  const [restTabModal, setRestTabModal] = useState(false);
-
-  // console.log(searchQueryDates);
-  // useEffect(() => {
-  //   setSearchQueryDates([
-  //     {
-  //       searchQueryStartDates: new Date(),
-  //       searchQueryEndDates: new Date(),
-  //     },
-  //   ]);
-  // }, []);
-
-  // useEffect(() => {
-  //  window.onpopstate = () => {
-  //   setSearchQueryDates([
-  //     {
-  //       searchQueryStartDates: new Date(),
-  //       searchQueryEndDates: new Date(),
-  //     },
-  //   ]);
-  //  }
-  // }, [])
+  useEffect(() => {
+    setFetchHotelStatus("idle");
+  }, []);
 
   const tabsList = useRef([
     {
@@ -187,16 +205,21 @@ const SingleHotel = () => {
               <div className="w-full max-w-screen-xl flex flex-col md:flex-row justify-between text-gray-100 absolute bottom-0">
                 <div className="flex justify-center items-center gap-4">
                   <button
-                    className="rounded-full w-10 h-10 p-0 border-0 inline-flex items-center justify-center text-2xl"
+                    className={`rounded-full w-10 h-10 p-0 border-0 inline-flex items-center justify-center text-2xl z-10 ${
+                      allArr.includes(singleHotel?._id)
+                        ? likedBtnnColor
+                        : `text-gray-200`
+                    }`}
                     style={{ background: "rgba(0,0,0,0.4)" }}
+                    onClick={() => toggleLikedBtn(singleHotel?._id)}
                   >
                     <AiFillHeart className="" />
                   </button>
                   <div>
                     <p className="text-sm font-extralight">
-                      {data?.country + "," + " " + data?.state}
+                      {singleHotel?.country + "," + " " + singleHotel?.state}
                     </p>
-                    <p className="text-3xl">{data?.name}</p>
+                    <p className="text-3xl">{singleHotel?.name}</p>
                   </div>
                 </div>
                 <div
@@ -206,7 +229,7 @@ const SingleHotel = () => {
                   <p className=" font-extralight">Price per night</p>
                   <p className=" text-2xl">
                     $
-                    {[data?.price]
+                    {[singleHotel?.price]
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </p>
@@ -217,48 +240,6 @@ const SingleHotel = () => {
           <section className="flex flex-col items-center justify-center">
             <div className="relative w-full">
               <div className="bg-primary  w-full relative overflow-hidde overflow-x-hidde">
-                {/* <ul className="text-gray-400 font-mediu text-xl flex justify-around py-">
-                <li
-                  className={
-                    activeTab === "tab2"
-                      ? "active cursor-pointer py-5 px-10"
-                      : "cursor-pointer py-5 px-10"
-                  }
-                  onClick={() => toggleTab("tab2")}
-                >
-                  overview
-                </li>
-                <li
-                  className={
-                    activeTab === "tab3"
-                      ? "active cursor-pointer py-5 px-10"
-                      : "cursor-pointer py-5 px-10"
-                  }
-                  onClick={() => toggleTab("tab3")}
-                >
-                  location
-                </li>
-                <li
-                  className={
-                    activeTab === "tab4"
-                      ? "active cursor-pointer py-5 px-10"
-                      : "cursor-pointer py-5 px-10"
-                  }
-                  onClick={() => toggleTab("tab4")}
-                >
-                  reviews
-                </li>
-                <li
-                  className={
-                    activeTab === "tab1"
-                      ? "active cursor-pointer py-5 px-10"
-                      : "cursor-pointer py-5 px-10"
-                  }
-                  onClick={() => toggleTab("tab1")}
-                >
-                  select a room
-                </li>
-              </ul> */}
                 <div className="text-gray-400 font-medium text-sm flex justify-around uppercase overflow-x-hidden overflow-y-hidden">
                   {tabScreenmatches ? (
                     tabsListBigScreenDisplay

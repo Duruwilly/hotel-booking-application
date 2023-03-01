@@ -20,18 +20,18 @@ const PopularSearch = () => {
   console.log(destination);
 
   const navigateToLocation = async (location) => {
-    dispatch(setDestination(location))
+    dispatch(setDestination(location));
 
     let url = `/destinations/hotels?query=${location}&date_from=${format(
       new Date(dateSearch[0].startDate),
       "dd-MM-yyyy"
-      )}&date_to=${format(new Date(dateSearch[0].endDate), "dd-MM-yyyy")}`
-      
+    )}&date_to=${format(new Date(dateSearch[0].endDate), "dd-MM-yyyy")}`;
+
     navigate(url);
   };
 
   return (
-    <section className="flex flex-col items-center mt-20">
+    <section className="flex flex-col items-center mt-16">
       <h2 className="text-3xl mb-5">Popular searches</h2>
       <div className=" grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10 w-full max-w-screen-lg justify-center items-center px-4">
         <button
