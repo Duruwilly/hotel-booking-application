@@ -41,22 +41,22 @@ const Favourites = () => {
                           <img src={image1} alt="" />
                         </div>
                       </Link>
-                      <div
-                        className=" py-3 text-center font-light"
-                        style={{ background: "rgba(0,0,0,0.1)" }}
-                      >
-                        Price per night from{" "}
-                        <span className="font-semibold">
-                          $
-                          {[fav.price]
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                        </span>
-                      </div>
                     </div>
                     <div className="" style={{ flex: 2 }}>
                       {fav._id !== activeItem ? (
                         <>
+                          <div
+                            className=" py-3 text-center font-light"
+                            style={{ background: "rgba(0,0,0,0.1)" }}
+                          >
+                            Price per night from{" "}
+                            <span className="font-semibold">
+                              $
+                              {[fav.price]
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                            </span>
+                          </div>
                           <h1 className="text-center py-2 text-xs font-semibold uppercase">
                             {fav.country + "," + " " + fav.state}
                           </h1>
@@ -90,13 +90,15 @@ const Favourites = () => {
                         </>
                       ) : (
                         <>
-                          <h1 className="px-4 font-medium pt-5">
-                            Delete favourites list
-                          </h1>
-                          <p className="px-4 font-light pb-5">
-                            Are you sure you want to delete this list of
-                            favourites?
-                          </p>
+                          <div className="pt-9 pb-[72px]">
+                            <h1 className="px-4 font-medium p-">
+                              Delete favourites list
+                            </h1>
+                            <p className="px-4 font-light pt-5">
+                              Are you sure you want to delete this list of
+                              favourites?
+                            </p>
+                          </div>
                           <div className="flex justify-center items-cente gap-2">
                             <button
                               className="bg-primary text-xs text-white uppercase py-3 w-full"
