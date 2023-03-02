@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  favouriteItems: [],
+  wishlistsItems: [],
   likedBtnnColor: "",
   totalFavQuantity: 0
 };
@@ -12,9 +12,9 @@ const addAndRemoveSlice = createSlice({
   reducers: {
     addItem(state, action) {
       const newItem = action.payload;
-      const existingItem = state.favouriteItems.find((item) => item._id === newItem._id)
+      const existingItem = state.wishlistsItems.find((item) => item._id === newItem._id)
       if (!existingItem) {
-        state.favouriteItems.push({
+        state.wishlistsItems.push({
           ...newItem,
         });
         state.totalFavQuantity++;
@@ -25,11 +25,11 @@ const addAndRemoveSlice = createSlice({
     },
     removeItem(state, action) {
       const itemId = action.payload;
-      const existingItem = state.favouriteItems.find(
+      const existingItem = state.wishlistsItems.find(
         (item) => item._id === itemId
       );
       if (existingItem) {
-        state.favouriteItems = state.favouriteItems.filter(
+        state.wishlistsItems = state.wishlistsItems.filter(
           (item) => item._id !== itemId
         );
         state.totalFavQuantity--;

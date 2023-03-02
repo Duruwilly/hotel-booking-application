@@ -14,6 +14,8 @@ import travelTeam3 from "../assets/images/team3.jpeg";
 import tower from "../assets/images/parisTower.jpeg";
 import stays from "../assets/images/gallery7.jpeg";
 import paymentModalBg from "../assets/images/pay5.jpg";
+import wishlistBg from "../assets/images/wishlistsBg.jpg";
+import mapBg from "../assets/images/map.svg";
 
 export const heroeBg = {
   width: "100%",
@@ -24,6 +26,20 @@ export const heroeBg = {
   backgroundRepeat: "no-repeat",
   height: "50vh",
   position: "relative",
+};
+
+export const favouriteBg = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${wishlistBg})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  height: "50vh",
+  position: "relative",
+  position: "relative",
+  textAlign: "center",
+  color: "white",
 };
 
 export const popularSearch1Bg = {
@@ -111,151 +127,162 @@ export const popularSearch6Bg = {
 };
 
 export const adsStyle = {
-    backgroundImage: `url(${ads})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    objectFit: 'cover',
-    width: '100%',
-    height: '13rem',
-    padding: '0',
-    color: 'white',
-    borderRadius: '8px'
-   }
+  backgroundImage: `url(${ads})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  objectFit: "cover",
+  width: "100%",
+  height: "13rem",
+  padding: "0",
+  color: "white",
+  borderRadius: "8px",
+};
 
-   export const aboutBg = {
-    width: '100%',
-    padding: '0',
-    backgroundImage: `url(${aboutbg})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    height: '50vh',
-    position: 'relative',
-    textAlign: 'center',
-    color: 'white',
-    fontSize: '1.5rem',
-    textTransform: 'capitalize'
-   }
+export const aboutBg = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${aboutbg})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  height: "50vh",
+  position: "relative",
+  textAlign: "center",
+  color: "white",
+  fontSize: "1.5rem",
+  textTransform: "capitalize",
+};
 
-   export const teamBg = {
-    width: '100%',
-    padding: '0',
-    backgroundImage: `url(${interior})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    height: '20rem',
-    textAlign: 'center',
-    color: 'white',
-    fontSize: '1.3rem',
-    textTransform: 'uppercase'
-   }
+export const teamBg = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${interior})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  height: "20rem",
+  textAlign: "center",
+  color: "white",
+  fontSize: "1.3rem",
+  textTransform: "uppercase",
+};
 
-   export const team1 = {
-    width: '100%',
-    padding: '0',
-    backgroundImage: `url(${travelTeam1})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    height: '20rem',
-    textAlign: 'center',
-    color: 'white',
-   }
-   
-   export const team2 = {
-    width: '100%',
-    padding: '0',
-    backgroundImage: `url(${travelTeam2})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    height: '20rem',
-    textAlign: 'center',
-    color: 'white',
-   }
-   
-   export const team3 = {
-    width: '100%',
-    padding: '0',
-    backgroundImage: `url(${travelTeam3})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    height: '20rem',
-    textAlign: 'center',
-    color: 'white',
-   }
+export const team1 = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${travelTeam1})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  height: "20rem",
+  textAlign: "center",
+  color: "white",
+};
 
-   export const parisTower = {
-    width: '100%',
-    padding: '0',
-    backgroundImage: `url(${tower})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    height: '20rem',
-    color: 'white',
-    position: 'relative'
-   }
+export const team2 = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${travelTeam2})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  height: "20rem",
+  textAlign: "center",
+  color: "white",
+};
 
-   export const stay = {
-    width: '100%',
-    padding: '0',
-    backgroundImage: `url(${stays})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    textAlign: 'center',
-    color: 'white',
-    height: '20rem',
-    textTransform: 'capitalize'
-   }
+export const team3 = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${travelTeam3})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  height: "20rem",
+  textAlign: "center",
+  color: "white",
+};
 
-   export const interi = {
-    width: '100%',
-    padding: '0',
-    backgroundImage: `url(${interior})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    textAlign: 'center',
-    color: 'white',
-    textTransform: 'capitalize'
-   }
+export const parisTower = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${tower})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  height: "20rem",
+  color: "white",
+  position: "relative",
+};
 
-   export const hotels = {
-    width: '100%',
-    padding: '0',
-    backgroundImage: `url(${popularSearch4bg})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    textAlign: 'center',
-    color: 'white',
-    textTransform: 'capitalize'
-   }
+export const stay = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${stays})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  textAlign: "center",
+  color: "white",
+  height: "20rem",
+  textTransform: "capitalize",
+};
 
-   export const ad = {
-    width: '100%',
-    padding: '0',
-    backgroundImage: `url(${ads})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    textAlign: 'center',
-    height: '20rem',
-    color: 'white',
-    textTransform: 'capitalize'
-   }
+export const interi = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${interior})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  textAlign: "center",
+  color: "white",
+  textTransform: "capitalize",
+};
 
-   export const paymentBg = {
-    width: "100%",
-    padding: "0",
-    backgroundImage: `url(${paymentModalBg})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    height: "13rem"
-   }
+export const hotels = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${popularSearch4bg})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  textAlign: "center",
+  color: "white",
+  textTransform: "capitalize",
+};
+
+export const ad = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${ads})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  textAlign: "center",
+  height: "20rem",
+  color: "white",
+  textTransform: "capitalize",
+};
+
+export const paymentBg = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${paymentModalBg})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  height: "13rem",
+};
+
+export const map = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${mapBg})`,
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  textAlign: "center",
+  height: "18rem",
+
+}

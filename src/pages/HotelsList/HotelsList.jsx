@@ -62,6 +62,13 @@ const HotelsList = () => {
     };
   }, []);
 
+  useEffect(() => {
+    window.onpopstate = () => {
+      if (searchParams.get("query") && searchParams.get("query") !== "")
+        dispatch(setDestination(searchParams.get("query")));
+    };
+  }, [searchParams.get("query")]);
+
   // getting the date from the query
   const startDateString = searchParams.get("date_from");
   const [startDay, startMonth, startYear] = startDateString
