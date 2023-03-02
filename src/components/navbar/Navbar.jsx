@@ -142,7 +142,7 @@ const Navbar = () => {
               </div>
             )}
             <div className="tooltip relative">
-              <Link to="/favourite">
+              <Link to="/wishlists">
                 <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer">
                   <BsFillHeartFill />
                 </div>

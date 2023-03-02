@@ -67,18 +67,18 @@ const SingleHotel = () => {
 
   const [activeTab, setActiveTab] = useState("select-a-room");
   const [tabScreenmatches, setTabScreenMatches] = useState(
-    window.matchMedia("(min-width: 640px)").matches
+    window.matchMedia("(min-width: 770px)").matches
   );
   const [restTabModal, setRestTabModal] = useState(false);
 
   useEffect(() => {
     window
-      .matchMedia("(min-width: 640px)")
+      .matchMedia("(min-width: 770px)")
       .addEventListener("change", (e) => setTabScreenMatches(e.matches));
 
     return () => {
       window
-        .matchMedia("(min-width: 640px)")
+        .matchMedia("(min-width: 770px)")
         .removeEventListener("change", (e) => setTabScreenMatches(e.matches));
     };
   }, []);
@@ -92,6 +92,11 @@ const SingleHotel = () => {
       panel: <p>on it</p>,
       name: "overview",
       value: "overview",
+    },
+    {
+      panel: <p>photos</p>,
+      name: "photos",
+      value: "photos",
     },
     {
       panel: <p>world</p>,
@@ -151,7 +156,7 @@ const SingleHotel = () => {
 
   const tabsListSmallScreenDisplay = useMemo(() => {
     let smallScreenTab = [...tabsList.current];
-    smallScreenTab.splice(1, 2);
+    smallScreenTab.splice(1, 3);
     return smallScreenTab?.map((tab) => (
       <div key={tab?.value} className="relative text-gray-400 ">
         <button
@@ -173,7 +178,7 @@ const SingleHotel = () => {
 
   const restSmallScreenTabsList = useMemo(() => {
     let restSmallScreenTab = [...tabsList.current];
-    let newArr = restSmallScreenTab.slice(0, 3);
+    let newArr = restSmallScreenTab.slice(0, 4);
     return newArr?.map((tab) => (
       <div key={tab?.value} className="relative text-gray-400 ">
         <button
