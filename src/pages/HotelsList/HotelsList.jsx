@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
-import SearchInputHeader from "./SearchInputHeader";
+
 import { BiSort } from "react-icons/bi";
 import {
   Link,
@@ -9,7 +9,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import ToggledSearchHeader from "./ToggledSearchHeader";
+
 import Spinner from "../../components/Spinner/Spinner";
 import SearchList from "../../components/searchList/SearchList";
 import useFetch from "../../hooks/useFetch";
@@ -21,6 +21,8 @@ import {
 } from "../../redux/searchStateSlice";
 import { useTitle } from "../../hooks/useTitle";
 import { useState } from "react";
+import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
+import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
 
 const HotelsList = () => {
   const [searchParams, setSearchParams] = useSearchParams();

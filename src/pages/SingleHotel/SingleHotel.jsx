@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { heroeBg } from "../../BgImageStyles/styles";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
-import SearchInputHeader from "../HotelsList/SearchInputHeader";
-import ToggledSearchHeader from "../HotelsList/ToggledSearchHeader";
+
 import { AiFillHeart } from "react-icons/ai";
 import { useLocation, useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
@@ -16,6 +15,8 @@ import useLikedItemCheck from "../../utils/useLikedItemCheck";
 import { addItem, removeItem, setLikedBtnColor } from "../../redux/Favourites";
 import axios from "axios";
 import { setDestination } from "../../redux/searchStateSlice";
+import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
+import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
 
 const SingleHotel = () => {
   const locationID = useLocation();

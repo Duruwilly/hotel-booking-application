@@ -2,13 +2,12 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { favouriteBg, map } from "../../BgImageStyles/styles";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
-import SearchInputHeader from "../HotelsList/SearchInputHeader";
-import ToggledSearchHeader from "../HotelsList/ToggledSearchHeader";
 import image1 from "../../assets/images/heroe.jpg";
-import mapBg from "../../assets/images/map.svg";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { removeItem } from "../../redux/Favourites";
+import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
+import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
 
 const Favourites = () => {
   const { matches, setDropdownHeader } = useMediaQueriesContext();

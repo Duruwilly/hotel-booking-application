@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { BsCalendarEvent } from "react-icons/bs";
 import { RxPerson } from "react-icons/rx";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { AiFillCloseCircle } from "react-icons/ai";
-import Button from "../../components/button/SearchButton";
+import Button from "../button/SearchButton";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import {
   setDate,
@@ -34,8 +34,27 @@ const SearchInputHeader = () => {
     setOpenDate(false);
   };
 
+  const [stickyClass, setStickyClass] = useState("relative");
+
+  useEffect(() => {
+    window.addEventListener("scroll", stickNavbar);
+
+    return () => {
+      window.removeEventListener("scroll", stickNavbar);
+    };
+  }, []);
+
+  const stickNavbar = () => {
+    if (window !== undefined) {
+      let windowHeight = window.scrollY;
+      windowHeight > 600
+        ? setStickyClass("sticky top-24 left-0 z-20")
+        : setStickyClass("top-0 sticky left-0 z-20");
+    }
+  };
+
   return (
-    <div className="w-full sticky top-0 left-0 z-20">
+    <div className={`w-full ${stickyClass}`}>
       <div className="w-full ">
         <div className="h-20 bg-white flex items-center justify-around py-3 border-b border-black w-full">
           <div className="searchItem">
