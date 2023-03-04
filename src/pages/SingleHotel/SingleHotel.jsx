@@ -4,7 +4,7 @@ import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import SearchInputHeader from "../HotelsList/SearchInputHeader";
 import ToggledSearchHeader from "../HotelsList/ToggledSearchHeader";
 import { AiFillHeart } from "react-icons/ai";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import Spinner from "../../components/Spinner/Spinner";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
@@ -15,42 +15,65 @@ import { useDispatch, useSelector } from "react-redux";
 import useLikedItemCheck from "../../utils/useLikedItemCheck";
 import { addItem, removeItem, setLikedBtnColor } from "../../redux/Favourites";
 import axios from "axios";
+import { setDestination } from "../../redux/searchStateSlice";
 
 const SingleHotel = () => {
-  const location = useLocation();
-  const id = location.pathname.split("/")[4];
+  const locationID = useLocation();
+  const id = locationID.pathname.split("/")[4];
+  const { location } = useParams();
+  console.log(location);
   const [singleHotel, setSinglehotel] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fetchStatus, setFetchStatus] = useState("idle");
 
   let { destination } = useSelector((state) => state.searchState);
+  const dispatch = useDispatch();
 
   const url = `http://localhost:8800/api/v1/hotels?country=${destination}`;
   const { data } = useFetch(url);
+  // const { data } = useFetch();
 
-  useTitle(`Rooms at ${data?.country}, ${data?.state}`);
+  useTitle(`Rooms at ${singleHotel?.country}, ${singleHotel?.state}`);
+  const { matches, setFetchHotelStatus, setDropdownHeader } =
+    useMediaQueriesContext();
+  let { likedBtnnColor } = useSelector((state) => state.favourite);
+  const { likedItemCheck } = useLikedItemCheck();
+
+  useEffect(() => {
+    if (location && location !== "")
+      dispatch(setDestination(location));
+  }, []);
 
   useEffect(() => {
     const fetchHotelRooms = async () => {
+      setFetchStatus("pending");
       setLoading(true);
       const url = `http://localhost:8800/api/v1/hotels/find/${id}`;
       try {
         const res = await axios.get(url);
+        setFetchStatus("success");
+
         setSinglehotel(res.data.data);
       } catch (error) {
         setError(error);
       }
-
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     };
     fetchHotelRooms();
   }, []);
-  const { matches, setFetchHotelStatus, setDropdownHeader } =
-    useMediaQueriesContext();
 
-  const dispatch = useDispatch();
-  let { likedBtnnColor } = useSelector((state) => state.favourite);
-  const { likedItemCheck } = useLikedItemCheck();
+  useEffect(() => {
+    setFetchHotelStatus("idle");
+  }, []);
+
+  useEffect(() => {
+    window.onpopstate = () => {
+      setFetchHotelStatus("idle");
+    };
+  }, []);
 
   let allArr = likedItemCheck();
   const toggleLikedBtn = (itemId) => {
@@ -87,7 +110,7 @@ const SingleHotel = () => {
     setFetchHotelStatus("idle");
   }, []);
 
-  const tabsList = useRef([
+  const tabsList = [
     {
       panel: <p>on it</p>,
       name: "overview",
@@ -112,20 +135,20 @@ const SingleHotel = () => {
       panel: (
         <Rooms
           hotelID={id}
-          price={data?.price}
-          hotelName={data?.name}
-          hotelCountry={data?.country}
-          hotelState={data?.state}
-          feature={data?.feature}
+          price={singleHotel?.price}
+          hotelName={singleHotel?.name}
+          hotelCountry={singleHotel?.country}
+          hotelState={singleHotel?.state}
+          feature={singleHotel?.feature}
         />
       ),
       name: "select a room",
       value: "select-a-room",
     },
-  ]);
+  ];
 
   const tabsListBigScreenDisplay = useMemo(() => {
-    return tabsList?.current?.map((tab) => (
+    return tabsList?.map((tab) => (
       <div key={tab?.value} className="relative text-gray-400 ">
         <button
           className={`${
@@ -155,7 +178,7 @@ const SingleHotel = () => {
   }, [tabsList, activeTab]);
 
   const tabsListSmallScreenDisplay = useMemo(() => {
-    let smallScreenTab = [...tabsList.current];
+    let smallScreenTab = [...tabsList];
     smallScreenTab.splice(1, 3);
     return smallScreenTab?.map((tab) => (
       <div key={tab?.value} className="relative text-gray-400 ">
@@ -173,11 +196,11 @@ const SingleHotel = () => {
   }, [tabsList, activeTab]);
 
   const activeTabPanel = useMemo(() => {
-    return tabsList.current?.find((tab) => tab?.value === activeTab)?.panel;
-  }, [tabsList, activeTab]);
+    return tabsList?.find((tab) => tab?.value === activeTab)?.panel;
+  }, [tabsList, activeTab, fetchStatus]);
 
   const restSmallScreenTabsList = useMemo(() => {
-    let restSmallScreenTab = [...tabsList.current];
+    let restSmallScreenTab = [...tabsList];
     let newArr = restSmallScreenTab.slice(0, 4);
     return newArr?.map((tab) => (
       <div key={tab?.value} className="relative text-gray-400 ">
@@ -196,11 +219,12 @@ const SingleHotel = () => {
         </button>
       </div>
     ));
-  });
+  }, [tabsList, activeTab]);
 
   return (
     <>
       {matches ? <SearchInputHeader /> : <ToggledSearchHeader />}
+
       {loading ? (
         <Spinner />
       ) : (

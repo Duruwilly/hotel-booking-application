@@ -34,6 +34,7 @@
       left: 0;
       top: 30%;
       width: 90%;
+      // width: max-content;
       height: 2px;
       background: green;
       transform: translateX(-50%);
@@ -41,6 +42,21 @@
 
       @media screen and (max-width: 374px) {
         top: 43.75%;
+      }
+      @media screen and (max-width: 1015px) {
+        width: 85%;
+      }
+      @media screen and (max-width: 640px) {
+        width: 80%;
+      }
+      @media screen and (max-width: 500px) {
+        width: 70%;
+      }
+      @media screen and (max-width: 360px) {
+        width: 65%;
+      }
+      @media screen and (max-width: 300px) {
+        width: 60%;
       }
     }
 

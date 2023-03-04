@@ -37,12 +37,6 @@ const SearchList = ({ roomOptions, hotel, days, data }) => {
     {
       src: image2,
     },
-    // {
-    //   src: image2,
-    // },
-    // {
-    //   src: image1,
-    // },
   ];
 
   const [sliderNumber, setSliderNumber] = useState(0);
@@ -80,7 +74,7 @@ const SearchList = ({ roomOptions, hotel, days, data }) => {
           <SlArrowRight onClick={() => handleMove("r")} />
         </button>
 
-        <div className="absolute top-0 right-0 z-20">
+        <div className="absolute top-0 right-0">
           <button
             className={`rounded-full w-12 h-12 p-0 border-0 inline-flex items-center justify-center text-3xl ${
               allArr.includes(hotel._id) ? likedBtnnColor : `text-gray-200`
@@ -126,13 +120,13 @@ const SearchList = ({ roomOptions, hotel, days, data }) => {
             </p>
           </div>
           <div className="flex flex-col">
-            <p className="font-bold text-lg">
+            <span className="font-semibold text-sm">
+              {/* for {days === 0 ? `1` : days} nights */}
+              Price per night from
+            </span>
+            <p className="font-bold text-lg pb-3">
               ${[hotel.price].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
             </p>
-            <span className="font-semibold text-sm pb-3">
-              {/* for {days === 0 ? `1` : days} nights */}
-              per night
-            </span>
             <Link
               to={`/hotel/${hotel.name}/${hotel.country}/${hotel._id}`}
               className="bg-red-800 w-full py-2 px-8 text-white font-semibold text-center border-none rounded-sm capitalize"

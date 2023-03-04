@@ -17,7 +17,6 @@ const PopularSearch = () => {
   const navigate = useNavigate();
   let { destination, dateSearch } = useSelector((state) => state.searchState);
   const dispatch = useDispatch();
-  console.log(destination);
 
   const navigateToLocation = async (location) => {
     dispatch(setDestination(location));

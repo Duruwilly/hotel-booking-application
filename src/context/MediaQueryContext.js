@@ -4,18 +4,21 @@ const MediaQueryMatches = createContext();
 
 export const MediaQueryContext = ({ children }) => {
   const [dropdownHeader, setDropdownHeader] = useState(false);
-  const [fetchHotelStatus, setFetchHotelStatus] = useState('idle')
+  const [fetchHotelStatus, setFetchHotelStatus] = useState("idle");
   const [searchQueryDates, setSearchQueryDates] = useState([
     {
       searchQueryStartDates: undefined,
       searchQueryEndDates: undefined,
-    }
-  ])
+    },
+  ]);
 
   const [hotelDropdownHeader, setHotelDropdownHeader] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const [openDate, setOpenDate] = useState(false);
   const [openRoomOptions, setOpenRoomOptions] = useState(false);
+  const [data, setData] = useState([]);
 
   const [date, setDates] = useState([
     {
@@ -45,15 +48,14 @@ export const MediaQueryContext = ({ children }) => {
   }, []);
 
   const toggleDate = () => {
-    setOpenDate(prev => !prev);
+    setOpenDate((prev) => !prev);
     setOpenRoomOptions(false);
   };
 
   const toggleRoomOptions = () => {
-    setOpenRoomOptions(prev => !prev);
+    setOpenRoomOptions((prev) => !prev);
     setOpenDate(false);
   };
-
 
   return (
     <MediaQueryMatches.Provider
@@ -77,7 +79,13 @@ export const MediaQueryContext = ({ children }) => {
         setSteps,
         list,
         searchQueryDates,
-        setSearchQueryDates
+        setSearchQueryDates,
+        loading,
+        setLoading,
+        error,
+        setError,
+        data,
+        setData
       }}
     >
       {children}
