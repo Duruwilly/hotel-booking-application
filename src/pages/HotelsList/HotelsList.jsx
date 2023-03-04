@@ -35,16 +35,17 @@ const HotelsList = () => {
     setFetchHotelStatus,
     fetchHotelStatus,
     date,
+    sortPrice,
+    setSortPrice
   } = useMediaQueriesContext();
   let { roomOptions, destination, searchQueryDates } = useSelector(
     (state) => state.searchState
   );
   // console.log(destination);
 
-  const url = `http://localhost:8800/api/v1/hotels?country=${searchParams.get("query")}`;
-  // destination !== ""
-  //   ? `http://localhost:8800/api/v1/hotels?country=${id}`
-  //   : "http://localhost:8800/api/v1/hotels";
+  const url = `http://localhost:8800/api/v1/hotels?country=${searchParams.get(
+    "query"
+  )}`;
 
   const { data, loading, error } = useFetch(url);
   // console.log(data);
@@ -67,13 +68,6 @@ const HotelsList = () => {
       setFetchHotelStatus("idle");
     };
   }, []);
-
-  // useEffect(() => {
-  //   window.onpopstate = () => {
-  //     if (searchParams.get("query") && searchParams.get("query") !== "")
-  //       dispatch(setDestination(searchParams.get("query")));
-  //   };
-  // }, []);
 
   // getting the date from the query
   const startDateString = searchParams.get("date_from");
@@ -113,8 +107,6 @@ const HotelsList = () => {
     );
   }, [searchParams.get("date_from"), searchParams.get("date_to")]);
 
-  // console.log(data);
-
   return (
     <>
       {matches ? <SearchInputHeader /> : <ToggledSearchHeader />}
@@ -131,8 +123,10 @@ const HotelsList = () => {
               <li className="uppercase text-xs border border-gray-900 bg-primary py-3 w-full text-white text-center list-none font-semibold">
                 {data.length} hotels
               </li>
-              <select className="uppercase text-xs border bg-transparent border-gray-900 text-black py-3 px- w-full text-center list-none font-semibold">
+              <select value={sortPrice} onChange={(e) => {setSortPrice(e.target.value); setFetchHotelStatus("idle")}} className="uppercase text-xs border bg-transparent border-gray-900 text-black py-3 px- w-full text-center list-none font-semibold">
                 <option>sort prices</option>
+                <option value="low-to-high">price low to high</option>
+                <option value="high-to-low">price high to low</option>
               </select>
               <li className="uppercase text-xs border border-gray-900 py-3 px- w-full text-black text-center list-none font-semibold">
                 <div className="flex items-center justify-center gap-2">
@@ -156,13 +150,15 @@ const HotelsList = () => {
             <div className="mt-5" onClick={() => setDropdownHeader(false)}>
               {fetchHotelStatus === "success" &&
                 data.map((hotel) => (
-                  <SearchList
-                    key={hotel._id}
-                    roomOptions={roomOptions}
-                    hotel={hotel}
-                    days={days}
-                    data={data}
-                  />
+                  <div key={hotel._id}>
+                    <SearchList
+                      key={hotel._id}
+                      roomOptions={roomOptions}
+                      hotel={hotel}
+                      days={days}
+                      data={data}
+                    />
+                  </div>
                 ))}
               {data.length < 0 && (
                 <p className="text-center">

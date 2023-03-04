@@ -19,6 +19,7 @@ export const MediaQueryContext = ({ children }) => {
   const [openDate, setOpenDate] = useState(false);
   const [openRoomOptions, setOpenRoomOptions] = useState(false);
   const [data, setData] = useState([]);
+  const [sortPrice, setSortPrice] = useState("")
 
   const [date, setDates] = useState([
     {
@@ -85,7 +86,9 @@ export const MediaQueryContext = ({ children }) => {
         error,
         setError,
         data,
-        setData
+        setData,
+        sortPrice,
+        setSortPrice
       }}
     >
       {children}
