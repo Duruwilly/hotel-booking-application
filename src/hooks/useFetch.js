@@ -7,7 +7,8 @@ const useFetch = (url) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const { fetchHotelStatus, setFetchHotelStatus } = useMediaQueriesContext();
+  const { fetchHotelStatus, setFetchHotelStatus, sortPrice } =
+    useMediaQueriesContext();
   // let { destination } = useSelector((state) => state.searchState);
 
   useEffect(() => {
@@ -17,7 +18,14 @@ const useFetch = (url) => {
       try {
         const res = await axios.get(url);
         setFetchHotelStatus(res.data.status);
-        setData(res.data.data);
+        if(sortPrice === "low-to-high") {
+          res.data.data.sort((a,b) => Number(a.price) - Number(b.price))
+          setData(res.data.data)
+        } else if(sortPrice === "high-to-low") {
+          res.data.data.sort((a,b) => Number(b.price) - Number(a.price))
+          setData(res.data.data)
+        }
+        setData(res.data.data)
       } catch (error) {
         setError(error);
       }

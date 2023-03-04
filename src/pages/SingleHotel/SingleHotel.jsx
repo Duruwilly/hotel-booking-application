@@ -22,7 +22,6 @@ const SingleHotel = () => {
   const locationID = useLocation();
   const id = locationID.pathname.split("/")[4];
   const { location } = useParams();
-  console.log(location);
   const [singleHotel, setSinglehotel] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
