@@ -5,12 +5,12 @@ import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import BasketItem from "../../components/basketItems/BasketItem";
-import SearchInputHeader from "../HotelsList/SearchInputHeader";
-import ToggledSearchHeader from "../HotelsList/ToggledSearchHeader";
 import { paymentBg } from "../../BgImageStyles/styles";
 import { useTitle } from "../../hooks/useTitle";
 import { FaTimes } from "react-icons/fa";
 import { getCountries } from "../../utils/getCountries";
+import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
+import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
 
 const Basket = () => {
   useTitle("Book the world best hotel");

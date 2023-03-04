@@ -3,7 +3,7 @@ import { CiSearch } from "react-icons/ci";
 import { BsCalendarEvent } from "react-icons/bs";
 import { RxPerson } from "react-icons/rx";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
-import Button from "../../components/button/SearchButton";
+import Button from "../button/SearchButton";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { AiFillCloseCircle } from "react-icons/ai";
