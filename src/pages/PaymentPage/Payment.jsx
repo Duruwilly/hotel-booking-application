@@ -20,7 +20,7 @@ const Payment = () => {
   return (
     <section className="flex justify-center">
       <div className="w-full max-w-screen-xl py- px-4">
-        <div className=" m-auto">
+        <div className="m-auto">
           <ProgressBar step={steps} list={list} />
         </div>
         <PaymentCard />

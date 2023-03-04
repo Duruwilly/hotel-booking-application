@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import image1 from "../../assets/images/heroe.jpg";
+import image2 from "../../assets/images/heroe2.jpg";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { MdOutlineSingleBed, MdOutlineKingBed } from "react-icons/md";
@@ -14,18 +15,20 @@ import useRoomsAvailabilityCheck, {
   isAvailable,
 } from "../../utils/useRoomsAvailabilityCheck";
 import PriceConversion from "../PriceConversion/PriceConversion";
+import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
+import { format } from "date-fns";
 
 const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
   const { user } = useAuthContext();
-
+console.log(hotelName);
   const [open, setOpen] = useState(false);
   const [activeOpen, setActiveOpen] = useState("");
+  const [activeImg, setActiveImg] = useState("");
   const [data, setData] = useState([]);
-
   useEffect(() => {
     fetchRoom();
   }, [hotelID]);
-
+  
   const fetchRoom = async () => {
     try {
       let url = `http://localhost:8800/api/v1/hotels/room/${hotelID}`;
@@ -53,7 +56,6 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
 
   const addToBasket = (id) => {
     const item = data.filter((itemId) => itemId._id === id);
-    // console.log(item);
     if (user) {
       dispatch(
         addItem({
@@ -78,6 +80,31 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
   //     setFetchHotelStatus("idle");
   //   }, [hotelID]);
 
+  const sliderImg = [
+    {
+      src: image1,
+    },
+    {
+      src: image2,
+    },
+  ];
+
+  const [sliderNumber, setSliderNumber] = useState(0);
+
+  const handleSlide = (dir) => {
+    let newSliderNumber;
+    if (dir === "l") {
+      // newSliderNumber would return the last image in the array if sliderNumber is 0 else keep sliding left
+      newSliderNumber =
+        sliderNumber === 0 ? sliderImg.length - 1 : sliderNumber - 1;
+    } else {
+      // newSliderNumber would return the first image in the array if sliderNumber is equal to the last image else keep sliding right
+      newSliderNumber =
+        sliderNumber === sliderImg.length - 1 ? 0 : sliderNumber + 1;
+    }
+    setSliderNumber(newSliderNumber);
+  };
+
   return (
     <>
       <PriceConversion />
@@ -97,7 +124,34 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
           ) : null}
           <div className="bg-white border border-gray-200 flex flex-col md:flex-row gap-6">
             <div style={{ flex: 3, position: "relative" }}>
-              <img src={image1} className="w-full" />
+              <img
+                src={
+                  room._id === activeImg
+                    ? sliderImg[sliderNumber].src
+                    : sliderImg[0].src
+                  // sliderImg[sliderNumber].src
+                }
+                alt=""
+                className="w-full"
+              />
+              <button className="text-4xl absolute left-5 top-[50%] cursor-pointer text-white opacity-70 hover:text-white hover:opacity-100 z-20">
+                <SlArrowLeft
+                  className=""
+                  onClick={() => {
+                    setActiveImg(room._id);
+                    if (room._id === activeImg) handleSlide("l");
+                  }}
+                />
+              </button>
+
+              <button className="text-4xl absolute right-5 top-[50%] cursor-pointer text-white opacity-70 hover:text-white hover:opacity-100 z-20">
+                <SlArrowRight
+                  onClick={() => {
+                    setActiveImg(room._id);
+                    if (room._id === activeImg) handleSlide("r");
+                  }}
+                />
+              </button>
             </div>
             <div
               style={{ flex: 2, position: "relative" }}
@@ -162,12 +216,23 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
                   )}
                 </div>
                 {!isAvailable(room.roomNumbers) ? (
-                  <p className="text-red-800 capitalize">room unavailable</p>
-                ) : (
-                  <p className="text-red-800 font-semibold">
-                    kindly select a date to see room availability
-                  </p>
-                )}
+                  <>
+                    <p className="text-red-900 font-semibold text-sm uppercase">room unavailable</p>
+                    <span className="text-sm font-light">
+                      Please select alternative dates above,{" "}
+                      <span className="font-semibold text-sm">{`${format(
+                        new Date(dateSearch[0]?.startDate),
+                        "dd MMM yyyy"
+                      )} - ${format(
+                        new Date(dateSearch[0]?.endDate),
+                        "dd MMM yyyy"
+                      )}`}{" "}</span>
+                    </span>
+                  </>
+                ) : // <p className="text-red-800 font-semibold">
+                //   kindly select a date to see room availability
+                // </p>
+                null}
                 <p className="text-sm">
                   For more details{" "}
                   <Link

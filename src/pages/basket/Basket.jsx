@@ -36,7 +36,11 @@ const Basket = () => {
   return (
     <>
       {basketItems.length > 0 ? (
-        <ProgressBar step={steps} list={list} />
+        <div className="flex justify-center">
+          <div className="w-full max-w-screen-lg">
+            <ProgressBar step={steps} list={list} />
+          </div>
+        </div>
       ) : matches ? (
         <SearchInputHeader />
       ) : (

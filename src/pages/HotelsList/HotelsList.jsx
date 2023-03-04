@@ -20,11 +20,12 @@ import {
   setSearchQueryDates,
 } from "../../redux/searchStateSlice";
 import { useTitle } from "../../hooks/useTitle";
+import { useState } from "react";
 
 const HotelsList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   useTitle(`Best luxury hotels in ${searchParams.get("query")}`);
-  const { id } = useParams();
+  // const { id } = useParams();
   const dispatch = useDispatch();
   const {
     matches,
@@ -36,14 +37,17 @@ const HotelsList = () => {
   let { roomOptions, destination, searchQueryDates } = useSelector(
     (state) => state.searchState
   );
+  // console.log(destination);
 
-  const url = `http://localhost:8800/api/v1/hotels?country=${destination}`;
+  const url = `http://localhost:8800/api/v1/hotels?country=${searchParams.get("query")}`;
   // destination !== ""
   //   ? `http://localhost:8800/api/v1/hotels?country=${id}`
   //   : "http://localhost:8800/api/v1/hotels";
 
   const { data, loading, error } = useFetch(url);
   // console.log(data);
+
+  // const { data } = useFetch();
 
   useEffect(() => {
     if (searchParams.get("query") && searchParams.get("query") !== "")
@@ -62,12 +66,12 @@ const HotelsList = () => {
     };
   }, []);
 
-  useEffect(() => {
-    window.onpopstate = () => {
-      if (searchParams.get("query") && searchParams.get("query") !== "")
-        dispatch(setDestination(searchParams.get("query")));
-    };
-  }, [searchParams.get("query")]);
+  // useEffect(() => {
+  //   window.onpopstate = () => {
+  //     if (searchParams.get("query") && searchParams.get("query") !== "")
+  //       dispatch(setDestination(searchParams.get("query")));
+  //   };
+  // }, []);
 
   // getting the date from the query
   const startDateString = searchParams.get("date_from");
@@ -148,7 +152,7 @@ const HotelsList = () => {
               ></span>
             </ul>
             <div className="mt-5" onClick={() => setDropdownHeader(false)}>
-              {data.length !== 0 ? (
+              {fetchHotelStatus === "success" &&
                 data.map((hotel) => (
                   <SearchList
                     key={hotel._id}
@@ -157,12 +161,27 @@ const HotelsList = () => {
                     days={days}
                     data={data}
                   />
-                ))
-              ) : (
+                ))}
+              {data.length < 0 && (
                 <p className="text-center">
                   No result based on your search location. Try another search
                 </p>
               )}
+              {/* {data.length !== 0 ? (
+              data.map((hotel) => (
+                <SearchList
+                  key={hotel._id}
+                  roomOptions={roomOptions}
+                  hotel={hotel}
+                  days={days}
+                  data={data}
+                />
+              ))
+            ) : (
+              <p className="text-center">
+                No result based on your search location. Try another search
+              </p>
+            )} */}
             </div>
           </div>
         </section>

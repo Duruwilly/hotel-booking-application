@@ -7,6 +7,8 @@ const useRoomsAvailabilityCheck = () => {
   let { basketItems } = useSelector((state) => state.basket);
   let { date } = useMediaQueriesContext();
 
+  // console.log(basketItems);
+
   const getDatesInRanges = (startDate, endDate) => {
     // we get the current date from the state
     const start = new Date(startDate);
@@ -48,7 +50,7 @@ const useRoomsAvailabilityCheck = () => {
     return dates;
   };
 
-  const allDatesInBasket = getDatesInRangesInBasket(datesInBasket[0]?.searchQueryStartDates, datesInBasket[0]?.searchQueryEndDates);
+  const allDatesInBasket = getDatesInRangesInBasket(datesInBasket[0]?.startDate, datesInBasket[0]?.endDate);
 
   // map through the roomNumbers in the database. if some of the date includes the
   const isAvailable = (roomsNumber) => {
