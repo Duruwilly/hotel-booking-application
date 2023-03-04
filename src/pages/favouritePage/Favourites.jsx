@@ -124,27 +124,29 @@ const Favourites = () => {
             </div>
           ) : (
             <div className="flex justify-center items-center py-10 px-4">
-              <div className="bg-whit border border-gray-300">
-                <div style={{ flex: 3 }}>
-                  <div className="map-overlay">
-                    <div
-                      style={map}
-                      className="flex justify-center items-center text-gray-200 text-xl"
-                    >
-                      <p>
-                        You don't have any <br /> favourite lists
-                      </p>
+              <div className="w-full max-w-screen-sm">
+                <div className="bg-whit border border-gray-300">
+                  <div style={{ flex: 3 }}>
+                    <div className="map-overlay">
+                      <div
+                        style={map}
+                        className="flex justify-center items-center text-gray-200 text-xl"
+                      >
+                        <p>
+                          You don't have any <br /> favourite lists
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="" style={{ flex: 2 }}>
-                  <h1 className="font-light text-xl text-gray-90 px-4 py-10">
-                    For inspiration, try our{" "}
-                    <Link to="/" className="text-red-800">
-                      popular searches in the home page{" "}
-                    </Link>
-                    or add your keywords to the search bar above
-                  </h1>
+                  <div className="" style={{ flex: 2 }}>
+                    <h1 className="font-light text-xl text-gray-90 px-4 py-10">
+                      For inspiration, try our{" "}
+                      <Link to="/" className="text-red-800">
+                        popular searches in the home page{" "}
+                      </Link>
+                      or add your keywords to the search bar above
+                    </h1>
+                  </div>
                 </div>
               </div>
             </div>
