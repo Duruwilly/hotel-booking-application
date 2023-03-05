@@ -15,11 +15,12 @@ export const MediaQueryContext = ({ children }) => {
   const [hotelDropdownHeader, setHotelDropdownHeader] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [convertPrice, setConvertPrice] = useState("USD");
 
   const [openDate, setOpenDate] = useState(false);
   const [openRoomOptions, setOpenRoomOptions] = useState(false);
   const [data, setData] = useState([]);
-  const [sortPrice, setSortPrice] = useState("")
+  const [sortPrice, setSortPrice] = useState("");
 
   const [date, setDates] = useState([
     {
@@ -88,7 +89,9 @@ export const MediaQueryContext = ({ children }) => {
         data,
         setData,
         sortPrice,
-        setSortPrice
+        setSortPrice,
+        convertPrice,
+        setConvertPrice,
       }}
     >
       {children}

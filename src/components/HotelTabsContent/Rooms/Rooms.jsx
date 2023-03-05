@@ -13,6 +13,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
   const { user } = useAuthContext();
   let { days } = useDaysCalculate();
   const [data, setData] = useState([]);
+  const [error, setError] = useState(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
@@ -21,14 +22,14 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
     fetchRoom();
   }, [hotelID]);
 
+  // fetches rooms
   const fetchRoom = async () => {
     try {
       let url = `http://localhost:8800/api/v1/hotels/room/${hotelID}`;
       const res = await axios.get(url);
-      // console.log(res.data.data);
       setData(res.data.data);
     } catch (error) {
-      console.log(error);
+      setError(error)
     }
   };
 

@@ -15,6 +15,8 @@ const BasketItem = (props) => {
     hotelCountry,
     hotelState,
     hotelName,
+    exchangedPrice,
+    convertPrice,
   } = props;
   const navigate = useNavigate();
 
@@ -90,10 +92,11 @@ const BasketItem = (props) => {
         <div className="pb-1 flex justify-between items-center">
           <span className="text-gray-400 font-light capitalize">price</span>
           <p className="font-light text-gray-">
-            $
-            {[props[0].price * days * quantity]
+            {`${
+              convertPrice === "USD" ? "$" : convertPrice === "EUR" ? "£" : "₦"
+            } ${[props[0].price * days * quantity * exchangedPrice]
               .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}{" "}
             x {quantity}
           </p>
         </div>

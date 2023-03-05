@@ -11,13 +11,15 @@ import { FaTimes } from "react-icons/fa";
 import { getCountries } from "../../utils/getCountries";
 import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
 import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
+import usePriceConversion from "../../utils/usePriceConversion";
 
 const Basket = () => {
   useTitle("Book the world best hotel");
   const [countries, setCountries] = useState([]);
   const inputStyles =
     "w-full focus:outline-none border border-gray-300 p-3 placeholder:text-sm block rounded-md";
-  const { steps, setSteps, list, matches } = useMediaQueriesContext();
+  const { steps, setSteps, list, matches, convertPrice, fetchHotelStatus } =
+    useMediaQueriesContext();
   const { basketItems } = useSelector((state) => state.basket);
   const [openModal, setOpenModal] = useState(false);
 
@@ -48,7 +50,11 @@ const Basket = () => {
       )}
       <section className="flex justify-center relative">
         <div className="w-full max-w-screen-sm px-4">
-          <Confirmation setSteps={setSteps} />
+          <Confirmation
+            setSteps={setSteps}
+            convertPrice={convertPrice}
+            fetchHotelStatus={fetchHotelStatus}
+          />
         </div>
         {basketItems.length > 0 && openModal && (
           <div
@@ -128,9 +134,11 @@ const Basket = () => {
 
 export default Basket;
 
-const Confirmation = ({ setSteps }) => {
+const Confirmation = ({ setSteps, convertPrice, fetchHotelStatus }) => {
   let { basketItems } = useSelector((state) => state.basket);
   const navigate = useNavigate();
+  const [exchangedPrice, setExchangedPrice] = useState();
+  const { convertPrices } = usePriceConversion();
 
   let total = 0;
 
@@ -147,6 +155,12 @@ const Confirmation = ({ setSteps }) => {
     navigate("/payment");
   };
 
+  useEffect(() => {
+    convertPrices().then((data) => {
+      setExchangedPrice(data);
+    });
+  }, [convertPrice, fetchHotelStatus]);
+
   return (
     <section className="py-12">
       {basketItems.length > 0 ? (
@@ -161,7 +175,7 @@ const Confirmation = ({ setSteps }) => {
         <div>
           {basketItems.map((basket) => (
             <div key={basket[0]._id}>
-              <BasketItem {...basket} />
+              <BasketItem {...basket} exchangedPrice={exchangedPrice} convertPrice={convertPrice} />
             </div>
           ))}
           <div
@@ -170,7 +184,15 @@ const Confirmation = ({ setSteps }) => {
           >
             <span className="text-xl font-light capitalize">total price</span>
             <p className="text-3xl font-light">
-              ${[total].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              {`${
+                convertPrice === "USD"
+                  ? "$"
+                  : convertPrice === "EUR"
+                  ? "£"
+                  : "₦"
+              } ${[total * exchangedPrice]
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
             </p>
           </div>
           <div className="mt-4">

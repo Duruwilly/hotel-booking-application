@@ -11,6 +11,28 @@ const Reviews = ({ hotelName }) => {
   };
   const inputStyles =
     "w-full focus:outline-none border border-gray-300 p-3 placeholder:text-sm block rounded-md";
+  const [userReviewData, setUserReviewData] = useState({
+    name: "",
+    email: "",
+    rating: "",
+    title: "",
+    comment: "",
+  });
+
+  const onChange = (e) => {
+    setUserReviewData((prevState) => ({
+      ...prevState,
+      [e.target.id]: e.target.value,
+    }));
+  };
+
+  const submitReview = (e) => {
+    e.preventDefault();
+    toggleModal();
+    setUserReviewData(() => ({
+      [e.target.id]: "",
+    }));
+  };
   return (
     <>
       <section className="flex justify-center">
@@ -68,74 +90,93 @@ const Reviews = ({ hotelName }) => {
       </section>
       {openModal && (
         <Modal toggle={() => toggleModal()}>
-          <FaTimes
-            onClick={() => setOpenModal(false)}
-            className="text-whit absolute top-4 right-4 text-2xl cursor-pointer"
-          />
-          {/* <button
+          <div className="flex justify-center items-center">
+            <div className="bg-white w-full max-w-screen-sm relative shadow-md">
+              <FaTimes
+                onClick={() => setOpenModal(false)}
+                className="text-whit absolute top-4 right-4 text-2xl cursor-pointer"
+              />
+              {/* <button
             className="text-white absolute top-4 right-4 text-3xl cursor-pointer"
             onClick={() => toggleModal()}
           ></button> */}
-          <form className="py-24 px-8">
-            <div className="border-b border-gray-300 mb-4 pb-2">
-              <p className=" font-medium text-lg">
-                Your first-hand experiences really help other travelers. Thanks!
-              </p>
+              <form className="py-24 px-8" onSubmit={submitReview}>
+                <div className="border-b border-gray-300 mb-4 pb-2">
+                  <p className=" font-medium text-lg">
+                    Your first-hand experiences really help other travelers.
+                    Thanks!
+                  </p>
+                </div>
+                <div className="space-y-3 px-">
+                  <div>
+                    <label>Your Name</label>
+                    <input
+                      type="text"
+                      className={inputStyles}
+                      placeholder="Name"
+                      id="name"
+                      value={userReviewData.name}
+                      onChange={onChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Your Email</label>
+                    <input
+                      type="text"
+                      className={inputStyles}
+                      placeholder="Email Address"
+                      id="email"
+                      value={userReviewData.email}
+                      onChange={onChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Rating</label>
+                    <select
+                      className={inputStyles}
+                      id="rating"
+                      value={userReviewData.rating}
+                      onChange={onChange}
+                    >
+                      <option value="">select rating</option>
+                      <option value="0/10">0/10</option>
+                      <option value="2/10">2/10</option>
+                      <option value="4/10">4/10</option>
+                      <option value="6/10">6/10</option>
+                      <option value="8/10">8/10</option>
+                      <option value="10/10">10/10</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label>Title of your review</label>
+                    <input
+                      type="text"
+                      className={inputStyles}
+                      placeholder="Summarize your stay or highlight an interesting details."
+                      id="title"
+                      value={userReviewData.title}
+                      onChange={onChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Your Review</label>
+                    <textarea
+                      name=""
+                      id="comment"
+                      value={userReviewData.comment}
+                      onChange={onChange}
+                      className={inputStyles}
+                    ></textarea>
+                  </div>
+                  <div className="flex justify-center">
+                    <button className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-light cursor-pointer w-full">
+                      submit
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-            <div className="space-y-3 px-">
-              <div>
-                <label>Your Name</label>
-                <input
-                  type="text"
-                  className={inputStyles}
-                  placeholder="Name"
-                  id="name"
-                />
-              </div>
-              <div>
-                <label>Your Email</label>
-                <input
-                  type="text"
-                  className={inputStyles}
-                  placeholder="Email Address"
-                  id="email"
-                />
-              </div>
-              <div>
-                <select className={inputStyles} name="" id="rating">
-                  <option value="">select rating</option>
-                  <option value="">0/10</option>
-                  <option value="">2/10</option>
-                  <option value="">4/10</option>
-                  <option value="">6/10</option>
-                  <option value="">8/10</option>
-                  <option value="">10/10</option>
-                </select>
-              </div>
-              <div>
-                <label>Title of your review</label>
-                <input
-                  type="text"
-                  className={inputStyles}
-                  placeholder="Summarize your stay or highlight an interesting details."
-                  id="title"
-                />
-              </div>
-              <div>
-                <label>Your Review</label>
-                <textarea
-                  name=""
-                  id="comment"
-                  className={inputStyles}
-                ></textarea>
-              </div>
-              <div className="flex justify-center">
-                <button className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-light cursor-pointer w-full">
-                  submit
-                </button>
-              </div>
-            </div>
-          </form>
+          </div>
         </Modal>
       )}
     </>

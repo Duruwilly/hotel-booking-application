@@ -286,8 +286,7 @@ export const map = {
   backgroundRepeat: "no-repeat",
   textAlign: "center",
   height: "18rem",
-
-}
+};
 
 export const overviewFacilitiesBg = {
   width: "100%",

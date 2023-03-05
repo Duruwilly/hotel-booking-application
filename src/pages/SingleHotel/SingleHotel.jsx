@@ -21,6 +21,7 @@ import Overview from "../../components/HotelTabsContent/HotelOverview/Overview";
 import Location from "../../components/HotelTabsContent/HotelLocation/Location";
 import Reviews from "../../components/HotelTabsContent/HotelReviews/Reviews";
 import Photos from "../../components/HotelTabsContent/HotelPhotos/Photos";
+import usePriceConversion from "../../utils/usePriceConversion";
 
 const SingleHotel = () => {
   const locationID = useLocation();
@@ -35,6 +36,10 @@ const SingleHotel = () => {
   let { destination } = useSelector((state) => state.searchState);
   const dispatch = useDispatch();
 
+  const [exchangedPrice, setExchangedPrice] = useState();
+  const { convertPrices } = usePriceConversion();
+
+  // using this to ge the hotel data that'd be passed to the liked items
   const url = `http://localhost:8800/api/v1/hotels?country=${destination}`;
   const { data } = useFetch(url);
   // const { data } = useFetch();
@@ -47,15 +52,22 @@ const SingleHotel = () => {
     setOpenPhotosModal((state) => !state);
   };
 
-  const { matches, setFetchHotelStatus, setDropdownHeader } =
-    useMediaQueriesContext();
+  const {
+    matches,
+    setFetchHotelStatus,
+    fetchHotelStatus,
+    convertPrice,
+    setDropdownHeader,
+  } = useMediaQueriesContext();
   let { likedBtnnColor } = useSelector((state) => state.favourite);
   const { likedItemCheck } = useLikedItemCheck();
 
+  // on re-search and returning back the hotel rooms page set the state to the location
   useEffect(() => {
     if (location && location !== "") dispatch(setDestination(location));
   }, []);
 
+  // fetches a particular hotel based on the id
   useEffect(() => {
     const fetchHotelRooms = async () => {
       setFetchStatus("pending");
@@ -76,16 +88,19 @@ const SingleHotel = () => {
     fetchHotelRooms();
   }, []);
 
+  // recalls the fuunction that fetches the hotels data on mount
   useEffect(() => {
     setFetchHotelStatus("idle");
   }, []);
 
+  // recalls the fuunction that fetches the hotels data on reload
   useEffect(() => {
     window.onpopstate = () => {
       setFetchHotelStatus("idle");
     };
   }, []);
 
+  // liked funtions
   let allArr = likedItemCheck();
   const toggleLikedBtn = (itemId) => {
     const dataItem = data?.filter((item) => item?._id === itemId);
@@ -118,8 +133,10 @@ const SingleHotel = () => {
   }, []);
 
   useEffect(() => {
-    setFetchHotelStatus("idle");
-  }, []);
+    convertPrices().then((data) => {
+      setExchangedPrice(data);
+    });
+  }, [convertPrice, fetchHotelStatus]);
 
   const tabsList = [
     {
@@ -281,12 +298,17 @@ const SingleHotel = () => {
                   className="flex flex-row justify-between md:flex-col items-center py-4 px-8"
                   style={{ background: "rgba(0,0,0,0.4)" }}
                 >
-                  <p className=" font-extralight">Price per night</p>
+                  <p className=" font-extralight">Price per night from</p>
                   <p className=" text-2xl">
-                    $
-                    {[singleHotel?.price]
+                    {`${
+                      convertPrice === "USD"
+                        ? "$"
+                        : convertPrice === "EUR"
+                        ? "£"
+                        : "₦"
+                    } ${[singleHotel?.price * exchangedPrice]
                       .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
                   </p>
                 </div>
               </div>
