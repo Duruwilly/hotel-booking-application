@@ -1,26 +1,22 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useAuthContext } from "../../context/AuthContext";
-import useDaysCalculate from "../../hooks/useDaysCalculate";
-import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
-import image1 from "../../assets/images/heroe.jpg";
-import image2 from "../../assets/images/heroe2.jpg";
+import { useAuthContext } from "../../../context/AuthContext";
+import useDaysCalculate from "../../../hooks/useDaysCalculate";
+import useRoomsAvailabilityCheck from "../../../utils/useRoomsAvailabilityCheck";
+import image1 from "../../../assets/images/heroe.jpg";
+import image2 from "../../../assets/images/heroe2.jpg";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { MdOutlineSingleBed, MdOutlineKingBed } from "react-icons/md";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { format } from "date-fns";
 
 const Room = ({ room, feature, addToBasket }) => {
-
-  let { roomOptions, dateSearch } = useSelector(
-    (state) => state.searchState
-  );
+  let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
   let { days } = useDaysCalculate();
   let { isAvailable } = useRoomsAvailabilityCheck();
 
   const [activeOpen, setActiveOpen] = useState("");
-
 
   const sliderImg = [
     {
@@ -62,16 +58,7 @@ const Room = ({ room, feature, addToBasket }) => {
       ) : null}
       <div className="bg-white border border-gray-200 flex flex-col md:flex-row gap-6">
         <div style={{ flex: 3, position: "relative" }}>
-          <img
-            src={
-              //   room._id === activeImg
-              //     ? sliderImg[sliderNumber].src
-              //     : sliderImg[0].src
-              sliderImg[sliderNumber].src
-            }
-            alt=""
-            className="w-full"
-          />
+          <img src={sliderImg[sliderNumber].src} alt="" className="w-full" />
           <button className="text-4xl absolute left-5 top-[50%] cursor-pointer text-white opacity-70 hover:text-white hover:opacity-100 z-20">
             <SlArrowLeft
               className=""

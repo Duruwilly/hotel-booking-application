@@ -660,6 +660,22 @@
   }
 }
 
+/* review breakpoint */
+@media screen and (max-width: 547px) {
+  .review-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media screen and (min-width: 548px) {
+  .review-content {
+    display: flex;
+    align-items: center
+  }
+}
+
 @layer base {
   body {
     @apply bg-gray;

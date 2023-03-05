@@ -53,7 +53,7 @@ const Navbar = () => {
     if (window !== undefined) {
       let windowHeight = window.scrollY;
       windowHeight > 600
-        ? setStickyClass("sticky top-0 left-0 z-[999]")
+        ? setStickyClass("sticky top-0 left-0 z-[90]")
         : setStickyClass("relative");
     }
   };

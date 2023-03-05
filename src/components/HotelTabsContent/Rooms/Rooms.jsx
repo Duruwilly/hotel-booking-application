@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../../../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem } from "../../redux/basketSlice";
-import { useAuthContext } from "../../context/AuthContext";
-import useDaysCalculate from "../../hooks/useDaysCalculate";
+import { addItem } from "../../../redux/basketSlice";
+import { useAuthContext } from "../../../context/AuthContext";
+import useDaysCalculate from "../../../hooks/useDaysCalculate";
 import axios from "axios";
-import PriceConversion from "../PriceConversion/PriceConversion";
+import PriceConversion from "../../PriceConversion/PriceConversion";
 import Room from "./Room";
 
 const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
@@ -65,19 +65,23 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
 
   return (
     <>
-      <PriceConversion />
-      {data.map((room) => (
-        <div className="mt-3" key={room._id}>
-          <Room
-            room={room}
-            hotelName={hotelName}
-            hotelCountry={hotelCountry}
-            hotelState={hotelState}
-            feature={feature}
-            addToBasket={addToBasket}
-          />
+      <div className="flex justify-center">
+        <div className="w-full max-w-screen-lg mt-">
+          <PriceConversion />
+          {data.map((room) => (
+            <div key={room._id} className="mt-3">
+              <Room
+                room={room}
+                hotelName={hotelName}
+                hotelCountry={hotelCountry}
+                hotelState={hotelState}
+                feature={feature}
+                addToBasket={addToBasket}
+              />
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </>
   );
 };

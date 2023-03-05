@@ -16,6 +16,8 @@ import stays from "../assets/images/gallery7.jpeg";
 import paymentModalBg from "../assets/images/pay5.jpg";
 import wishlistBg from "../assets/images/wishlistsBg.jpg";
 import mapBg from "../assets/images/map.svg";
+import overviewFacilitiesbg from "../assets/images/overviewFacBg.jpg";
+import overviewFoodsbg from "../assets/images/overviewFoodsBg.jpg";
 
 export const heroeBg = {
   width: "100%",
@@ -286,3 +288,25 @@ export const map = {
   height: "18rem",
 
 }
+
+export const overviewFacilitiesBg = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${overviewFacilitiesbg})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  height: "50vh",
+  position: "relative",
+};
+
+export const overviewFoodsBg = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${overviewFoodsbg})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  height: "50vh",
+  position: "relative",
+};

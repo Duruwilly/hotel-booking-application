@@ -36,7 +36,7 @@ const HotelsList = () => {
     fetchHotelStatus,
     date,
     sortPrice,
-    setSortPrice
+    setSortPrice,
   } = useMediaQueriesContext();
   let { roomOptions, destination, searchQueryDates } = useSelector(
     (state) => state.searchState
@@ -123,7 +123,14 @@ const HotelsList = () => {
               <li className="uppercase text-xs border border-gray-900 bg-primary py-3 w-full text-white text-center list-none font-semibold">
                 {data.length} hotels
               </li>
-              <select value={sortPrice} onChange={(e) => {setSortPrice(e.target.value); setFetchHotelStatus("idle")}} className="uppercase text-xs border bg-transparent border-gray-900 text-black py-3 px- w-full text-center list-none font-semibold">
+              <select
+                value={sortPrice}
+                onChange={(e) => {
+                  setSortPrice(e.target.value);
+                  setFetchHotelStatus("idle");
+                }}
+                className="uppercase text-xs border bg-transparent border-gray-900 text-black py-3 px- w-full text-center list-none font-semibold"
+              >
                 <option>sort prices</option>
                 <option value="low-to-high">price low to high</option>
                 <option value="high-to-low">price high to low</option>
