@@ -8,7 +8,7 @@ import useFetch from "../../hooks/useFetch";
 import Spinner from "../../components/Spinner/Spinner";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import { useTitle } from "../../hooks/useTitle";
-import Rooms from "../../components/Rooms/Rooms";
+import Rooms from "../../components/HotelTabsContent/Rooms/Rooms";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import useLikedItemCheck from "../../utils/useLikedItemCheck";
@@ -17,6 +17,10 @@ import axios from "axios";
 import { setDestination } from "../../redux/searchStateSlice";
 import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
 import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
+import Overview from "../../components/HotelTabsContent/HotelOverview/Overview";
+import Location from "../../components/HotelTabsContent/HotelLocation/Location";
+import Reviews from "../../components/HotelTabsContent/HotelReviews/Reviews";
+import Photos from "../../components/HotelTabsContent/HotelPhotos/Photos";
 
 const SingleHotel = () => {
   const locationID = useLocation();
@@ -26,6 +30,7 @@ const SingleHotel = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fetchStatus, setFetchStatus] = useState("idle");
+  const [openPhotosModal, setOpenPhotosModal] = useState(false);
 
   let { destination } = useSelector((state) => state.searchState);
   const dispatch = useDispatch();
@@ -34,15 +39,21 @@ const SingleHotel = () => {
   const { data } = useFetch(url);
   // const { data } = useFetch();
 
-  useTitle(`Rooms at ${singleHotel?.country}, ${singleHotel?.state}`);
+  useTitle(
+    `Rooms at ${singleHotel?.name} | ${singleHotel?.country}, ${singleHotel?.state} | WillTrip`
+  );
+
+  const toggleModal = () => {
+    setOpenPhotosModal((state) => !state);
+  };
+
   const { matches, setFetchHotelStatus, setDropdownHeader } =
     useMediaQueriesContext();
   let { likedBtnnColor } = useSelector((state) => state.favourite);
   const { likedItemCheck } = useLikedItemCheck();
 
   useEffect(() => {
-    if (location && location !== "")
-      dispatch(setDestination(location));
+    if (location && location !== "") dispatch(setDestination(location));
   }, []);
 
   useEffect(() => {
@@ -112,22 +123,29 @@ const SingleHotel = () => {
 
   const tabsList = [
     {
-      panel: <p>on it</p>,
+      panel: (
+        <Overview
+          feature={singleHotel?.feature}
+          hotelName={singleHotel?.name}
+        />
+      ),
       name: "overview",
       value: "overview",
     },
     {
-      panel: <p>photos</p>,
+      panel: (
+        <Photos openPhotosModal={openPhotosModal} toggleModal={toggleModal} />
+      ),
       name: "photos",
       value: "photos",
     },
     {
-      panel: <p>world</p>,
-      name: "review",
-      value: "review",
+      panel: <Reviews hotelName={singleHotel?.name} />,
+      name: "reviews",
+      value: "reviews",
     },
     {
-      panel: <p>hello</p>,
+      panel: <Location />,
       name: "location",
       value: "location",
     },
@@ -156,7 +174,12 @@ const SingleHotel = () => {
               ? "singleHotelActive text-white cursor-pointer py-5 px-10"
               : " cursor-pointer py-5 px-10"
           } uppercase hover:text-white`}
-          onClick={() => setActiveTab(tab?.value)}
+          onClick={() => {
+            setActiveTab(tab?.value);
+            if (tab?.value === "photos") {
+              toggleModal();
+            }
+          }}
         >
           {tab?.name}
         </button>
@@ -213,6 +236,9 @@ const SingleHotel = () => {
           onClick={() => {
             setActiveTab(tab?.value);
             setRestTabModal(false);
+            if (tab?.value === "photos") {
+              toggleModal();
+            }
           }}
         >
           {tab?.name}
@@ -231,10 +257,10 @@ const SingleHotel = () => {
         <>
           <section style={heroeBg} onClick={() => setDropdownHeader(false)}>
             <div className="flex justify-center">
-              <div className="w-full max-w-screen-xl flex flex-col md:flex-row justify-between text-gray-100 absolute bottom-0">
+              <div className="w-full max-w-screen-xl flex md:px- flex-col md:flex-row justify-between text-gray-100 absolute bottom-0">
                 <div className="flex justify-center items-center gap-4">
                   <button
-                    className={`rounded-full w-10 h-10 p-0 border-0 inline-flex items-center justify-center text-2xl z-10 ${
+                    className={`rounded-full w-10 h-10 p-0 border-0 inline-flex items-center justify-center text-2xl z- ${
                       allArr.includes(singleHotel?._id)
                         ? likedBtnnColor
                         : `text-gray-200`
@@ -299,7 +325,12 @@ const SingleHotel = () => {
                 )}
               </div>
             </div>
-            <div className="w-full max-w-screen-lg mt-12 mb-16 px-4">
+            <div
+              className="w-full max-w-screen- mt-12 mb-16 px-"
+              onClick={() => {
+                setRestTabModal(false);
+              }}
+            >
               {activeTabPanel}
             </div>
           </section>
