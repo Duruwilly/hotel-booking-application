@@ -9,13 +9,23 @@ import useDaysCalculate from "../../hooks/useDaysCalculate";
 import BookingSummaryCard from "../../components/bookingSummaryCard/BookingSummaryCard";
 import { useTitle } from "../../hooks/useTitle";
 import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
+import usePriceConversion from "../../utils/usePriceConversion";
 
 const Payment = () => {
   useTitle("Book the world best hotel");
-  const { steps, list, setSteps } = useMediaQueriesContext();
+  const { steps, list, setSteps, convertPrice, fetchHotelStatus } =
+    useMediaQueriesContext();
+  const [exchangedPrice, setExchangedPrice] = useState();
+  const { convertPrices } = usePriceConversion();
   useEffect(() => {
     setSteps(() => 2);
   }, []);
+
+  useEffect(() => {
+    convertPrices().then((data) => {
+      setExchangedPrice(data);
+    });
+  }, [convertPrice, fetchHotelStatus]);
 
   return (
     <section className="flex justify-center">
@@ -23,7 +33,10 @@ const Payment = () => {
         <div className="m-auto">
           <ProgressBar step={steps} list={list} />
         </div>
-        <PaymentCard />
+        <PaymentCard
+          convertPrice={convertPrice}
+          exchangedPrice={exchangedPrice}
+        />
       </div>
     </section>
   );
@@ -31,7 +44,7 @@ const Payment = () => {
 
 export default Payment;
 
-const PaymentCard = () => {
+const PaymentCard = ({ convertPrice, exchangedPrice }) => {
   let { basketItems } = useSelector((state) => state.basket);
 
   let { days } = useDaysCalculate();
@@ -148,7 +161,15 @@ const PaymentCard = () => {
               <div className="flex justify-between">
                 <p>Total price</p>
                 <span className="text-xl">
-                  ${[total].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  {`${
+                    convertPrice === "USD"
+                      ? "$"
+                      : convertPrice === "EUR"
+                      ? "£"
+                      : "₦"
+                  } ${[total * exchangedPrice]
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
                 </span>
               </div>
             </div>
@@ -179,7 +200,9 @@ const PaymentCard = () => {
             </h1>
             {basketItems.map((basket) => (
               <div key={basket[0]._id}>
-                <BookingSummaryCard {...basket} />
+                <BookingSummaryCard
+                  {...basket}
+                />
               </div>
             ))}
           </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { favouriteBg, map } from "../../BgImageStyles/styles";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
@@ -8,12 +8,22 @@ import { useState } from "react";
 import { removeItem } from "../../redux/Favourites";
 import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
 import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
+import usePriceConversion from "../../utils/usePriceConversion";
 
 const Favourites = () => {
-  const { matches, setDropdownHeader } = useMediaQueriesContext();
+  const { matches, setDropdownHeader, convertPrice, fetchHotelStatus } =
+    useMediaQueriesContext();
   let { wishlistsItems } = useSelector((state) => state.favourite);
   const [activeItem, setActiveItem] = useState("");
   const dispatch = useDispatch();
+  const [exchangedPrice, setExchangedPrice] = useState();
+  const { convertPrices } = usePriceConversion();
+
+  useEffect(() => {
+    convertPrices().then((data) => {
+      setExchangedPrice(data);
+    });
+  }, [convertPrice, fetchHotelStatus]);
   return (
     <>
       {matches ? <SearchInputHeader /> : <ToggledSearchHeader />}
@@ -50,10 +60,15 @@ const Favourites = () => {
                           >
                             Price per night from{" "}
                             <span className="font-semibold">
-                              $
-                              {[fav.price]
+                              {`${
+                                convertPrice === "USD"
+                                  ? "$"
+                                  : convertPrice === "EUR"
+                                  ? "£"
+                                  : "₦"
+                              } ${[fav.price * exchangedPrice]
                                 .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
                             </span>
                           </div>
                           <h1 className="text-center py-2 text-xs font-semibold uppercase">

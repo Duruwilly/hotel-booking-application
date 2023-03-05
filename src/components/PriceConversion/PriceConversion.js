@@ -1,11 +1,20 @@
-import React from "react";
+import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 
 const PriceConversion = () => {
+  const { setConvertPrice, convertPrice } =
+    useMediaQueriesContext();
+
   return (
-    <select className="outline-none py-3 px-6 border border-gray-300 text-base">
-      <option value="dollar">USD</option>
-      <option value="euro">EUR</option>
-      <option value="naira">Naira</option>
+    <select
+      value={convertPrice}
+      className="outline-none py-3 px-6 border border-gray-300 text-base"
+      onChange={(e) => {
+        setConvertPrice(e.target.value);
+      }}
+    >
+      <option value="USD">USD</option>
+      <option value="EUR">EUR</option>
+      <option value="NGN">Naira</option>
     </select>
   );
 };

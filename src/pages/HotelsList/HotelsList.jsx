@@ -23,6 +23,9 @@ import { useTitle } from "../../hooks/useTitle";
 import { useState } from "react";
 import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
 import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
+import Modal from "../../components/Modal/Modal";
+import Map from "../../components/Map/Map";
+import PriceConversion from "../../components/PriceConversion/PriceConversion";
 
 const HotelsList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,6 +44,12 @@ const HotelsList = () => {
   let { roomOptions, destination, searchQueryDates } = useSelector(
     (state) => state.searchState
   );
+
+  const [openMapModal, setOpenMapModal] = useState(false);
+
+  const toggleModal = () => {
+    setOpenMapModal((state) => !state);
+  };
   // console.log(destination);
 
   const url = `http://localhost:8800/api/v1/hotels?country=${searchParams.get(
@@ -119,41 +128,89 @@ const HotelsList = () => {
           onClick={() => setDropdownHeader(false)}
         >
           <div className="w-full max-w-screen-xl py-5 px-4">
-            <ul className="flex my-0 mx-auto list-none relative">
-              <li className="uppercase text-xs border border-gray-900 bg-primary py-3 w-full text-white text-center list-none font-semibold">
-                {data.length} hotels
-              </li>
-              <select
-                value={sortPrice}
-                onChange={(e) => {
-                  setSortPrice(e.target.value);
-                  setFetchHotelStatus("idle");
-                }}
-                className="uppercase text-xs border bg-transparent border-gray-900 text-black py-3 px- w-full text-center list-none font-semibold"
-              >
-                <option>sort prices</option>
-                <option value="low-to-high">price low to high</option>
-                <option value="high-to-low">price high to low</option>
-              </select>
-              <li className="uppercase text-xs border border-gray-900 py-3 px- w-full text-black text-center list-none font-semibold">
-                <div className="flex items-center justify-center gap-2">
-                  <FaMapMarkerAlt />
-                  view on map
-                </div>
-              </li>
-              <span
-                className="bg-primary"
-                style={{
-                  display: "block",
-                  position: "absolute",
-                  bottom: "-7px",
-                  left: "10%",
-                  width: "15px",
-                  height: "15px",
-                  transform: "rotate(45deg)",
-                }}
-              ></span>
-            </ul>
+            <div className="fle justify-betwee items-cente">
+              <ul className="flex my-0 mx-auto list-none relative">
+                <li className="uppercase text-xs border border-gray-900 bg-primary py-3 w-full text-white text-center list-none font-semibold">
+                  {data.length} hotels
+                </li>
+                <select
+                  value={sortPrice}
+                  onChange={(e) => {
+                    setSortPrice(e.target.value);
+                    setFetchHotelStatus("idle");
+                  }}
+                  className="uppercase text-xs border bg-transparent border-gray-900 text-black py-3 px- w-full text-center list-none font-semibold cursor-pointer"
+                >
+                  <option>sort prices</option>
+                  <option value="low-to-high">price low to high</option>
+                  <option value="high-to-low">price high to low</option>
+                </select>
+
+                <li
+                  className="uppercase text-xs border border-gray-900 py-3 px- w-full text-black text-center list-none font-semibold cursor-pointer"
+                  onClick={() => toggleModal()}
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <FaMapMarkerAlt />
+                    view on map
+                  </div>
+                </li>
+                <span
+                  className="bg-primary"
+                  style={{
+                    display: "block",
+                    position: "absolute",
+                    bottom: "-7px",
+                    left: "10%",
+                    width: "15px",
+                    height: "15px",
+                    transform: "rotate(45deg)",
+                  }}
+                ></span>
+              </ul>
+
+              <PriceConversion data={data} />
+
+              {/* <ul className="flex my-0 mx-auto relative">
+                <li className="uppercase text-xs border border-gray-900 bg-primary text-white text-center list-none font-semibold outline-none py-3 px-6">
+                  {data.length} hotels
+                </li>
+                <select
+                  value={sortPrice}
+                  onChange={(e) => {
+                    setSortPrice(e.target.value);
+                    setFetchHotelStatus("idle");
+                  }}
+                  className="uppercase text-xs border bg-transparent border-gray-900 text-black py- px- w-ful text-center font-semibold cursor-pointer outline-none py-3 px-6"
+                >
+                  <option>sort prices</option>
+                  <option value="low-to-high">price low to high</option>
+                  <option value="high-to-low">price high to low</option>
+                </select>
+                <li
+                  className="uppercase text-xs border border-gray-900 py-3 px-6 w-ful text-black text-center list-none font-semibold cursor-pointer"
+                  onClick={() => toggleModal()}
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <FaMapMarkerAlt />
+                    view on map
+                  </div>
+                </li>
+                <span
+                  className="bg-primary"
+                  style={{
+                    display: "block",
+                    position: "absolute",
+                    bottom: "-7px",
+                    left: "10%",
+                    width: "15px",
+                    height: "15px",
+                    transform: "rotate(45deg)",
+                  }}
+                ></span>
+              </ul> */}
+              {/* <PriceConversion /> */}
+            </div>
             <div className="mt-5" onClick={() => setDropdownHeader(false)}>
               {fetchHotelStatus === "success" &&
                 data.map((hotel) => (
@@ -190,6 +247,11 @@ const HotelsList = () => {
             </div>
           </div>
         </section>
+      )}
+      {openMapModal && (
+        <Modal>
+          <Map setOpenMapModal={setOpenMapModal} />
+        </Modal>
       )}
     </>
   );

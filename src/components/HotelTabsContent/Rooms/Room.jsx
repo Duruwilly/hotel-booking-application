@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../../context/AuthContext";
@@ -10,6 +10,8 @@ import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { MdOutlineSingleBed, MdOutlineKingBed } from "react-icons/md";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { format } from "date-fns";
+import { useMediaQueriesContext } from "../../../context/MediaQueryContext";
+import usePriceConversion from "../../../utils/usePriceConversion";
 
 const Room = ({ room, feature, addToBasket }) => {
   let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
@@ -17,6 +19,10 @@ const Room = ({ room, feature, addToBasket }) => {
   let { isAvailable } = useRoomsAvailabilityCheck();
 
   const [activeOpen, setActiveOpen] = useState("");
+
+  const [exchangedPrice, setExchangedPrice] = useState();
+  const { convertPrice, fetchHotelStatus } = useMediaQueriesContext();
+  const { convertPrices } = usePriceConversion();
 
   const sliderImg = [
     {
@@ -42,6 +48,12 @@ const Room = ({ room, feature, addToBasket }) => {
     }
     setSliderNumber(newSliderNumber);
   };
+
+  useEffect(() => {
+    convertPrices().then((data) => {
+      setExchangedPrice(data);
+    });
+  }, [convertPrice, fetchHotelStatus]);
 
   return (
     <>
@@ -169,17 +181,33 @@ const Room = ({ room, feature, addToBasket }) => {
             <p className="flex justify-between items-center font-light text-gray-700 pt-3 md:pt-0">
               Per night
               <span className="font-semibold text-xl">
-                $
-                {[room?.price].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                {`${
+                  convertPrice === "USD"
+                    ? "$"
+                    : convertPrice === "EUR"
+                    ? "£"
+                    : "₦"
+                } ${[room?.price * exchangedPrice]
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
               </span>
             </p>
             <p className="flex justify-between font-light text-gray-700">
               Total stay
               <span className="font-semibold text-xl">
-                $
+                {/* $
                 {[room?.price * days]
                   .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                {`${
+                  convertPrice === "USD"
+                    ? "$"
+                    : convertPrice === "EUR"
+                    ? "£"
+                    : "₦"
+                } ${[room?.price * days * exchangedPrice]
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
               </span>
             </p>
             <button

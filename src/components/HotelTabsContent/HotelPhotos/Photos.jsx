@@ -34,29 +34,30 @@ const Photos = ({ openPhotosModal, toggleModal }) => {
   };
   return (
     <>
-
       {openPhotosModal && (
         <Modal>
-          <div>
-            <div>
-              <img src={sliderImg[sliderNumber].src} alt="" />
-            </div>
+          <div className="flex justify-center items-center">
+            <div className="bg-white w-full max-w-screen-sm relative shadow-md">
+              <div>
+                <img src={sliderImg[sliderNumber].src} alt="" />
+              </div>
 
-            <button className="text-4xl absolute left-0 top-[50%] cursor-pointer text-white opacity-70 hover:text-white hover:opacity-100 z-20">
-              <SlArrowLeft className="" onClick={() => handleMove("l")} />
-            </button>
-
-            <button className="text-4xl absolute  -right-0 top-[50%] cursor-pointer text-white opacity-70 hover:text-white hover:opacity-100 z-20">
-              <SlArrowRight onClick={() => handleMove("r")} />
-            </button>
-
-            <div className="absolute top-0 right-0">
-              <button
-                className={`rounded-full w-12 h-12 p-0 border-0 inline-flex items-center justify-center text-4xl text-white opacity-70 hover:text-white hover:opacity-100`}
-                style={{ background: "rgba(0,0,0,0.4)" }}
-              >
-                <VscClose className="" onClick={() => toggleModal()} />
+              <button className="text-4xl absolute left-0 top-[50%] cursor-pointer text-white opacity-70 hover:text-white hover:opacity-100 z-20">
+                <SlArrowLeft className="" onClick={() => handleMove("l")} />
               </button>
+
+              <button className="text-4xl absolute  -right-0 top-[50%] cursor-pointer text-white opacity-70 hover:text-white hover:opacity-100 z-20">
+                <SlArrowRight onClick={() => handleMove("r")} />
+              </button>
+
+              <div className="absolute top-0 right-0">
+                <button
+                  className={`rounded-full w-12 h-12 p-0 border-0 inline-flex items-center justify-center text-4xl text-white opacity-70 hover:text-white hover:opacity-100`}
+                  style={{ background: "rgba(0,0,0,0.4)" }}
+                >
+                  <VscClose className="" onClick={() => toggleModal()} />
+                </button>
+              </div>
             </div>
           </div>
         </Modal>

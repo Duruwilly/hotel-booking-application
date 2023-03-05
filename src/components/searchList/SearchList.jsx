@@ -8,11 +8,13 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem, removeItem, setLikedBtnColor } from "../../redux/Favourites";
 import useLikedItemCheck from "../../utils/useLikedItemCheck";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { SlArrowLeft, SlArrowRight } from "react-icons/sl"
-
+import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
+import usePriceConversion from "../../utils/usePriceConversion";
 
 const SearchList = ({ roomOptions, hotel, days, data }) => {
+  const [exchangedPrice, setExchangedPrice] = useState();
+  const { convertPrice, fetchHotelStatus } = useMediaQueriesContext();
+  const { convertPrices } = usePriceConversion();
   const dispatch = useDispatch();
   let { likedBtnnColor } = useSelector((state) => state.favourite);
   const { likedItemCheck } = useLikedItemCheck();
@@ -56,6 +58,12 @@ const SearchList = ({ roomOptions, hotel, days, data }) => {
 
     setSliderNumber(newSliderNumber);
   };
+
+  useEffect(() => {
+    convertPrices().then((data) => {
+      setExchangedPrice(data);
+    });
+  }, [convertPrice, fetchHotelStatus]);
 
   return (
     <div className="bg-white border border-gray-200 flex flex-col hotelList-card-container mb-7">
@@ -125,7 +133,15 @@ const SearchList = ({ roomOptions, hotel, days, data }) => {
               Price per night from
             </span>
             <p className="font-bold text-lg pb-3">
-              ${[hotel.price].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              {`${
+                convertPrice === "USD"
+                  ? "$"
+                  : convertPrice === "EUR"
+                  ? "£"
+                  : "₦"
+              } ${[hotel.price * exchangedPrice]
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
             </p>
             <Link
               to={`/hotel/${hotel.name}/${hotel.country}/${hotel._id}`}
