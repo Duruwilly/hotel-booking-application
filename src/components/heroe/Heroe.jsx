@@ -34,8 +34,6 @@ const Heroe = () => {
     window.matchMedia("(min-width: 768px)").matches
   );
 
-  console.log(searchQueryDates);
-
   useEffect(() => {
     window
       .matchMedia("(min-width: 768px)")

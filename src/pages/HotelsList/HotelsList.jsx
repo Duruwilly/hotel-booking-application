@@ -26,6 +26,8 @@ import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSear
 import Modal from "../../components/Modal/Modal";
 import Map from "../../components/Map/Map";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
+import usePriceConversion from "../../utils/usePriceConversion";
+import { Paginator } from "../../components/Paginator";
 
 const HotelsList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -40,21 +42,28 @@ const HotelsList = () => {
     date,
     sortPrice,
     setSortPrice,
+    convertPrice,
+    setQueryState,
+    queryState,
   } = useMediaQueriesContext();
   let { roomOptions, destination, searchQueryDates } = useSelector(
     (state) => state.searchState
   );
 
   const [openMapModal, setOpenMapModal] = useState(false);
+  const [exchangedPrice, setExchangedPrice] = useState();
+  const { convertPrices } = usePriceConversion();
 
   const toggleModal = () => {
     setOpenMapModal((state) => !state);
   };
   // console.log(destination);
 
-  const url = `http://localhost:8800/api/v1/hotels?country=${searchParams.get(
+  let page = searchParams.get("page") ?? 1;
+  let currentPage = Number(page);
+  const url = `http://localhost:8800/api/v1/hotels?destination=${searchParams.get(
     "query"
-  )}`;
+  )}&page=${currentPage}`;
 
   const { data, loading, error } = useFetch(url);
   // console.log(data);
@@ -76,6 +85,17 @@ const HotelsList = () => {
     window.onpopstate = () => {
       setFetchHotelStatus("idle");
     };
+  }, []);
+
+  useEffect(() => {
+    setQueryState((state) => {
+      return {
+        ...state,
+        query: `query=${searchParams.get("query")}&date_from=${searchParams.get(
+          "date_from"
+        )}&date_to=${searchParams.get("date_to")}`,
+      };
+    });
   }, []);
 
   // getting the date from the query
@@ -115,6 +135,12 @@ const HotelsList = () => {
       })
     );
   }, [searchParams.get("date_from"), searchParams.get("date_to")]);
+
+  useEffect(() => {
+    convertPrices().then((data) => {
+      setExchangedPrice(data);
+    });
+  }, [convertPrice]);
 
   return (
     <>
@@ -169,7 +195,7 @@ const HotelsList = () => {
                 ></span>
               </ul>
 
-              <PriceConversion data={data} />
+              <PriceConversion />
 
               {/* <ul className="flex my-0 mx-auto relative">
                 <li className="uppercase text-xs border border-gray-900 bg-primary text-white text-center list-none font-semibold outline-none py-3 px-6">
@@ -213,7 +239,7 @@ const HotelsList = () => {
             </div>
             <div className="mt-5" onClick={() => setDropdownHeader(false)}>
               {fetchHotelStatus === "success" &&
-                data.map((hotel) => (
+                data.responseData.map((hotel) => (
                   <div key={hotel._id}>
                     <SearchList
                       key={hotel._id}
@@ -221,10 +247,11 @@ const HotelsList = () => {
                       hotel={hotel}
                       days={days}
                       data={data}
+                      exchangedPrice={exchangedPrice}
                     />
                   </div>
                 ))}
-              {data.length < 0 && (
+              {data.responseData.length < 0 && (
                 <p className="text-center">
                   No result based on your search location. Try another search
                 </p>
@@ -253,6 +280,24 @@ const HotelsList = () => {
           <Map setOpenMapModal={setOpenMapModal} />
         </Modal>
       )}
+      {data.responseData && data.responseData.length > 0 ? (
+        <nav className="custom-paginator">
+          <ul>
+            <Paginator
+              currentPage={currentPage}
+              pages={data.pages}
+              url={"/destinations/hotels"}
+              query={queryState.query}
+            />
+            {/* {Paginator({
+              currentPage: currentPage,
+              pages: data.pages,
+              url: "/destinations/hotels",
+              query: queryState.query,
+            })} */}
+          </ul>
+        </nav>
+      ) : null}
     </>
   );
 };

@@ -13,7 +13,7 @@ const BasketItem = (props) => {
     days,
     quantity,
     hotelCountry,
-    hotelState,
+    // hotelState,
     hotelName,
     exchangedPrice,
     convertPrice,
@@ -32,7 +32,8 @@ const BasketItem = (props) => {
         style={{ borderBottom: "1px solid rgba(107,114,128,.1)" }}
       >
         <span className="text-gray-400 uppercase text-xs font-light ">
-          {hotelCountry + "," + " " + hotelState}
+          {/* {hotelCountry + "," + " " + hotelState} */}
+          {hotelCountry}
         </span>
         <h2 className="text-3xl font-light">{hotelName}</h2>
       </div>

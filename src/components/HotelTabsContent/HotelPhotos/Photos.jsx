@@ -37,7 +37,7 @@ const Photos = ({ openPhotosModal, toggleModal }) => {
       {openPhotosModal && (
         <Modal>
           <div className="flex justify-center items-center">
-            <div className="bg-white w-full max-w-screen-sm relative shadow-md">
+            <div className=" w-full max-w-screen-sm relative shadow-md">
               <div>
                 <img src={sliderImg[sliderNumber].src} alt="" />
               </div>

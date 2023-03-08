@@ -1,8 +1,7 @@
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 
 const PriceConversion = () => {
-  const { setConvertPrice, convertPrice } =
-    useMediaQueriesContext();
+  const { setConvertPrice, convertPrice } = useMediaQueriesContext();
 
   return (
     <select
@@ -14,7 +13,7 @@ const PriceConversion = () => {
     >
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
-      <option value="NGN">Naira</option>
+      <option value="NGN">NGN</option>
     </select>
   );
 };

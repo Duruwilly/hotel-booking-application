@@ -3,8 +3,7 @@ import React, { useEffect } from "react";
 import { useMediaQueriesContext } from "../context/MediaQueryContext";
 
 const usePriceConversion = () => {
-  const { convertPrice } =
-    useMediaQueriesContext();
+  const { convertPrice } = useMediaQueriesContext();
 
   const convertPrices = async () => {
     const url = `https://openexchangerates.org/api/latest.json?app_id=${process.env.REACT_APP_CURRENCY_ID}&symbols=${convertPrice}`;

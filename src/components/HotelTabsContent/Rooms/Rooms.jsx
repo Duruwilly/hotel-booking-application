@@ -9,7 +9,7 @@ import axios from "axios";
 import PriceConversion from "../../PriceConversion/PriceConversion";
 import Room from "./Room";
 
-const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
+const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
   const { user } = useAuthContext();
   let { days } = useDaysCalculate();
   const [data, setData] = useState([]);
@@ -53,7 +53,6 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
           days,
           hotelName,
           hotelCountry,
-          hotelState,
           feature,
         })
       );
@@ -75,7 +74,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, hotelState, feature }) => {
                 room={room}
                 hotelName={hotelName}
                 hotelCountry={hotelCountry}
-                hotelState={hotelState}
+                // hotelState={hotelState}
                 feature={feature}
                 addToBasket={addToBasket}
               />

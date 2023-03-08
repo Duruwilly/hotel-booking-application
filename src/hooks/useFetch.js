@@ -4,7 +4,10 @@ import { useMediaQueriesContext } from "../context/MediaQueryContext";
 import { useSelector } from "react-redux";
 
 const useFetch = (url) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({
+    pages: "",
+    responseData: [],
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const { fetchHotelStatus, setFetchHotelStatus, sortPrice } =
@@ -17,15 +20,30 @@ const useFetch = (url) => {
       setFetchHotelStatus("pending");
       try {
         const res = await axios.get(url);
+        console.log(res.data);
+        let pages = Math.ceil(res.data.total / res.data.per_page);
+        console.log(pages);
         setFetchHotelStatus(res.data.status);
-        if(sortPrice === "low-to-high") {
-          res.data.data.sort((a,b) => Number(a.price) - Number(b.price))
-          setData(res.data.data)
-        } else if(sortPrice === "high-to-low") {
-          res.data.data.sort((a,b) => Number(b.price) - Number(a.price))
-          setData(res.data.data)
+        if (sortPrice === "low-to-high") {
+          res.data.data.sort((a, b) => Number(a.price) - Number(b.price));
+          setData((state) => ({
+            ...state,
+            responseData: res.data.data,
+            pages: pages,
+          }));
+        } else if (sortPrice === "high-to-low") {
+          res.data.data.sort((a, b) => Number(b.price) - Number(a.price));
+          setData((state) => ({
+            ...state,
+            responseData: res.data.data,
+            pages: pages,
+          }));
         }
-        setData(res.data.data)
+        setData((state) => ({
+          ...state,
+          responseData: res.data.data,
+          pages: pages,
+        }));
       } catch (error) {
         setError(error);
       }

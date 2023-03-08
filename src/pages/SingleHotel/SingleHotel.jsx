@@ -40,7 +40,7 @@ const SingleHotel = () => {
   const { convertPrices } = usePriceConversion();
 
   // using this to ge the hotel data that'd be passed to the liked items
-  const url = `http://localhost:8800/api/v1/hotels?country=${destination}`;
+  const url = `http://localhost:8800/api/v1/hotels?destination=${destination}`;
   const { data } = useFetch(url);
   // const { data } = useFetch();
 
@@ -103,7 +103,7 @@ const SingleHotel = () => {
   // liked funtions
   let allArr = likedItemCheck();
   const toggleLikedBtn = (itemId) => {
-    const dataItem = data?.filter((item) => item?._id === itemId);
+    const dataItem = data.responseData?.filter((item) => item?._id === itemId);
     if (allArr.includes(itemId)) {
       dispatch(removeItem(itemId));
       return;
@@ -172,8 +172,8 @@ const SingleHotel = () => {
           hotelID={id}
           price={singleHotel?.price}
           hotelName={singleHotel?.name}
-          hotelCountry={singleHotel?.country}
-          hotelState={singleHotel?.state}
+          hotelCountry={singleHotel?.destination}
+          // hotelState={singleHotel?.state}
           feature={singleHotel?.feature}
         />
       ),
@@ -289,7 +289,8 @@ const SingleHotel = () => {
                   </button>
                   <div>
                     <p className="text-sm font-extralight">
-                      {singleHotel?.country + "," + " " + singleHotel?.state}
+                      {/* {singleHotel?.country + "," + " " + singleHotel?.state} */}
+                      {singleHotel?.destination}
                     </p>
                     <p className="text-3xl">{singleHotel?.name}</p>
                   </div>
