@@ -72,7 +72,8 @@ const Favourites = () => {
                             </span>
                           </div>
                           <h1 className="text-center py-2 text-xs font-semibold uppercase">
-                            {fav.country + "," + " " + fav.state}
+                            {/* {fav.country + "," + " " + fav.state} */}
+                            {fav?.destination}
                           </h1>
                           <h2 className="text-center pb-4 text-2xl font-light capitalize">
                             {fav.name}

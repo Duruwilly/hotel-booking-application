@@ -11,10 +11,8 @@ import useLikedItemCheck from "../../utils/useLikedItemCheck";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import usePriceConversion from "../../utils/usePriceConversion";
 
-const SearchList = ({ roomOptions, hotel, days, data }) => {
-  const [exchangedPrice, setExchangedPrice] = useState();
-  const { convertPrice, fetchHotelStatus } = useMediaQueriesContext();
-  const { convertPrices } = usePriceConversion();
+const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice,  }) => {
+  const { convertPrice } = useMediaQueriesContext();
   const dispatch = useDispatch();
   let { likedBtnnColor } = useSelector((state) => state.favourite);
   const { likedItemCheck } = useLikedItemCheck();
@@ -59,12 +57,6 @@ const SearchList = ({ roomOptions, hotel, days, data }) => {
     setSliderNumber(newSliderNumber);
   };
 
-  useEffect(() => {
-    convertPrices().then((data) => {
-      setExchangedPrice(data);
-    });
-  }, [convertPrice, fetchHotelStatus]);
-
   return (
     <div className="bg-white border border-gray-200 flex flex-col hotelList-card-container mb-7">
       <div style={{ flex: 3, position: "relative" }}>
@@ -101,7 +93,8 @@ const SearchList = ({ roomOptions, hotel, days, data }) => {
         className="flex flex-col justify-start"
       >
         <h2 className="text-gray-400 uppercase text-sm font-light pt-5 mr-16">
-          {hotel.country + "," + " " + hotel.state}
+          {/* {hotel.country + "," + " " + hotel.state} */}
+          {hotel?.destination}
         </h2>
         <h1 className="font-semibold capitalize text-xl py-2">{hotel.name}</h1>
         <div className="pr-4">

@@ -580,12 +580,11 @@
   background: rgba(127, 29, 29, 1) !important;
   border-radius: 10px;
   color: #fff !important;
-  font-size: 29px; 
+  font-size: 29px;
   font-weight: 700;
   transition: all 200ms linear;
   transition-delay: 0.1s;
 }
-
 
 .owl-carousel .owl-nav button.owl-next:hover,
 .owl-carousel .owl-nav button.owl-prev:hover {
@@ -595,28 +594,30 @@
 }
 
 /* swiper */
-.hotelSlider .swiper-button-next, .hotelSlider .swiper-button-prev {
+.hotelSlider .swiper-button-next,
+.hotelSlider .swiper-button-prev {
   color: #eee;
   opacity: 0.4;
-  font-size: 1px
+  font-size: 1px;
 }
 
-.hotelSlider .swiper-button-next:hover, .hotelSlider .swiper-button-prev:hover {
-  color: #fff
+.hotelSlider .swiper-button-next:hover,
+.hotelSlider .swiper-button-prev:hover {
+  color: #fff;
 }
 
 /* responsive breakpoint for wishlist item */
 @media screen and (max-width: 1023px) {
   .wishlist-item {
     display: grid;
-    grid-template-columns: repeat(2, 1fr)
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media screen and (max-width: 740px) {
   .wishlist-item {
     display: grid;
-    grid-template-columns: repeat(1, 1fr)
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 
@@ -672,9 +673,81 @@
 @media screen and (min-width: 548px) {
   .review-content {
     display: flex;
-    align-items: center
+    align-items: center;
   }
 }
+
+.custom-paginator {
+  width: 100%;
+  margin: 20px 0px 15px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-paginator ul {
+  list-style: none;
+  padding: 0;
+}
+
+.custom-paginator ul li {
+  display: inline;
+  margin-right: 7px;
+}
+
+.custom-paginator ul li a {
+  text-decoration: none;
+  color: #000000;
+  padding: 3px 7px 3px 7px;
+  font-style: normal;
+  font-weight: 400;
+  /* font-size: 14px; */
+  line-height: 19px;
+  text-align: center;
+}
+
+.custom-paginator ul li.active {
+  text-decoration: none;
+  background: rgb(127 29 29);
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 3px 7px 3px 7px;
+}
+
+.custom-paginator ul li.active a {
+  color: #ffffff;
+}
+
+.custom-paginator ul li.disabled {
+  pointer-events: none;
+}
+
+.custom-paginator ul li.previous.disabled a {
+  color: rgba(127, 29, 29, 0.25);
+  pointer-events: none;
+}
+
+.custom-paginator ul li.next.disabled a {
+  color: rgba(127, 29, 29, 0.25);
+  pointer-events: none;
+}
+
+.custom-paginator ul li.previous a {
+  color: rgb(127 29 29);
+}
+
+.custom-paginator ul li.next a {
+  color: rgb(127 29 29);
+}
+
+/* @media (max-width: 991px) {
+  .custom-paginator {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+} */
 
 @layer base {
   body {

@@ -18,7 +18,7 @@ const BookingSummaryCard = (props) => {
     guests,
     quantity,
     hotelCountry,
-    hotelState,
+    // hotelState,
     hotelName,
   } = props;
   //   console.log(props[0].roomNumbers);
@@ -26,7 +26,8 @@ const BookingSummaryCard = (props) => {
     <div className="p-4 bg-white border border-gray-300 h-fit">
       <h2 className="text-3xl font-normal capitalize">{hotelName}</h2>
       <p className="capitalize pt-2 font-extralight">
-        {hotelCountry + "," + " " + hotelState}
+        {/* {hotelCountry + "," + " " + hotelState} */}
+        {hotelCountry}
       </p>
       <div className="pt-6">
         <div className="flex pb-2">

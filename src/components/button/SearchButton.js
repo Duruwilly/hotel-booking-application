@@ -7,15 +7,22 @@ import SearchButtonSpinner from "../Spinner/SearchButtonSpinner";
 
 const Button = () => {
   const { dispatch } = useSharedSearchContext();
-  const { setFetchHotelStatus, setDropdownHeader, setLoading } =
-    useMediaQueriesContext();
+  const {
+    setFetchHotelStatus,
+    setDropdownHeader,
+    setLoading,
+    queryState,
+    setQueryState,
+  } = useMediaQueriesContext();
   const navigate = useNavigate();
   let { destination, dateSearch } = useSelector((state) => state.searchState);
 
-  let url = `/destinations/hotels?query=${destination}&date_from=${format(
+  let queryStrings = `query=${destination}&date_from=${format(
     new Date(dateSearch[0]?.startDate),
     "dd-MM-yyyy"
   )}&date_to=${format(new Date(dateSearch[0]?.endDate), "dd-MM-yyyy")}`;
+
+  let url = `/destinations/hotels?${queryStrings}`;
   // if (destination !== "") {
   //   url = `/destinations/${destination}/hotels`;
   // } else {
@@ -35,6 +42,9 @@ const Button = () => {
     //   setTimeout(() => {
     //   }, 3000);
     // }
+    setQueryState((state) => {
+      return { ...state, query: queryStrings };
+    });
   };
 
   // ${loading ? "bg-red-900 opacity-70" : ""}
