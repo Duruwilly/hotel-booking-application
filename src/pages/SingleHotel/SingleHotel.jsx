@@ -45,7 +45,7 @@ const SingleHotel = () => {
   // const { data } = useFetch();
 
   useTitle(
-    `Rooms at ${singleHotel?.name} | ${singleHotel?.country}, ${singleHotel?.state} | WillTrip`
+    `Rooms at ${singleHotel?.name} | ${singleHotel?.destination} | WillTrip`
   );
 
   const toggleModal = () => {
@@ -144,12 +144,7 @@ const SingleHotel = () => {
 
   const tabsList = [
     {
-      panel: (
-        <Overview
-          feature={singleHotel?.feature}
-          hotelName={singleHotel?.name}
-        />
-      ),
+      panel: <Overview singleHotel={singleHotel} />,
       name: "overview",
       value: "overview",
     },
@@ -163,8 +158,7 @@ const SingleHotel = () => {
     {
       panel: (
         <Reviews
-          hotelName={singleHotel?.name}
-          hotelReviews={singleHotel?.reviews}
+          singleHotel={singleHotel}
           hotelID={id}
           setFetchStatus={setFetchStatus}
         />
@@ -173,7 +167,7 @@ const SingleHotel = () => {
       value: "reviews",
     },
     {
-      panel: <Location />,
+      panel: <Location singleHotel={singleHotel} />,
       name: "location",
       value: "location",
     },

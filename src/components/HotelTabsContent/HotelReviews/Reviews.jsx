@@ -10,7 +10,7 @@ import Modal from "../../Modal/Modal";
 import Spinner from "../../Spinner/Spinner";
 import ReviewsContent from "./ReviewsContent";
 
-const Reviews = ({ hotelName, hotelID, hotelReviews, setFetchStatus }) => {
+const Reviews = ({ hotelID, hotelReviews, setFetchStatus, singleHotel }) => {
   const id = useParams();
   const [openModal, setOpenModal] = useState(false);
   const { user } = useAuthContext();
@@ -61,11 +61,13 @@ const Reviews = ({ hotelName, hotelID, hotelReviews, setFetchStatus }) => {
 
   return (
     <>
-      {hotelReviews && hotelReviews?.length > 0 && (
+      {singleHotel?.reviews && singleHotel?.reviews?.length > 0 && (
         <section className="flex justify-center">
           <div className="w-full max-w-screen-lg px-4">
             <div className=" pb-4 flex justify-between review-content mb-5">
-              <h1 className="text-2xl capitalize">reviews of {hotelName}</h1>
+              <h1 className="text-2xl capitalize">
+                reviews of {singleHotel?.name}
+              </h1>
               <span
                 className="text-red-800 cursor-pointer"
                 onClick={() => toggleModal()}
@@ -73,7 +75,7 @@ const Reviews = ({ hotelName, hotelID, hotelReviews, setFetchStatus }) => {
                 Write a guest review
               </span>
             </div>
-            {hotelReviews?.map((reviews) => (
+            {singleHotel?.reviews?.map((reviews) => (
               <div key={reviews._id}>
                 <ReviewsContent reviews={reviews} />
               </div>
@@ -83,7 +85,7 @@ const Reviews = ({ hotelName, hotelID, hotelReviews, setFetchStatus }) => {
       )}
       <section className="flex justify-center">
         <div className="w-full max-w-screen-lg px-4">
-          {hotelReviews.length === 0 && (
+          {singleHotel?.reviews.length === 0 && (
             <p className="text-center">
               No reviews at the moment. Be the first to give a review by{" "}
               <span
