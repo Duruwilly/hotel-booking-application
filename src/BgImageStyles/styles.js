@@ -240,6 +240,7 @@ export const interi = {
   backgroundRepeat: "no-repeat",
   textAlign: "center",
   color: "white",
+  height: "20rem",
   textTransform: "capitalize",
 };
 
@@ -252,6 +253,7 @@ export const hotels = {
   backgroundRepeat: "no-repeat",
   textAlign: "center",
   color: "white",
+  height: "20rem",
   textTransform: "capitalize",
 };
 

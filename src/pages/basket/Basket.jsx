@@ -58,7 +58,7 @@ const Basket = () => {
         </div>
         {basketItems.length > 0 && openModal && (
           <div
-            className=" w-screen h-screen fixed top-0 left-0 flex items-center justify-center z-[5] px-2"
+            className=" w-screen h-screen fixed top-0 left-0 flex items-center justify-center z-[100] px-2"
             style={{ background: "rgba(255, 255, 255, 0.6)" }}
           >
             <div className="bg-white relative w-full max-w-screen-sm shadow-md">

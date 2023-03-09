@@ -3,7 +3,9 @@ import { useSelector } from "react-redux";
 import { useMediaQueriesContext } from "../context/MediaQueryContext";
 
 const useRoomsAvailabilityCheck = () => {
-  let { dateSearch, searchQueryDates } = useSelector((state) => state.searchState);
+  let { dateSearch, searchQueryDates } = useSelector(
+    (state) => state.searchState
+  );
   let { basketItems } = useSelector((state) => state.basket);
   let { date } = useMediaQueriesContext();
 
@@ -27,18 +29,28 @@ const useRoomsAvailabilityCheck = () => {
     return dates;
   };
 
-  const allDates = getDatesInRanges(dateSearch[0]?.startDate, dateSearch[0]?.endDate);
-  
+  const allDates = getDatesInRanges(
+    dateSearch[0]?.startDate,
+    dateSearch[0]?.endDate
+  );
 
   let datesInBasket = basketItems.map((getRoomId) => getRoomId.dateSearch[0]);
-
+  // datesInBasket.map((date) => new Date(date.startDate));
   const getDatesInRangesInBasket = (startDate, endDate) => {
     // we get the current date from the state
-    const start = new Date(startDate);
+    let start;
     const end = new Date(endDate);
+    startDate.forEach((item, index) => {
+      // console.log(new Date(item));
+      // start += new Date(item).getTime();
+      start = Number(item)
+    });
+    // console.log(start);
+    console.log(new Date(start));
 
     // we get the time from the start date for better comparison
-    const date = new Date(start.getTime());
+    const date = new Date(start).getTime();
+    // console.log(date);
 
     const dates = [];
 
@@ -50,8 +62,11 @@ const useRoomsAvailabilityCheck = () => {
     return dates;
   };
 
-  const allDatesInBasket = getDatesInRangesInBasket(datesInBasket[0]?.startDate, datesInBasket[0]?.endDate);
-
+  const allDatesInBasket = getDatesInRangesInBasket(
+    datesInBasket.map((date) => new Date(date.startDate)),
+    datesInBasket.map((date) => new Date(date.endDate))
+  );
+  // console.log(allDatesInBasket);
   // map through the roomNumbers in the database. if some of the date includes the
   const isAvailable = (roomsNumber) => {
     const isFound = roomsNumber.map((num) =>

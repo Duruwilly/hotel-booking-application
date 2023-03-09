@@ -6,16 +6,16 @@ const AboutUsPage = lazy(() => import("../pages/AboutUs/AboutUs"));
 const BookWithUsPage = lazy(() => import("../pages/AboutUs/BookWithUs"));
 const ReviewsPage = lazy(() => import("../pages/AboutUs/Reviews"));
 const ContactPage = lazy(() => import("../pages/AboutUs/Contact"));
-const TravelTeamPage = lazy(() => import("../pages/AboutUs/TravelTeam"));
-const TravelTeam1 = lazy(() =>
-  import("../pages/AboutUs/TravelProfile/TravelTeam1")
+const TravelTeamPage = lazy(() => import("../pages/AboutUs/TravelTeam/TravelTeam"));
+const TravelTeamProfile = lazy(() =>
+  import("../pages/AboutUs/TravelProfile/TravelTeamPage")
 );
-const TravelTeam2 = lazy(() =>
-  import("../pages/AboutUs/TravelProfile/TravelTeam2")
-);
-const TravelTeam3 = lazy(() =>
-  import("../pages/AboutUs/TravelProfile/TravelTeam3")
-);
+// const TravelTeam2 = lazy(() =>
+//   import("../pages/AboutUs/TravelProfile/TravelTeam2")
+// );
+// const TravelTeam3 = lazy(() =>
+//   import("../pages/AboutUs/TravelProfile/TravelTeam3")
+// );
 const RegisterPage = lazy(() => import("../pages/RegisterPage/RegisterPage"));
 const LoginPage = lazy(() => import("../pages/LoginPage/LoginPage"));
 const BasketPage = lazy(() => import("../pages/basket/Basket"));
@@ -56,17 +56,17 @@ export const publicRoutes = [
     element: TravelTeamPage,
   },
   {
-    path: "/travel-team/laeti-laura",
-    element: TravelTeam1,
+    path: "/travel-team/:teamName/:id",
+    element: TravelTeamProfile,
   },
-  {
-    path: "/travel-team/laura-laura",
-    element: TravelTeam2,
-  },
-  {
-    path: "/travel-team/prince-will",
-    element: TravelTeam3,
-  },
+  // {
+  //   path: "/travel-team/laura-laura",
+  //   element: TravelTeam2,
+  // },
+  // {
+  //   path: "/travel-team/prince-will",
+  //   element: TravelTeam3,
+  // },
   {
     path: "/register",
     element: RegisterPage,

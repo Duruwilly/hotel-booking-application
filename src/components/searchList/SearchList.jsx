@@ -11,7 +11,7 @@ import useLikedItemCheck from "../../utils/useLikedItemCheck";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import usePriceConversion from "../../utils/usePriceConversion";
 
-const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice,  }) => {
+const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
   const { convertPrice } = useMediaQueriesContext();
   const dispatch = useDispatch();
   let { likedBtnnColor } = useSelector((state) => state.favourite);
@@ -137,7 +137,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice,  }) => {
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
             </p>
             <Link
-              to={`/hotel/${hotel.name}/${hotel.country}/${hotel._id}`}
+              to={`/hotel/${hotel.name}/${hotel.destination}/${hotel._id}`}
               className="bg-red-800 w-full py-2 px-8 text-white font-semibold text-center border-none rounded-sm capitalize"
             >
               select room
