@@ -59,14 +59,10 @@ export const MediaQueryContext = ({ children }) => {
     setOpenDate(false);
   };
 
-  // var page = urlQuery.page ?? 1;
-  // var currentPage = Number(page);
   const [queryState, setQueryState] = useState({
     pages: 1,
     query: "",
   });
-
-  console.log(queryState);
 
   return (
     <MediaQueryMatches.Provider

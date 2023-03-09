@@ -21,11 +21,12 @@ const Navbar = () => {
   const location = useLocation();
 
   const { matches, setDropdownHeader } = useMediaQueriesContext();
+  // const { loading, error, dispatch } = useAuthContext();
 
   let { totalQuantity } = useSelector((state) => state.basket);
   let { totalFavQuantity } = useSelector((state) => state.favourite);
 
-  const { user } = useAuthContext();
+  const { user, dispatch } = useAuthContext();
 
   const [stickyClass, setStickyClass] = useState("relative");
 
@@ -74,6 +75,11 @@ const Navbar = () => {
 
   const toggleMobileNav = () => {
     setMobileNav(!mobileNav);
+  };
+
+  const handleLogout = () => {
+    // e.preventDefault();
+    dispatch({ type: "LOGOUT" });
   };
 
   // let toggleDropDownSearchHeader = location.pathname === "/" && location.pathname === '/destinations/hotels' && location.pathname === `/destinations/${destination}/hotels` && location.pathname === "/hotel/:hotelName/:location/:hotelId"
@@ -128,7 +134,9 @@ const Navbar = () => {
                   <Link to="/profile">
                     <li className="capitalize">profile</li>
                   </Link>
-                  <li className="capitalize">logout</li>
+                  <li className="capitalize" onClick={() => handleLogout()}>
+                    logout
+                  </li>
                 </ul>
               </div>
             ) : (
