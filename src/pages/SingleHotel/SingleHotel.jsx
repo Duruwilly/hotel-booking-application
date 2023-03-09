@@ -75,7 +75,7 @@ const SingleHotel = () => {
       const url = `http://localhost:8800/api/v1/hotels/find/${id}`;
       try {
         const res = await axios.get(url);
-        setFetchStatus("success");
+        setFetchStatus(res.data.status);
 
         setSinglehotel(res.data.data);
       } catch (error) {
@@ -85,12 +85,16 @@ const SingleHotel = () => {
         setLoading(false);
       }, 1000);
     };
-    fetchHotelRooms();
-  }, []);
+    if (fetchStatus === "idle") fetchHotelRooms();
+  }, [fetchStatus]);
 
   // recalls the fuunction that fetches the hotels data on mount
   useEffect(() => {
     setFetchHotelStatus("idle");
+  }, []);
+
+  useEffect(() => {
+    setFetchStatus("idle");
   }, []);
 
   // recalls the fuunction that fetches the hotels data on reload
@@ -157,7 +161,14 @@ const SingleHotel = () => {
       value: "photos",
     },
     {
-      panel: <Reviews hotelName={singleHotel?.name} />,
+      panel: (
+        <Reviews
+          hotelName={singleHotel?.name}
+          hotelReviews={singleHotel?.reviews}
+          hotelID={id}
+          setFetchStatus={setFetchStatus}
+        />
+      ),
       name: "reviews",
       value: "reviews",
     },

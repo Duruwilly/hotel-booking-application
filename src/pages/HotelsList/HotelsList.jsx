@@ -251,7 +251,7 @@ const HotelsList = () => {
                     />
                   </div>
                 ))}
-              {data.responseData.length < 0 && (
+              {data.responseData.length === 0 && (
                 <p className="text-center">
                   No result based on your search location. Try another search
                 </p>

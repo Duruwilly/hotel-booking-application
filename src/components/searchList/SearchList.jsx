@@ -60,7 +60,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice,  }) => {
   return (
     <div className="bg-white border border-gray-200 flex flex-col hotelList-card-container mb-7">
       <div style={{ flex: 3, position: "relative" }}>
-        <Link to={`/hotel/${hotel.name}/${hotel.country}/${hotel._id}`}>
+        <Link to={`/hotel/${hotel.name}/${hotel.destination}/${hotel._id}`}>
           <div>
             <img src={sliderImg[sliderNumber].src} alt="" />
           </div>

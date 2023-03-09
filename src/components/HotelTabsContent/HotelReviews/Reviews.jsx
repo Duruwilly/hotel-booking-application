@@ -1,10 +1,20 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuthContext } from "../../../context/AuthContext";
+import { useMediaQueriesContext } from "../../../context/MediaQueryContext";
+import useFetch from "../../../hooks/useFetch";
 import Modal from "../../Modal/Modal";
+import Spinner from "../../Spinner/Spinner";
+import ReviewsContent from "./ReviewsContent";
 
-const Reviews = ({ hotelName }) => {
+const Reviews = ({ hotelName, hotelID, hotelReviews, setFetchStatus }) => {
+  const id = useParams();
   const [openModal, setOpenModal] = useState(false);
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
 
   const toggleModal = () => {
     setOpenModal((state) => !state);
@@ -26,66 +36,64 @@ const Reviews = ({ hotelName }) => {
     }));
   };
 
-  const submitReview = (e) => {
+  const submitReview = async (e) => {
     e.preventDefault();
-    toggleModal();
-    setUserReviewData(() => ({
-      [e.target.id]: "",
-    }));
+    const url = `http://localhost:8800/api/v1/create-reviews/${hotelID}`;
+    if (user) {
+      try {
+        const response = await axios.post(url, { ...userReviewData });
+        if (response?.data.status === "success") {
+          setFetchStatus("idle");
+          setUserReviewData(() => ({
+            [e.target.id]: "",
+          }));
+          toggleModal();
+        }
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+      return;
+    } else {
+      navigate("/login");
+    }
   };
+
   return (
     <>
+      {hotelReviews && hotelReviews?.length > 0 && (
+        <section className="flex justify-center">
+          <div className="w-full max-w-screen-lg px-4">
+            <div className=" pb-4 flex justify-between review-content mb-5">
+              <h1 className="text-2xl capitalize">reviews of {hotelName}</h1>
+              <span
+                className="text-red-800 cursor-pointer"
+                onClick={() => toggleModal()}
+              >
+                Write a guest review
+              </span>
+            </div>
+            {hotelReviews?.map((reviews) => (
+              <div key={reviews._id}>
+                <ReviewsContent reviews={reviews} />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
       <section className="flex justify-center">
         <div className="w-full max-w-screen-lg px-4">
-          <div className=" pb-4 flex justify-between review-content mb-5">
-            <h1 className="text-2xl capitalize">reviews of {hotelName}</h1>
-            <span
-              className="text-red-800 cursor-pointer"
-              onClick={() => toggleModal()}
-            >
-              Write a guest review
-            </span>
-          </div>
-          <div className="border-t-2 border-gray-300 py-5">
-            <div className="flex flex-row review-content justify-between">
-              <div>
-                <h2>serene environment</h2>
-                <span className="text-gray-400">
-                  Anonymous on january 28, 2014
-                </span>
-                <p className="text-sm font-light">
-                  he hotel was okay and easily accessible. Though, they tried
-                  but they need on work on the air condition.
-                </p>
-              </div>
-              <div>
-                <span className="mr-2">Good</span>
-                <button className=" bg-green-700 py-2 px-4 text-white text-xl">
-                  7/10
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="border-t-2 border-gray-300 py-5">
-            <div className="flex flex-row review-content justify-between">
-              <div>
-                <h2>serene environment</h2>
-                <span className="text-gray-400">
-                  Anonymous on january 28, 2014
-                </span>
-                <p className="text-sm font-light">
-                  he hotel was okay and easily accessible. Though, they tried
-                  but they need on work on the air condition.
-                </p>
-              </div>
-              <div>
-                <span className="mr-2">Good</span>
-                <button className=" bg-green-700 py-2 px-4 text-white text-xl">
-                  7/10
-                </button>
-              </div>
-            </div>
-          </div>
+          {hotelReviews.length === 0 && (
+            <p className="text-center">
+              No reviews at the moment. Be the first to give a review by{" "}
+              <span
+                className="text-red-800 cursor-pointer"
+                onClick={() => toggleModal()}
+              >
+                writing a guest review.
+              </span>
+            </p>
+          )}
         </div>
       </section>
       {openModal && (
@@ -139,12 +147,12 @@ const Reviews = ({ hotelName }) => {
                       onChange={onChange}
                     >
                       <option value="">select rating</option>
-                      <option value="0/10">0/10</option>
-                      <option value="2/10">2/10</option>
-                      <option value="4/10">4/10</option>
-                      <option value="6/10">6/10</option>
-                      <option value="8/10">8/10</option>
-                      <option value="10/10">10/10</option>
+                      <option value="0">0</option>
+                      <option value="2">2</option>
+                      <option value="4">4</option>
+                      <option value="6">6</option>
+                      <option value="8">8</option>
+                      <option value="10">10</option>
                     </select>
                   </div>
                   <div>
@@ -169,7 +177,10 @@ const Reviews = ({ hotelName }) => {
                     ></textarea>
                   </div>
                   <div className="flex justify-center">
-                    <button className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-light cursor-pointer w-full">
+                    <button
+                      type="submit"
+                      className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-light cursor-pointer w-full"
+                    >
                       submit
                     </button>
                   </div>

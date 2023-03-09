@@ -20,9 +20,7 @@ const useFetch = (url) => {
       setFetchHotelStatus("pending");
       try {
         const res = await axios.get(url);
-        console.log(res.data);
         let pages = Math.ceil(res.data.total / res.data.per_page);
-        console.log(pages);
         setFetchHotelStatus(res.data.status);
         if (sortPrice === "low-to-high") {
           res.data.data.sort((a, b) => Number(a.price) - Number(b.price));

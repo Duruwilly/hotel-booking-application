@@ -18,7 +18,6 @@ export const Paginator = ({ currentPage, pages, url, query }) => {
           links.push("....");
         }
         for (let i = currentPage - 4; i < currentPage; i++) {
-          console.log(i);
           links.push(i);
         }
       } else {
