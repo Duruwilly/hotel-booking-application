@@ -4,12 +4,16 @@ import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import TimeInHours from "../../utils/TimeInHours";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useDaysCalculate from "../../hooks/useDaysCalculate";
-import BookingSummaryCard from "../../components/bookingSummaryCard/BookingSummaryCard";
+import BookingSummaryCard from "./BookingSummaryCard";
 import { useTitle } from "../../hooks/useTitle";
 import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
 import usePriceConversion from "../../utils/usePriceConversion";
+import { useNavigate } from "react-router-dom";
+import { clearBasket } from "../../redux/basketSlice";
+import axios from "axios";
+import { useAuthContext } from "../../context/AuthContext";
 
 const Payment = () => {
   useTitle("Book the world best hotel");
@@ -46,15 +50,19 @@ export default Payment;
 
 const PaymentCard = ({ convertPrice, exchangedPrice }) => {
   let { basketItems } = useSelector((state) => state.basket);
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   let { days } = useDaysCalculate();
-  let { handlePay } = useRoomsAvailabilityCheck();
+  const { user } = useAuthContext();
+  let { putBookedRoomsDate } = useRoomsAvailabilityCheck();
   let total = 0;
+  console.log(convertPrice);
 
   basketItems.forEach((item) => {
     total += item.quantity * item[0].price * item.days;
   });
 
+  const [error, setError] = useState(false);
   const [userPaymentData, setUserPaymentData] = useState({
     firstName: "",
     lastName: "",
@@ -69,6 +77,45 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
       ...prevState,
       [e.target.id]: e.target.value,
     }));
+  };
+
+  let bookedRooms = basketItems.map((item) => ({
+    hotelName: item?.hotelName,
+    hotelLocation: item?.hotelCountry,
+    roomTitle: item[0]?.title,
+    roomPrice: item[0]?.price,
+    roomNumber: item[0]?.roomNumbers[0]?.number,
+    bookingStartDate: item?.dateSearch[0]?.startDate,
+    bookingEndDate: item?.dateSearch[0]?.endDate,
+    adult: item?.roomOptions?.adult,
+    children: item?.roomOptions?.children,
+    days: item?.days,
+    convertedPrice: convertPrice,
+  }));
+
+  const paymentTransaction = async (e) => {
+    e.preventDefault();
+    const url = `http://localhost:8800/api/v1/pay`;
+    if (user) {
+      try {
+        const response = await axios.post(url, {
+          ...userPaymentData,
+          bookedRoomsOption: bookedRooms,
+        });
+        if (response?.data.status === "success") {
+          setUserPaymentData(() => ({
+            [e.target.id]: "",
+          }));
+          dispatch(clearBasket());
+          navigate("/");
+        }
+      } catch (error) {
+        setError(error);
+      }
+      return;
+    } else {
+      navigate("/login");
+    }
   };
 
   const inputStyles =
@@ -92,6 +139,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                     id="firstName"
                     value={userPaymentData.firstName}
                     onChange={onChange}
+                    required
                   />
                   <input
                     type="text"
@@ -100,6 +148,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                     id="lastName"
                     value={userPaymentData.lastName}
                     onChange={onChange}
+                    required
                   />
                 </div>
                 <div className="flex gap-5">
@@ -110,6 +159,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                     id="mobileNumber"
                     value={userPaymentData.mobileNumber}
                     onChange={onChange}
+                    required
                   />
                   <span className="text-sm text-gray-400 font-light w-full">
                     We may need to contact you about your booking
@@ -122,6 +172,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                   id="email"
                   value={userPaymentData.email}
                   onChange={onChange}
+                  required
                 />
               </div>
             </div>
@@ -136,6 +187,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                   <p className="font-light">Approximate time of arrival?</p>
                   <select
                     name=""
+                    required
                     onChange={onChange}
                     id="arrivalTime"
                     className="outline-none py-3 px-4 border border-gray-300 text-base"
@@ -149,6 +201,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                 </div>
                 <textarea
                   name=""
+                  required
                   id="comment"
                   onChange={onChange}
                   value={userPaymentData.comment}
@@ -183,7 +236,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    handlePay();
+                    putBookedRoomsDate();
                   }}
                   className="bg-green-700 text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs flex justify-center items-center gap-3"
                 >
@@ -200,9 +253,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
             </h1>
             {basketItems.map((basket) => (
               <div key={basket[0]._id}>
-                <BookingSummaryCard
-                  {...basket}
-                />
+                <BookingSummaryCard {...basket} />
               </div>
             ))}
           </div>
