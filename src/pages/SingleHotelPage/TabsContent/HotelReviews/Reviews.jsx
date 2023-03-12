@@ -3,9 +3,10 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAuthContext } from "../../../../context/AuthContext";
+import { useAuthContext } from "../../../../context/LoginAuthContext";
 import Modal from "../../../../components/Modal/Modal";
 import ReviewsContent from "./ReviewsContent";
+import { WILL_TRIP_BASE_URL } from "../../../../constants/base-urls";
 
 const Reviews = ({ hotelID, hotelReviews, setFetchStatus, singleHotel }) => {
   const id = useParams();
@@ -35,7 +36,7 @@ const Reviews = ({ hotelID, hotelReviews, setFetchStatus, singleHotel }) => {
 
   const submitReview = async (e) => {
     e.preventDefault();
-    const url = `http://localhost:8800/api/v1/create-reviews/${hotelID}`;
+    const url = `${WILL_TRIP_BASE_URL}/v1/create-reviews/${hotelID}`;
     if (user) {
       try {
         const response = await axios.post(url, { ...userReviewData });

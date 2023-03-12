@@ -13,7 +13,7 @@ import FixedHeroe from "../component/heroe/FixedHeroe";
 import FixedHeader from "../header/FixedHeader";
 import { useMediaQueriesContext } from "../../../context/MediaQueryContext";
 import MobileNav from "./MobileNav";
-import { useAuthContext } from "../../../context/AuthContext";
+import { useAuthContext } from "../../../context/LoginAuthContext";
 import { IoIosArrowDown } from "react-icons/io";
 import { useSelector } from "react-redux";
 
