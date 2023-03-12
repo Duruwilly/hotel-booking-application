@@ -22,6 +22,7 @@ import Location from "./TabsContent/HotelLocation/Location";
 import Reviews from "./TabsContent/HotelReviews/Reviews";
 import Photos from "./TabsContent/HotelPhotos/Photos";
 import usePriceConversion from "../../utils/usePriceConversion";
+import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 
 const SingleHotel = () => {
   const locationID = useLocation();
@@ -40,7 +41,7 @@ const SingleHotel = () => {
   const { convertPrices } = usePriceConversion();
 
   // using this to ge the hotel data that'd be passed to the liked items
-  const url = `http://localhost:8800/api/v1/hotels?destination=${destination}`;
+  const url = `${WILL_TRIP_BASE_URL}/hotels?destination=${destination}`;
   const { data } = useFetch(url);
   // const { data } = useFetch();
 
@@ -72,7 +73,7 @@ const SingleHotel = () => {
     const fetchHotelRooms = async () => {
       setFetchStatus("pending");
       setLoading(true);
-      const url = `http://localhost:8800/api/v1/hotels/find/${id}`;
+      const url = `${WILL_TRIP_BASE_URL}/v1/hotels/find/${id}`;
       try {
         const res = await axios.get(url);
         setFetchStatus(res.data.status);

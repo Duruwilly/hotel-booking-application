@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
+import useFetch from "../../../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { addItem } from "../../../redux/basketSlice";
+import { useAuthContext } from "../../../context/LoginAuthContext";
+import useDaysCalculate from "../../../hooks/useDaysCalculate";
 import axios from "axios";
+import PriceConversion from "../../PriceConversion/PriceConversion";
 import Room from "./Room";
-import { useAuthContext } from "../../../../context/LoginAuthContext";
-import PriceConversion from "../../../../components/PriceConversion/PriceConversion";
-import useDaysCalculate from "../../../../hooks/useDaysCalculate";
-import { addItem } from "../../../../redux/basketSlice";
 
 const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
   const { user } = useAuthContext();

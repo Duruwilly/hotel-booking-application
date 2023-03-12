@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 import { MobileNavBtn } from "../../../components/button/MobileNavBtn";
 import { IoIosArrowDown } from "react-icons/io";
-import { useAuthContext } from "../../../context/AuthContext";
+import { useAuthContext } from "../../../context/LoginAuthContext";
 
 const MobileNav = ({ toggle }) => {
   const { user } = useAuthContext();
@@ -39,7 +39,10 @@ const MobileNav = ({ toggle }) => {
             </Link>
           </>
         )}
-        <div className="text-gray-300 flex flex-col justify-center items-center py-5" onClick={toggle}>
+        <div
+          className="text-gray-300 flex flex-col justify-center items-center py-5"
+          onClick={toggle}
+        >
           <Link to="/about-us" className="py-5 text-center">
             Who we are
           </Link>

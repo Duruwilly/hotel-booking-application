@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { WILL_TRIP_BASE_URL } from "../constants/base-urls";
 import { useMediaQueriesContext } from "../context/MediaQueryContext";
 
 const useRoomsAvailabilityCheck = () => {
@@ -104,7 +105,7 @@ const useRoomsAvailabilityCheck = () => {
 
     while (date <= end) {
       dates.push(new Date(date).getTime());
-      date.setDate(date.getDate() + 1)
+      date.setDate(date.getDate() + 1);
     }
     return dates;
   };
@@ -138,7 +139,7 @@ const useRoomsAvailabilityCheck = () => {
         basketItems.map((getRoomId) =>
           getRoomId[0].roomNumbers.map((id) => {
             const res = axios.put(
-              `http://localhost:8800/api/v1/rooms/rooms-availability/${id._id}`,
+              `${WILL_TRIP_BASE_URL}/rooms/rooms-availability/${id._id}`,
               { dates: allDatesInBasket }
             );
             return res.data;

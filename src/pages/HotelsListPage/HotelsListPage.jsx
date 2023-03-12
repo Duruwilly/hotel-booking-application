@@ -28,6 +28,7 @@ import Map from "../../components/Map/Map";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import usePriceConversion from "../../utils/usePriceConversion";
 import { Paginator } from "../../components/Paginator";
+import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 
 const HotelsList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -61,7 +62,7 @@ const HotelsList = () => {
 
   let page = searchParams.get("page") ?? 1;
   let currentPage = Number(page);
-  const url = `http://localhost:8800/api/v1/hotels?destination=${searchParams.get(
+  const url = `${WILL_TRIP_BASE_URL}/hotels?destination=${searchParams.get(
     "query"
   )}&page=${currentPage}`;
 

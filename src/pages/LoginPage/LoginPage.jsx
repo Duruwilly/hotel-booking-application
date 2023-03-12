@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
-import { useAuthContext } from "../../context/AuthContext";
+import { useAuthContext } from "../../context/LoginAuthContext";
 import axios from "axios";
+import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 
 const LoginPage = () => {
   const inputStyle =
@@ -35,7 +36,7 @@ const LoginPage = () => {
     dispatch({ type: "LOGIN_START" });
     try {
       const res = await axios.post(
-        "http://localhost:8800/api/v1/auth/login",
+        `${WILL_TRIP_BASE_URL}/auth/login`,
         userDetails
       );
       dispatch({ type: "LOGIN_SUCCESS", payload: res.data });

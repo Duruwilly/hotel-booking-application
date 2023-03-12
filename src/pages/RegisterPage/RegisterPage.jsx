@@ -1,9 +1,12 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
+import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const inputStyle =
     "appearance-none rounded-sm relative block w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-input-border";
 
@@ -11,6 +14,37 @@ const RegisterPage = () => {
   const passwordToggle = () => {
     setShowPassword((prevState) => !prevState);
   };
+
+  const [error, setError] = useState(false);
+
+  const [userDetails, setUserDetails] = useState({
+    fullname: "",
+    country: "",
+    email: "",
+    password: "",
+    mobileNumber: "",
+  });
+
+  const handleChange = (e) => {
+    setUserDetails((prev) => ({
+      ...prev,
+      [e.target.id]: e.target.value,
+    }));
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        `${WILL_TRIP_BASE_URL}/auth/register`,
+        userDetails
+      );
+      navigate("/login");
+    } catch (error) {
+      setError(error.response.data);
+    }
+  };
+
   return (
     <section className="py-5">
       <main className="flex items-center justify-center">
@@ -19,13 +53,14 @@ const RegisterPage = () => {
             <h2 className="text-center text-xl font-medium">
               Create a free account
             </h2>
-            <form className="space-y-2">
+            <form className="space-y-2" onSubmit={handleLogin}>
               <input
                 type="name"
                 placeholder="Full Name"
                 id="userName"
                 name="userName"
                 className={inputStyle}
+                onChange={handleChange}
               />
               <input
                 type="text"
@@ -33,6 +68,7 @@ const RegisterPage = () => {
                 id="country"
                 name="country"
                 className={inputStyle}
+                onChange={handleChange}
               />
               <input
                 type="email"
@@ -41,6 +77,7 @@ const RegisterPage = () => {
                 id="email"
                 name="email"
                 className={inputStyle}
+                onChange={handleChange}
               />
               <div className="relative">
                 <input
@@ -50,6 +87,7 @@ const RegisterPage = () => {
                   id="password"
                   name="password"
                   className={inputStyle}
+                  onChange={handleChange}
                 />
                 {showPassword && (
                   <FaEye
@@ -74,10 +112,13 @@ const RegisterPage = () => {
                 id="mobileNumber"
                 name="mobileNumber"
                 className={inputStyle}
+                onChange={handleChange}
               />
               <RegisterSignupBtn text="Sign up" />
             </form>
-
+            {error && (
+              <p className="text-red-700 text-center">{error.message}</p>
+            )}
             <p className="text-center">
               Already have an account?{" "}
               <Link

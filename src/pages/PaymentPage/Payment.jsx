@@ -13,7 +13,8 @@ import usePriceConversion from "../../utils/usePriceConversion";
 import { useNavigate } from "react-router-dom";
 import { clearBasket } from "../../redux/basketSlice";
 import axios from "axios";
-import { useAuthContext } from "../../context/AuthContext";
+import { useAuthContext } from "../../context/LoginAuthContext";
+import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 
 const Payment = () => {
   useTitle("Book the world best hotel");
@@ -56,7 +57,19 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
   const { user } = useAuthContext();
   let { putBookedRoomsDate } = useRoomsAvailabilityCheck();
   let total = 0;
-  console.log(convertPrice);
+
+  var request_id = new Date();
+  let day = String(request_id.getDate()).padStart(2, "0");
+  var month = String(request_id.getMonth() + 1).padStart(2, "0");
+  let year = String(request_id.getFullYear());
+  let hour = String(request_id.getHours()).padStart(2, "0");
+  let minute = String(request_id.getMinutes());
+
+  let randomStr = "";
+  let random = Math.random();
+  let randomNumber = (randomStr += random).split(".")[1];
+
+  request_id = year + month + day + hour + minute + randomNumber;
 
   basketItems.forEach((item) => {
     total += item.quantity * item[0].price * item.days;
@@ -91,11 +104,12 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
     children: item?.roomOptions?.children,
     days: item?.days,
     convertedPrice: convertPrice,
+    transaction_id: request_id,
   }));
 
   const paymentTransaction = async (e) => {
     e.preventDefault();
-    const url = `http://localhost:8800/api/v1/pay`;
+    const url = `${WILL_TRIP_BASE_URL}/transactions/pay`;
     if (user) {
       try {
         const response = await axios.post(url, {
