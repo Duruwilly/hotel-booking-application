@@ -8,8 +8,8 @@ import "react-date-range/dist/theme/default.css";
 import { ScrollToTop } from "./components/scrollToTop/ScrollToTop";
 import { publicRoutes } from "./navigation/public-routes";
 import Spinner from "./components/Spinner/Spinner";
-const Navbar = lazy(() => import("./components/navbar/Navbar"));
-const FooterList = lazy(() => import("./components/footer/FooterList"));
+import Navbar from "./pages/HomePage/navbar/Navbar";
+const FooterList = lazy(() => import("./pages/HomePage/footer/FooterList"));
 // import {
 //   Home,
 //   // AboutUs,
@@ -39,7 +39,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Suspense fallback={<Spinner />}>
+      <Suspense>
         <Navbar />
       </Suspense>
       <Routes>
@@ -54,7 +54,7 @@ function App() {
         ))}
       </Routes>
       <div onClick={closeModal}>
-        <Suspense fallback={<Spinner />}>
+        <Suspense>
           <FooterList />
         </Suspense>
       </div>
