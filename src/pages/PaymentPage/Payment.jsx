@@ -13,7 +13,7 @@ import usePriceConversion from "../../utils/usePriceConversion";
 import { useNavigate } from "react-router-dom";
 import { clearBasket } from "../../redux/basketSlice";
 import axios from "axios";
-import { useAuthContext } from "../../context/LoginAuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 
 const Payment = () => {

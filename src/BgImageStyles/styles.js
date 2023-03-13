@@ -18,6 +18,7 @@ import wishlistBg from "../assets/images/wishlistsBg.jpg";
 import mapBg from "../assets/images/map.svg";
 import overviewFacilitiesbg from "../assets/images/overviewFacBg.jpg";
 import overviewFoodsbg from "../assets/images/overviewFoodsBg.jpg";
+import profilebg from "../assets/images/profile.jpg";
 
 export const heroeBg = {
   width: "100%",
@@ -34,6 +35,20 @@ export const favouriteBg = {
   width: "100%",
   padding: "0",
   backgroundImage: `url(${wishlistBg})`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  height: "50vh",
+  position: "relative",
+  position: "relative",
+  textAlign: "center",
+  color: "white",
+};
+
+export const profileBg = {
+  width: "100%",
+  padding: "0",
+  backgroundImage: `url(${profilebg})`,
   backgroundPosition: "center",
   backgroundSize: "cover",
   backgroundRepeat: "no-repeat",

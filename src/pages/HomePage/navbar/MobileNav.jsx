@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 import { MobileNavBtn } from "../../../components/button/MobileNavBtn";
 import { IoIosArrowDown } from "react-icons/io";
-import { useAuthContext } from "../../../context/LoginAuthContext";
+import { useAuthContext } from "../../../context/AuthContext";
 
 const MobileNav = ({ toggle }) => {
   const { user } = useAuthContext();

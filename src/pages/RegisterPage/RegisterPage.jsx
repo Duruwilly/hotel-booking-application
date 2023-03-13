@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
+import { useRegisterAuthContext } from "../../context/RegisterAuthContext";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -15,7 +16,9 @@ const RegisterPage = () => {
     setShowPassword((prevState) => !prevState);
   };
 
-  const [error, setError] = useState(false);
+  // const [error, setError] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const { loading, error, dispatch } = useRegisterAuthContext();
 
   const [userDetails, setUserDetails] = useState({
     fullname: "",
@@ -34,14 +37,20 @@ const RegisterPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    // setLoading(true);
+    dispatch({ type: "REGISTER_START" });
     try {
       const res = await axios.post(
         `${WILL_TRIP_BASE_URL}/auth/register`,
         userDetails
       );
-      navigate("/login");
+      // setLoading(false);
+      dispatch({ type: "REGISTER_SUCCESS", payload: res.data });
+      navigate("/");
     } catch (error) {
-      setError(error.response.data);
+      // setLoading(false);
+      // setError(error.response.data);
+      dispatch({ type: "REGISTER_FAILURE", payload: error.response.data });
     }
   };
 
@@ -57,8 +66,8 @@ const RegisterPage = () => {
               <input
                 type="name"
                 placeholder="Full Name"
-                id="userName"
-                name="userName"
+                id="fullname"
+                required
                 className={inputStyle}
                 onChange={handleChange}
               />
@@ -67,6 +76,7 @@ const RegisterPage = () => {
                 placeholder="Country"
                 id="country"
                 name="country"
+                required
                 className={inputStyle}
                 onChange={handleChange}
               />
@@ -76,6 +86,7 @@ const RegisterPage = () => {
                 autoComplete="email"
                 id="email"
                 name="email"
+                required
                 className={inputStyle}
                 onChange={handleChange}
               />
@@ -86,6 +97,7 @@ const RegisterPage = () => {
                   autoComplete="current-password"
                   id="password"
                   name="password"
+                  required
                   className={inputStyle}
                   onChange={handleChange}
                 />
@@ -111,10 +123,20 @@ const RegisterPage = () => {
                 placeholder="Mobile Number"
                 id="mobileNumber"
                 name="mobileNumber"
+                required
                 className={inputStyle}
                 onChange={handleChange}
               />
-              <RegisterSignupBtn text="Sign up" />
+              <RegisterSignupBtn
+                disabled={
+                  userDetails.email === "" &&
+                  userDetails.fullname === "" &&
+                  userDetails.country === "" &&
+                  userDetails.mobileNumber === "" &&
+                  userDetails.password === ""
+                }
+                text={loading ? "loading..." : "Sign up"}
+              />
             </form>
             {error && (
               <p className="text-red-700 text-center">{error.message}</p>
