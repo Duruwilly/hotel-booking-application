@@ -34,7 +34,7 @@ const RegisterAuthReducer = (state, action) => {
   }
 };
 
-export const AuthContextProvider = ({ children }) => {
+export const RegisterAuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(RegisterAuthReducer, INITIAL_STATE);
 
   // save the user to the local storage
@@ -55,4 +55,4 @@ export const AuthContextProvider = ({ children }) => {
   );
 };
 
-export const useAuthContext = () => useContext(RegisterAuthContext);
+export const useRegisterAuthContext = () => useContext(RegisterAuthContext);

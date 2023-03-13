@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
-import { useAuthContext } from "../../context/LoginAuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 

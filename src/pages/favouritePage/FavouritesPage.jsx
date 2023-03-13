@@ -34,7 +34,7 @@ const Favourites = () => {
           </p>
         </div>
       </section>
-      <div className="flex justify-center">
+      <section className="flex justify-center">
         <div className="w-full max-w-screen-xl">
           {wishlistsItems.length > 0 ? (
             <div className="grid lg:grid-cols-3 wishlist-item gap-4 py-10 px-4">
@@ -78,7 +78,7 @@ const Favourites = () => {
             </div>
           )}
         </div>
-      </div>
+      </section>
     </>
   );
 };

@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAuthContext } from "../../../../context/LoginAuthContext";
+import { useAuthContext } from "../../../../context/AuthContext";
 import Modal from "../../../../components/Modal/Modal";
 import ReviewsContent from "./ReviewsContent";
 import { WILL_TRIP_BASE_URL } from "../../../../constants/base-urls";

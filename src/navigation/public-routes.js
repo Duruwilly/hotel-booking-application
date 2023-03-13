@@ -26,6 +26,7 @@ const WishlistsPage = lazy(() =>
 const TransactionsPage = lazy(() =>
   import("../pages/TransactionsPage/TransactionsPage")
 );
+const ProfilePage = lazy(() => import("../pages/profilePage/ProfilePage"));
 
 export const publicRoutes = [
   {
@@ -87,5 +88,9 @@ export const publicRoutes = [
   {
     path: "/transactions",
     element: TransactionsPage,
+  },
+  {
+    path: "/my-account",
+    element: ProfilePage,
   },
 ];

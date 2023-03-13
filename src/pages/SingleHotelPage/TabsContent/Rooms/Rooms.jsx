@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Room from "./Room";
-import { useAuthContext } from "../../../../context/LoginAuthContext";
+import { useAuthContext } from "../../../../context/AuthContext";
 import PriceConversion from "../../../../components/PriceConversion/PriceConversion";
 import useDaysCalculate from "../../../../hooks/useDaysCalculate";
 import { addItem } from "../../../../redux/basketSlice";

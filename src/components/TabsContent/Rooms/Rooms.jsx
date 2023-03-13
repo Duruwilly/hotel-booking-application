@@ -3,7 +3,7 @@ import useFetch from "../../../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../../../redux/basketSlice";
-import { useAuthContext } from "../../../context/LoginAuthContext";
+import { useAuthContext } from "../../../context/AuthContext";
 import useDaysCalculate from "../../../hooks/useDaysCalculate";
 import axios from "axios";
 import PriceConversion from "../../PriceConversion/PriceConversion";
