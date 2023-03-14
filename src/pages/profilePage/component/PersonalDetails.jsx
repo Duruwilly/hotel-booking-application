@@ -26,7 +26,7 @@ const PersonalDetails = () => {
               Full Name
             </p>
             <span className="capitalize font-light" style={{ flex: 6 }}>
-              {user.fullname}
+              {user?.fullname}
             </span>
           </div>
           <div className="flex">
@@ -34,7 +34,7 @@ const PersonalDetails = () => {
               Country
             </p>
             <span className="capitalize font-light" style={{ flex: 6 }}>
-              {user.country}
+              {user?.country}
             </span>
           </div>
           <div className="flex">
@@ -104,7 +104,7 @@ const EditProfile = ({ currWin, setCurrWin, user }) => {
   const handleChange = (e) => {
     setUserDetails((prev) => ({
       ...prev,
-      [e.target.id]: console.log(e.target.value),
+      [e.target.id]: e.target.value,
     }));
   };
 
@@ -169,7 +169,7 @@ const EditProfile = ({ currWin, setCurrWin, user }) => {
                   </label>
                 </div>
                 <div className="py-5 w-full" style={{ maxWidth: "300px" }}>
-                  <label htmlFor="">Country</label>
+                  <label htmlFor="">Select country</label>
                   <select
                     name="country"
                     id="country"

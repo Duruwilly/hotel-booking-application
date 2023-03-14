@@ -11,19 +11,19 @@ const AuthContext = createContext(INITIAL_STATE);
 
 const AuthReducer = (state, action) => {
   switch (action.type) {
-    case "LOGIN_START":
+    case "START":
       return {
         user: null,
         loading: true,
         error: null
       };
-    case "LOGIN_SUCCESS":
+    case "SUCCESS":
       return {
         user: action.payload,
         loading: false,
         error: null
       };
-    case "LOGIN_FAILURE":
+    case "FAILED":
       return {
         user: null,
         loading: false,

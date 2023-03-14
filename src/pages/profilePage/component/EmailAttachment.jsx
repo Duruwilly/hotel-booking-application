@@ -19,19 +19,46 @@ const EmailAttachment = ({
           required
           onChange={(e) => {
             let idArr = e.target.name.split("-");
+            console.log(userDetails.otherEmail);
             // console.log({
             //   attachment: e.target.value ? e.target.value : {},
             // });
+            // return setUserDetails((state) => {
+            //   return {
+            //     ...state,
+            //     otherEmail: [
+            //       ...state.otherEmail,
+            //       {
+            //         key: parseInt(idArr[1]),
+            //         value: e.target.value ? e.target.value : null,
+            //       },
+            //     ],
+            //   };
+            // });
+
             return setUserDetails((state) => {
-              return {
-                ...state,
-                otherEmail: [
+              let prevAttachments = state.otherEmail;
+
+              const indexOfAttachment = prevAttachments.findIndex(
+                (att) => att?.key === parseInt(idArr[1])
+              );
+              if (indexOfAttachment >= 0) {
+                prevAttachments[indexOfAttachment].value = e.target.value
+                  ? e.target.value
+                  : null;
+              } else {
+                prevAttachments = [
                   ...state.otherEmail,
                   {
                     key: parseInt(idArr[1]),
                     value: e.target.value ? e.target.value : null,
                   },
-                ],
+                ];
+              }
+              console.log(userDetails.otherEmail);
+              return {
+                ...state,
+                otherEmail: prevAttachments,
               };
             });
           }}

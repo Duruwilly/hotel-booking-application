@@ -4,7 +4,7 @@ import {
   BsFillHeartFill,
   BsFillTelephoneFill,
 } from "react-icons/bs";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../../assets/logo/logo2.png";
 import Header from "../header/Header";
 import { FaBars } from "react-icons/fa";
@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { matches, setDropdownHeader } = useMediaQueriesContext();
   // const { loading, error, dispatch } = useAuthContext();
@@ -134,7 +135,13 @@ const Navbar = () => {
                   <Link to="/my-account">
                     <li className="capitalize">profile</li>
                   </Link>
-                  <li className="capitalize" onClick={() => handleLogout()}>
+                  <li
+                    className="capitalize"
+                    onClick={() => {
+                      handleLogout();
+                      navigate("/");
+                    }}
+                  >
                     logout
                   </li>
                 </ul>
