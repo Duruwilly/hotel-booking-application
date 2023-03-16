@@ -33,16 +33,17 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    dispatch({ type: "LOGIN_START" });
+    dispatch({ type: "START" });
     try {
       const res = await axios.post(
         `${WILL_TRIP_BASE_URL}/auth/login`,
         userDetails
       );
-      dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+      dispatch({ type: "SUCCESS", payload: res.data });
       navigate("/");
     } catch (error) {
-      dispatch({ type: "LOGIN_FAILURE", payload: error.response.data });
+      dispatch({ type: "FAILED", payload: error.response.data });
+      localStorage.removeItem("user")
     }
   };
 
@@ -58,7 +59,6 @@ const LoginPage = () => {
                 type="email"
                 id="email"
                 name="email"
-                autoComplete="email"
                 placeholder="Email address"
                 className={inputStyle}
                 onChange={handleChange}
@@ -69,7 +69,6 @@ const LoginPage = () => {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
-                  autoComplete="current-password"
                   placeholder="Password"
                   className={inputStyle}
                   onChange={handleChange}

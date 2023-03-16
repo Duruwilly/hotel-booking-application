@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import PersonalDetailsPage from ".";
 import { profileBg } from "../../BgImageStyles/styles";
 import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
 import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
@@ -13,7 +14,7 @@ const ProfilePage = () => {
     {
       value: "personal details",
       title: "personal-details",
-      panel: <PersonalDetails />,
+      panel: <PersonalDetailsPage />
     },
     {
       value: "update password",

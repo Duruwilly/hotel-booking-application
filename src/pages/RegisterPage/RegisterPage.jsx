@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
+import { useAuthContext } from "../../context/AuthContext";
 import { useRegisterAuthContext } from "../../context/RegisterAuthContext";
 
 const RegisterPage = () => {
@@ -18,7 +19,7 @@ const RegisterPage = () => {
 
   // const [error, setError] = useState(false);
   // const [loading, setLoading] = useState(false);
-  const { loading, error, dispatch } = useRegisterAuthContext();
+  const { loading, error, dispatch } = useAuthContext();
 
   const [userDetails, setUserDetails] = useState({
     fullname: "",
@@ -38,19 +39,19 @@ const RegisterPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     // setLoading(true);
-    dispatch({ type: "REGISTER_START" });
+    dispatch({ type: "START" });
     try {
       const res = await axios.post(
         `${WILL_TRIP_BASE_URL}/auth/register`,
         userDetails
       );
       // setLoading(false);
-      dispatch({ type: "REGISTER_SUCCESS", payload: res.data });
+      dispatch({ type: "SUCCESS", payload: res.data });
       navigate("/");
     } catch (error) {
       // setLoading(false);
       // setError(error.response.data);
-      dispatch({ type: "REGISTER_FAILURE", payload: error.response.data });
+      dispatch({ type: "FAILED", payload: error.response.data });
     }
   };
 

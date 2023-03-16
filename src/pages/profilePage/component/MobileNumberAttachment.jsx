@@ -15,26 +15,50 @@ const MobileNumberAttachment = ({
           type="tel"
           id="mobileNumber"
           name={`att-${ind}`}
-          // value={userDetails.otherMobileNumber}
+          value={userDetails.otherMobileNumber.value}
           className="form-input"
           required
           onChange={(e) => {
             let idArr = e.target.name.split("-");
-            // console.log({
-            //   attachment: e.target.value ? e.target.value : {},
-            // });
             return setUserDetails((state) => {
-              return {
-                ...state,
-                otherMobileNumber: [
+              let prevAttachments = state.otherMobileNumber;
+
+              const indexOfAttachment = prevAttachments.findIndex(
+                (att) => att?.key === parseInt(idArr[1])
+              );
+              if (indexOfAttachment >= 0) {
+                prevAttachments[indexOfAttachment].value = e.target.value
+                  ? e.target.value
+                  : null;
+              } else {
+                prevAttachments = [
                   ...state.otherMobileNumber,
                   {
                     key: parseInt(idArr[1]),
                     value: e.target.value ? e.target.value : null,
                   },
-                ],
+                ];
+              }
+              return {
+                ...state,
+                otherMobileNumber: prevAttachments,
               };
             });
+            // console.log({
+            //   attachment: e.target.value ? e.target.value : {},
+            // });
+            // return setUserDetails((state) => {
+            //   return {
+            //     ...state,
+            //     otherMobileNumber: [
+            //       ...state.otherMobileNumber,
+            //       {
+            //         key: parseInt(idArr[1]),
+            //         value: e.target.value ? e.target.value : null,
+            //       },
+            //     ],
+            //   };
+            // });
           }}
         />
       </div>

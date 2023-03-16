@@ -4,7 +4,7 @@ import {
   BsFillHeartFill,
   BsFillTelephoneFill,
 } from "react-icons/bs";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../../assets/logo/logo2.png";
 import Header from "../header/Header";
 import { FaBars } from "react-icons/fa";
@@ -16,12 +16,19 @@ import MobileNav from "./MobileNav";
 import { useAuthContext } from "../../../context/AuthContext";
 import { IoIosArrowDown } from "react-icons/io";
 import { useSelector } from "react-redux";
+import { useUserProfileContext } from "../../../context/UserProfileContext";
+import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
+import axios from "axios";
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { matches, setDropdownHeader } = useMediaQueriesContext();
+  const { getUserDetails, userProfileDetails, setFetchingState } =
+    useUserProfileContext();
   // const { loading, error, dispatch } = useAuthContext();
+  // const [userProfileDetails, setUserProfileDetails] = useState();
 
   let { totalQuantity } = useSelector((state) => state.basket);
   let { totalFavQuantity } = useSelector((state) => state.favourite);
@@ -82,6 +89,37 @@ const Navbar = () => {
     dispatch({ type: "LOGOUT" });
   };
 
+  useEffect(() => {
+    setFetchingState("idle");
+  }, []);
+
+  useEffect(() => {
+    getUserDetails();
+  }, []);
+
+  // useEffect(() => {
+  //   const getUserDetails = async () => {
+  //     // setLoading(true);
+  //     try {
+  //       const res = await axios.get(`${WILL_TRIP_BASE_URL}/users/${user.id}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${user.token}`,
+  //         },
+  //       });
+  //       console.log(res);
+  //       if (res.data.status === "success") {
+  //       }
+  //       // setLoading(false);
+  //       setUserProfileDetails(res.data.data);
+  //       console.log(userProfileDetails);
+  //       //   toast.success(res.data.msg);
+  //     } catch (error) {
+  //       // setLoading(false);
+  //       // toast.error(error.response.data.message);
+  //     }
+  //   };
+  //   getUserDetails();
+  // }, [user.id]);
   // let toggleDropDownSearchHeader = location.pathname === "/" && location.pathname === '/destinations/hotels' && location.pathname === `/destinations/${destination}/hotels` && location.pathname === "/hotel/:hotelName/:location/:hotelId"
 
   return (
@@ -127,14 +165,24 @@ const Navbar = () => {
             {user ? (
               <div className="text-gray-300 text-sm hidden lg:block relative cursor-pointer dropdown">
                 <div className="flex justify-center items-center gap-1">
-                  <span className="capitalize">{`hi, ${user.fullname}`}</span>
+                  <span className="capitalize">{`hi, ${
+                    userProfileDetails?.fullname !== undefined
+                      ? userProfileDetails?.fullname
+                      : ""
+                  }`}</span>
                   <IoIosArrowDown className="text-inherit text-xl" />
                 </div>
                 <ul>
                   <Link to="/my-account">
                     <li className="capitalize">profile</li>
                   </Link>
-                  <li className="capitalize" onClick={() => handleLogout()}>
+                  <li
+                    className="capitalize"
+                    onClick={() => {
+                      handleLogout();
+                      navigate("/");
+                    }}
+                  >
                     logout
                   </li>
                 </ul>
@@ -187,7 +235,10 @@ const Navbar = () => {
             } navMobileVisibility mobile-wrapper`}
           >
             <div className="mobile-overlay" onClick={toggleMobileNav}></div>
-            <MobileNav toggle={toggleMobileNav} />
+            <MobileNav
+              toggle={toggleMobileNav}
+              userProfileDetails={userProfileDetails}
+            />
           </div>
         </div>
       </header>
