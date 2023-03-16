@@ -11,8 +11,8 @@ const EmailAttachment = ({
     <div key={ind}>
       <div className="">
         <input
-          type="tel"
-          id="mobileNumber"
+          type="email"
+          id="email"
           name={`att-${ind}`}
           value={attachmentState.otherEmail}
           className="form-input"

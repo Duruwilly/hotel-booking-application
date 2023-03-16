@@ -9,6 +9,9 @@ import { ScrollToTop } from "./components/scrollToTop/ScrollToTop";
 import { publicRoutes } from "./navigation/public-routes";
 import Spinner from "./components/Spinner/Spinner";
 import Navbar from "./pages/HomePage/navbar/Navbar";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserContextProvider } from "./context/UserProfileContext";
 const FooterList = lazy(() => import("./pages/HomePage/footer/FooterList"));
 // import {
 //   Home,
@@ -37,28 +40,33 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Suspense>
-        <Navbar />
-      </Suspense>
-      <Routes>
-        {publicRoutes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={
-              <Suspense fallback={<Spinner />}>{<route.element />}</Suspense>
-            }
-          ></Route>
-        ))}
-      </Routes>
-      <div onClick={closeModal}>
+    <>
+      <BrowserRouter>
+        <ScrollToTop />
         <Suspense>
-          <FooterList />
+          <UserContextProvider>
+            <Navbar />
+          </UserContextProvider>
         </Suspense>
-      </div>
-    </BrowserRouter>
+        <Routes>
+          {publicRoutes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                <Suspense fallback={<Spinner />}>{<route.element />}</Suspense>
+              }
+            ></Route>
+          ))}
+        </Routes>
+        <div onClick={closeModal}>
+          <Suspense>
+            <FooterList />
+          </Suspense>
+        </div>
+      </BrowserRouter>
+      <ToastContainer />
+    </>
   );
 }
 

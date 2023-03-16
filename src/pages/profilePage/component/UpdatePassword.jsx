@@ -4,8 +4,7 @@ import { omit } from "lodash";
 import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
 import axios from "axios";
 import { useAuthContext } from "../../../context/AuthContext";
-import { useDispatch } from "react-redux";
-import { addSuccessMessages } from "../../../redux/responseMessage";
+import { toast } from "react-toastify";
 
 const UpdatePassword = () => {
   const inputStyle =
@@ -13,7 +12,6 @@ const UpdatePassword = () => {
   const [errors, setErrors] = useState({});
   const { user } = useAuthContext();
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
   const [oldPasswordError, setOldPasswordError] = useState(false);
 
   const [userPassword, setUserPassword] = useState({
@@ -78,10 +76,15 @@ const UpdatePassword = () => {
     setLoading(true);
     try {
       const res = await axios.put(
-        `${WILL_TRIP_BASE_URL}/users/update-password/${user._id}`,
+        `${WILL_TRIP_BASE_URL}/users/update-password/${user.id}`,
         {
           oldPassword: userPassword.oldPassword,
           password: userPassword.password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
         }
       );
       setLoading(false);
@@ -89,7 +92,7 @@ const UpdatePassword = () => {
         return { ...state, newPassword: "", oldPassword: "", password: "" };
       });
       setOldPasswordError(false);
-      dispatch(addSuccessMessages(res.data.msg));
+      toast.success(res.data.msg);
     } catch (error) {
       setLoading(false);
       setOldPasswordError(error.response.data.message);
@@ -175,7 +178,7 @@ const UpdatePassword = () => {
           )}
           <div className="mt-7">
             <Button
-              text={`${loading ? "Loading..." : "Edit"}`}
+              text={loading ? "Loading..." : "Edit"}
               //   disabled={
               //     Object.keys(errors).length > 0 ||
               //     userPassword.newPassword === "" ||

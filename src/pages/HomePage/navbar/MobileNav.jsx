@@ -4,7 +4,7 @@ import { MobileNavBtn } from "../../../components/button/MobileNavBtn";
 import { IoIosArrowDown } from "react-icons/io";
 import { useAuthContext } from "../../../context/AuthContext";
 
-const MobileNav = ({ toggle }) => {
+const MobileNav = ({ toggle, userProfileDetails }) => {
   const { user } = useAuthContext();
 
   return (
@@ -19,7 +19,11 @@ const MobileNav = ({ toggle }) => {
         {user ? (
           <div className="text-gray-300 text-sm relative cursor-pointer dropdown">
             <div className="flex justify-center items-center gap-1">
-              <span className="flex justify-center items-center capitalize text-center">{`hi, ${user.fullname}`}</span>
+              <span className="flex justify-center items-center capitalize text-center">{`hi, ${
+                userProfileDetails?.fullname !== undefined
+                  ? userProfileDetails?.fullname
+                  : ""
+              }`}</span>
               <IoIosArrowDown className="text-inherit text-xl" />
             </div>
             <ul onClick={toggle}>

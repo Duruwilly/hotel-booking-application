@@ -43,6 +43,7 @@ const LoginPage = () => {
       navigate("/");
     } catch (error) {
       dispatch({ type: "FAILED", payload: error.response.data });
+      localStorage.removeItem("user")
     }
   };
 

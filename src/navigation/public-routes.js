@@ -27,7 +27,16 @@ const TransactionsPage = lazy(() =>
   import("../pages/TransactionsPage/TransactionsPage")
 );
 const ProfilePage = lazy(() => import("../pages/profilePage/ProfilePage"));
+const ForgotPasswordPage = lazy(() =>
+  import("../pages/ForgetPasswordPage/ForgorPassword")
+);
+const ResetPasswordLink = lazy(() =>
+  import("../pages/ForgetPasswordPage/ResetPassword")
+);
 
+const ResetPasswordPage = lazy(() =>
+  import("../pages/ResetPasswordPage/ResetPassword")
+);
 export const publicRoutes = [
   {
     path: "/",
@@ -92,5 +101,17 @@ export const publicRoutes = [
   {
     path: "/my-account",
     element: ProfilePage,
+  },
+  {
+    path: "/forgot-password",
+    element: ForgotPasswordPage,
+  },
+  {
+    path: "/users/resetpassword/:resetToken",
+    element: ResetPasswordLink,
+  },
+  {
+    path: "/users",
+    element: ResetPasswordPage,
   },
 ];
