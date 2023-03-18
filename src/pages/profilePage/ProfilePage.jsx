@@ -117,9 +117,7 @@ const ProfilePage = () => {
                   </ul>
                 </div>
               )}
-              <div className=" pl-12 pt-5">
-                {selectedTabPanel}
-              </div>
+              <div className=" pl-12 pt-5">{selectedTabPanel}</div>
             </div>
           </div>
         </div>

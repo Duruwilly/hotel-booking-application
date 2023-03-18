@@ -2,7 +2,7 @@ import { omit } from "lodash";
 
 const validatePassword = (e, id, value, passwordErrors, setPasswordErrors) => {
   switch (id) {
-    case "newPassword":
+    case "password":
       if (
         !new RegExp(
           /(?=.*[0-9])(?=.*[!@#$%^&*_-])(?=.*[a-z])(?=.*[A-Z]).{8,}/
@@ -10,26 +10,26 @@ const validatePassword = (e, id, value, passwordErrors, setPasswordErrors) => {
       ) {
         setPasswordErrors({
           ...passwordErrors,
-          newPassword:
+          passwordError:
             "password must contain at lease one special character, uppercase and lowercase letters with at least a number, and must be 8 character or more",
         });
       } else {
-        let newObj = omit(passwordErrors, "newPassword");
+        let newObj = omit(passwordErrors, "password");
         setPasswordErrors(newObj);
       }
       break;
 
-    case "password":
+    case "newPassword":
       if (
-        document.getElementById("password").value !==
-        document.getElementById("newPassword").value
+        document.getElementById("newPassword").value !==
+        document.getElementById("password").value
       ) {
         setPasswordErrors({
           ...passwordErrors,
-          password: "Password does not match",
+          newPassword: "Password does not match",
         });
       } else {
-        let newObj = omit(passwordErrors, "password");
+        let newObj = omit(passwordErrors, "newPassword");
         setPasswordErrors(newObj);
       }
       break;
@@ -39,7 +39,7 @@ const validatePassword = (e, id, value, passwordErrors, setPasswordErrors) => {
   }
 };
 
-const validateEmail = ({ id, value, setEmailErrors, emailErrors }) => {
+const validateEmail = (e, id, value, emailErrors, setEmailErrors) => {
   switch (id) {
     case "email":
       if (
@@ -52,7 +52,7 @@ const validateEmail = ({ id, value, setEmailErrors, emailErrors }) => {
           emailError: "Email not valid",
         });
       } else {
-        let newObj = omit(emailErrors, "email");
+        let newObj = omit(emailErrors, "emailError");
         setEmailErrors(newObj);
       }
   }
