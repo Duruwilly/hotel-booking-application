@@ -6,7 +6,7 @@ import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useDaysCalculate from "../../hooks/useDaysCalculate";
-import BookingSummaryCard from "./BookingSummaryCard";
+import BookingSummaryCard from "./component/BookingSummaryCard";
 import { useTitle } from "../../hooks/useTitle";
 import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
 import usePriceConversion from "../../utils/usePriceConversion";

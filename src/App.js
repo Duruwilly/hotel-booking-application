@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 // import Navbar from "./components/navbar/Navbar";
 import { useMediaQueriesContext } from "./context/MediaQueryContext";
@@ -12,6 +12,11 @@ import Navbar from "./pages/HomePage/navbar/Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContextProvider } from "./context/UserProfileContext";
+import { privateRoutes } from "./navigation/private-routes";
+import PrivateRouteMiddleware from "./navigation/private-routes-middleware";
+import { useCheckAccess } from "./hooks/useCheckAccess";
+import { authRoutes } from "./navigation/auth-routes";
+import { useAuthContext } from "./context/AuthContext";
 const FooterList = lazy(() => import("./pages/HomePage/footer/FooterList"));
 // import {
 //   Home,
@@ -34,6 +39,8 @@ const FooterList = lazy(() => import("./pages/HomePage/footer/FooterList"));
 
 function App() {
   const { setDropdownHeader } = useMediaQueriesContext();
+  const { loggedIn } = useCheckAccess();
+  const { user } = useAuthContext();
 
   const closeModal = () => {
     setDropdownHeader(false);
@@ -58,7 +65,35 @@ function App() {
               }
             ></Route>
           ))}
+          {authRoutes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                <Suspense fallback={<Spinner />}>
+                  {user ? <Navigate to="/" /> : <route.element />}
+                </Suspense>
+              }
+            ></Route>
+          ))}
+          {privateRoutes.map((route, index) => (
+            <Route
+              key={index}
+              // path={route.path}
+              element={<PrivateRouteMiddleware />}
+            >
+              <Route
+                path={route.path}
+                element={
+                  <Suspense fallback={<Spinner />}>
+                    {<route.element />}
+                  </Suspense>
+                }
+              />
+            </Route>
+          ))}
         </Routes>
+
         <div onClick={closeModal}>
           <Suspense>
             <FooterList />

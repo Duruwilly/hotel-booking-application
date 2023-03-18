@@ -4,10 +4,11 @@ import { profileBg } from "../../BgImageStyles/styles";
 import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
 import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
-import PersonalDetails from "./component/PersonalDetails";
+import { useTitle } from "../../hooks/useTitle";
 import UpdatePassword from "./component/UpdatePassword";
 
 const ProfilePage = () => {
+  useTitle("Book the world best hotel");
   const { matches, setDropdownHeader } = useMediaQueriesContext();
   const [selectedTab, setSelectedTab] = useState("personal-details");
   const tabArr = [
