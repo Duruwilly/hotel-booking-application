@@ -10,28 +10,24 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { resetToken } = useParams();
-  const location = useLocation();
-  console.log(resetToken);
-  console.log(password);
 
   const resetPassword = async (e) => {
     e.preventDefault();
-    // setLoading(true);
-    // try {
-    //   const res = await axios.post(
-    //     `${WILL_TRIP_BASE_URL}/resetpassword/${resetToken}`,
-    //     {
-    //       password: password,
-    //     }
-    //   );
-    //   setLoading(false);
-    //   toast.success(res.data);
-    //   navigate("/");
-    // } catch (error) {
-    //   setLoading(false);
-    //   toast.error(error.response?.data.message);
-    // }
-    console.log("hello");
+    try {
+      const res = await axios.post(
+        `${WILL_TRIP_BASE_URL}/users/resetpassword/${resetToken}`,
+        {
+          password: password,
+        }
+      );
+      console.log(res);
+      setLoading(false);
+      toast.success("successfully changed Password. Kindly login again");
+      navigate("/");
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.response?.data.message);
+    }
   };
 
   return (
@@ -58,9 +54,13 @@ const ResetPassword = () => {
                 }}
                 required
               />
-              <RegisterSignupBtn
-                text={loading ? "Loading..." : "Retrieve password"}
-              />
+              {/* <button
+                onClick={resetPassword}
+                className="group relative w-full flex justify-center py-3 px-4 font-medium rounded-sm text-white bg-red-900 focus:outline-none"
+              >
+                Retrieve password
+              </button> */}
+              <RegisterSignupBtn text="Retrieve password" />
             </form>
             <p className="text-center">OR</p>
             <p className="text-center">

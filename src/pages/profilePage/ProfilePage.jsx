@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PersonalDetailsPage from ".";
 import { profileBg } from "../../BgImageStyles/styles";
 import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
@@ -14,7 +14,7 @@ const ProfilePage = () => {
     {
       value: "personal details",
       title: "personal-details",
-      panel: <PersonalDetailsPage />
+      panel: <PersonalDetailsPage />,
     },
     {
       value: "update password",
@@ -42,6 +42,22 @@ const ProfilePage = () => {
     return duplicateArr?.find((tab) => tab?.title === selectedTab)?.panel;
   }, [duplicateArr, selectedTab]);
 
+  const [screenMatches, setScreenMatches] = useState(
+    window.matchMedia("(min-width: 1023px)").matches
+  );
+
+  useEffect(() => {
+    window
+      .matchMedia("(min-width: 1023px)")
+      .addEventListener("change", (e) => setScreenMatches(e.matches));
+
+    return () => {
+      window
+        .matchMedia("(min-width: 1023px)")
+        .removeEventListener("change", (e) => setScreenMatches(e.matches));
+    };
+  }, []);
+
   return (
     <>
       {matches ? <SearchInputHeader /> : <ToggledSearchHeader />}
@@ -57,31 +73,53 @@ const ProfilePage = () => {
       <section className="fle justify-cente">
         <div className="w-full max-w-screen-x px-">
           <div className="flex justify-center">
-            <div style={{ flex: 1 }} className="pl-4">
-              <ul className=" space-y-4 mt-10">
-                {duplicateArr.map((tab, index) => (
-                  <div
-                    key={index}
-                    style={{ display: "relative", color: "#A2A2A2" }}
-                  >
-                    <li
-                      className={`${
-                        selectedTab === tab.title
-                          ? "text-red-900 border-l-2 border-red-900 cursor-pointer pl-2"
-                          : "cursor-pointer pl-2"
-                      } uppercase font-medium tracking-wider text-sm`}
-                      onClick={() => {
-                        setSelectedTab(tab?.title);
-                      }}
+            {screenMatches && (
+              <div style={{ flex: 1 }} className="pl-4">
+                <ul className=" space-y-4 mt-10">
+                  {duplicateArr.map((tab, index) => (
+                    <div
+                      key={index}
+                      style={{ display: "relative", color: "#A2A2A2" }}
                     >
-                      {tab.value}
-                    </li>
-                  </div>
-                ))}
-              </ul>
-            </div>
-            <div style={{ flex: 4 }} className="bg-white shadow-xl pl-12 pt-5">
-              {selectedTabPanel}
+                      <li
+                        className={`${
+                          selectedTab === tab.title
+                            ? "text-red-900 border-l-2 border-red-900 cursor-pointer pl-2"
+                            : "cursor-pointer pl-2"
+                        } uppercase font-medium tracking-wider text-sm`}
+                        onClick={() => {
+                          setSelectedTab(tab?.title);
+                        }}
+                      >
+                        {tab.value}
+                      </li>
+                    </div>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div style={{ flex: 4 }} className="bg-white shadow-xl">
+              {!screenMatches && (
+                <div className="bg-primary  w-full relative overflow-hidde overflow-x-hidde py-3">
+                  <ul className="text-white text-center font-normal space-y-4 tracking-widest text-[.75rem] fle justify-aroun uppercase overflow-x-hidden overflow-y-hidden">
+                    {duplicateArr.map((tab, index) => (
+                      <div key={index} className="relative">
+                        <li
+                          onClick={() => {
+                            setSelectedTab(tab?.title);
+                          }}
+                        >
+                          {tab.value}
+                        </li>
+                      </div>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div className=" pl-12 pt-5">
+                {selectedTabPanel}
+              </div>
             </div>
           </div>
         </div>

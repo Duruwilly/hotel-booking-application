@@ -1,3 +1,4 @@
+import ResetPasswordPage from "../pages/ResetPasswordPage/ResetPassword";
 import { lazy } from "react";
 const HomePage = lazy(() => import("../pages/HomePage/Home"));
 const HotelsListPage = lazy(() =>
@@ -32,10 +33,6 @@ const ForgotPasswordPage = lazy(() =>
 );
 const ResetPasswordLink = lazy(() =>
   import("../pages/ForgetPasswordPage/ResetPassword")
-);
-
-const ResetPasswordPage = lazy(() =>
-  import("../pages/ResetPasswordPage/ResetPassword")
 );
 export const publicRoutes = [
   {
@@ -109,9 +106,5 @@ export const publicRoutes = [
   {
     path: "/users/resetpassword/:resetToken",
     element: ResetPasswordLink,
-  },
-  {
-    path: "/users",
-    element: ResetPasswordPage,
   },
 ];
