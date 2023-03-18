@@ -21,7 +21,6 @@ export const UserContextProvider = ({ children }) => {
           Authorization: `Bearer ${user.token}`,
         },
       });
-      console.log(res.data);
       if (res?.data?.status === "success") {
         setLoadingState(false);
         setUserProfileDetails(res?.data?.data);

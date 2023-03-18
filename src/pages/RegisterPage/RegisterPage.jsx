@@ -37,7 +37,7 @@ const RegisterPage = () => {
     let value = e.target?.value;
 
     validatePassword(e, id, value, passwordErrors, setPasswordErrors);
-    validateEmail(id, value, emailErrors, setEmailErrors);
+    validateEmail(e, id, value, emailErrors, setEmailErrors);
 
     setUserDetails((prev) => ({
       ...prev,
@@ -93,7 +93,6 @@ const RegisterPage = () => {
               <input
                 type="email"
                 placeholder="Email address"
-                autoComplete="email"
                 id="email"
                 name="email"
                 required
@@ -107,7 +106,6 @@ const RegisterPage = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
-                  autoComplete="current-password"
                   id="password"
                   name="password"
                   required
@@ -131,8 +129,8 @@ const RegisterPage = () => {
                   />
                 )}
               </div>
-              {passwordErrors.newPassword && (
-                <InlineErrors error={passwordErrors.newPassword} />
+              {passwordErrors.passwordError && (
+                <InlineErrors error={passwordErrors.passwordError} />
               )}
               <input
                 type="tel"

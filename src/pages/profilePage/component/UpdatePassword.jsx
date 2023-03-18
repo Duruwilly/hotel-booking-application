@@ -131,6 +131,35 @@ const UpdatePassword = () => {
             </label>
             <input
               type="password"
+              id="password"
+              name="password"
+              value={userPassword.password}
+              autoComplete="current-password"
+              className={`${inputStyle} ${
+                passwordErrors.passwordError
+                  ? "border border-red-700"
+                  : "border border-gray-300"
+              }`}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          {passwordErrors.passwordError && (
+            <InlineErrors error={passwordErrors.passwordError} />
+          )}
+          <p className="font-light text-xs mb-4">
+            Your password must have at least eight characters and feature one
+            special character, one capital letter, one number and one lower-case
+            letter.
+          </p>
+          <div className="mb-">
+            <label htmlFor="" style={{ color: "#A2A2A2" }}>
+              <span className="after:content-['*'] after:ml-0.5 after:text-red-900 block">
+                Confirm new password
+              </span>
+            </label>
+            <input
+              type="password"
               id="newPassword"
               name="password"
               value={userPassword.newPassword}
@@ -146,35 +175,6 @@ const UpdatePassword = () => {
           </div>
           {passwordErrors.newPassword && (
             <InlineErrors error={passwordErrors.newPassword} />
-          )}
-          <p className="font-light text-xs mb-4">
-            Your password must have at least eight characters and feature one
-            special character, one capital letter, one number and one lower-case
-            letter.
-          </p>
-          <div className="mb-">
-            <label htmlFor="" style={{ color: "#A2A2A2" }}>
-              <span className="after:content-['*'] after:ml-0.5 after:text-red-900 block">
-                Confirm new password
-              </span>
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={userPassword.password}
-              autoComplete="current-password"
-              className={`${inputStyle} ${
-                passwordErrors.password
-                  ? "border border-red-700"
-                  : "border border-gray-300"
-              }`}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          {passwordErrors.password && (
-            <InlineErrors error={passwordErrors.password} />
           )}
           <div className="mt-7">
             <Button

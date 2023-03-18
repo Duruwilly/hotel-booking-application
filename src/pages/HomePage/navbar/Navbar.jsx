@@ -95,7 +95,7 @@ const Navbar = () => {
 
   useEffect(() => {
     getUserDetails();
-  }, []);
+  }, [user?.token]);
 
   // useEffect(() => {
   //   const getUserDetails = async () => {

@@ -1,4 +1,3 @@
-import ResetPasswordPage from "../pages/ResetPasswordPage/ResetPassword";
 import { lazy } from "react";
 const HomePage = lazy(() => import("../pages/HomePage/Home"));
 const HotelsListPage = lazy(() =>
@@ -20,7 +19,7 @@ const TravelTeamProfilePage = lazy(() =>
 const RegisterPage = lazy(() => import("../pages/RegisterPage/RegisterPage"));
 const LoginPage = lazy(() => import("../pages/LoginPage/LoginPage"));
 const BasketPage = lazy(() => import("../pages/basketPage/BasketPage"));
-const PaymentPage = lazy(() => import("../pages/PaymentPage/Payment"));
+const PaymentPage = lazy(() => import("../pages/PaymentPage/PaymentPage"));
 const WishlistsPage = lazy(() =>
   import("../pages/favouritePage/FavouritesPage")
 );
@@ -34,6 +33,8 @@ const ForgotPasswordPage = lazy(() =>
 const ResetPasswordLink = lazy(() =>
   import("../pages/ForgetPasswordPage/ResetPassword")
 );
+const NotFoundPage = lazy(() => import("../pages/NotFoundPage"))
+
 export const publicRoutes = [
   {
     path: "/",
@@ -71,14 +72,14 @@ export const publicRoutes = [
     path: "/travel-team/:teamName/:id",
     element: TravelTeamProfilePage,
   },
-  {
-    path: "/register",
-    element: RegisterPage,
-  },
-  {
-    path: "/login",
-    element: LoginPage,
-  },
+  // {
+  //   path: "/register",
+  //   element: RegisterPage,
+  // },
+  // {
+  //   path: "/login",
+  //   element: LoginPage,
+  // },
   {
     path: "/basket",
     element: BasketPage,
@@ -95,10 +96,10 @@ export const publicRoutes = [
     path: "/transactions",
     element: TransactionsPage,
   },
-  {
-    path: "/my-account",
-    element: ProfilePage,
-  },
+  // {
+  //   path: "/my-account",
+  //   element: ProfilePage,
+  // },
   {
     path: "/forgot-password",
     element: ForgotPasswordPage,
@@ -106,5 +107,9 @@ export const publicRoutes = [
   {
     path: "/users/resetpassword/:resetToken",
     element: ResetPasswordLink,
+  },
+  {
+    path: "*",
+    element: NotFoundPage,
   },
 ];
