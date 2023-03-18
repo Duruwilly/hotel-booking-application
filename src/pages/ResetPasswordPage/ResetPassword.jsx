@@ -19,7 +19,7 @@ const ResetPassword = () => {
     <form onSubmit={onSubmit}>
       <input
         type="text"
-        id="email"
+        id="password"
         className="form-input"
         onChange={(e) => console.log(e.target.value)}
       />

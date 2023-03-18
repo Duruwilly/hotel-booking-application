@@ -3,12 +3,15 @@ import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
+import InlineErrors from "../../components/inlineValidationErrors/InlineErrors";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 import { useAuthContext } from "../../context/AuthContext";
-import { useRegisterAuthContext } from "../../context/RegisterAuthContext";
+import { validateEmail, validatePassword } from "../../utils/validation";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const [passwordErrors, setPasswordErrors] = useState({});
+  const [emailErrors, setEmailErrors] = useState({});
   const inputStyle =
     "appearance-none rounded-sm relative block w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-input-border";
 
@@ -30,9 +33,15 @@ const RegisterPage = () => {
   });
 
   const handleChange = (e) => {
+    let id = e.target?.id;
+    let value = e.target?.value;
+
+    validatePassword(e, id, value, passwordErrors, setPasswordErrors);
+    validateEmail(id, value, emailErrors, setEmailErrors);
+
     setUserDetails((prev) => ({
       ...prev,
-      [e.target.id]: e.target.value,
+      [id]: value,
     }));
   };
 
@@ -58,8 +67,8 @@ const RegisterPage = () => {
   return (
     <section className="py-5">
       <main className="flex items-center justify-center">
-        <div className="max-w-4xl w-full px-4">
-          <div className="max-w-4xl w-full space-y-5">
+        <div className="max-w-2xl w-full px-4">
+          <div className="max-w-2xl w-full space-y-5">
             <h2 className="text-center text-xl font-medium">
               Create a free account
             </h2>
@@ -91,6 +100,9 @@ const RegisterPage = () => {
                 className={inputStyle}
                 onChange={handleChange}
               />
+              {emailErrors.emailError && (
+                <InlineErrors error={emailErrors.emailError} />
+              )}
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -119,6 +131,9 @@ const RegisterPage = () => {
                   />
                 )}
               </div>
+              {passwordErrors.newPassword && (
+                <InlineErrors error={passwordErrors.newPassword} />
+              )}
               <input
                 type="tel"
                 placeholder="Mobile Number"

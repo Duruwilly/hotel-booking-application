@@ -5,11 +5,13 @@ import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
 import axios from "axios";
 import { useAuthContext } from "../../../context/AuthContext";
 import { toast } from "react-toastify";
+import { validatePassword } from "../../../utils/validation";
+import InlineErrors from "../../../components/inlineValidationErrors/InlineErrors";
 
 const UpdatePassword = () => {
   const inputStyle =
     "appearance-none rounded-sm relative block w-full px-3 py-3 focus:outline-none focus:border-input-border";
-  const [errors, setErrors] = useState({});
+  const [passwordErrors, setPasswordErrors] = useState({});
   const { user } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [oldPasswordError, setOldPasswordError] = useState(false);
@@ -24,7 +26,7 @@ const UpdatePassword = () => {
     let id = e.target?.id;
     let value = e.target?.value;
 
-    validatePassword(e, id, value);
+    validatePassword(e, id, value, passwordErrors, setPasswordErrors);
 
     setUserPassword((prev) => ({
       ...prev,
@@ -32,44 +34,44 @@ const UpdatePassword = () => {
     }));
   };
 
-  const validatePassword = (e, id, value) => {
-    switch (id) {
-      case "newPassword":
-        if (
-          !new RegExp(
-            /(?=.*[0-9])(?=.*[!@#$%^&*_-])(?=.*[a-z])(?=.*[A-Z]).{8,}/
-          ).test(value)
-        ) {
-          setErrors({
-            ...errors,
-            newPassword:
-              "password must contain at lease one special character, uppercase and lowercase letters with at least a number, and must be 8 character or more",
-          });
-        } else {
-          let newObj = omit(errors, "newPassword");
-          setErrors(newObj);
-        }
-        break;
+  // const validatePassword = (e, id, value, passwordErrors, setPasswordErrors) => {
+  //   switch (id) {
+  //     case "newPassword":
+  //       if (
+  //         !new RegExp(
+  //           /(?=.*[0-9])(?=.*[!@#$%^&*_-])(?=.*[a-z])(?=.*[A-Z]).{8,}/
+  //         ).test(value)
+  //       ) {
+  //         setPasswordErrors({
+  //           ...passwordErrors,
+  //           newPassword:
+  //             "password must contain at lease one special character, uppercase and lowercase letters with at least a number, and must be 8 character or more",
+  //         });
+  //       } else {
+  //         let newObj = omit(passwordErrors, "newPassword");
+  //         setPasswordErrors(newObj);
+  //       }
+  //       break;
 
-      case "password":
-        if (
-          document.getElementById("password").value !==
-          document.getElementById("newPassword").value
-        ) {
-          setErrors({
-            ...errors,
-            password: "Password does not match",
-          });
-        } else {
-          let newObj = omit(errors, "password");
-          setErrors(newObj);
-        }
-        break;
+  //     case "password":
+  //       if (
+  //         document.getElementById("password").value !==
+  //         document.getElementById("newPassword").value
+  //       ) {
+  //         setPasswordErrors({
+  //           ...passwordErrors,
+  //           password: "Password does not match",
+  //         });
+  //       } else {
+  //         let newObj = omit(passwordErrors, "password");
+  //         setPasswordErrors(newObj);
+  //       }
+  //       break;
 
-      default:
-        break;
-    }
-  };
+  //     default:
+  //       break;
+  //   }
+  // };
 
   const updatePassword = async (e) => {
     e.preventDefault();
@@ -120,9 +122,7 @@ const UpdatePassword = () => {
               required
             />
           </div>
-          {oldPasswordError && (
-            <h3 className="text-red-800 text-xs mb-3">{oldPasswordError}</h3>
-          )}
+          {oldPasswordError && <InlineErrors error={oldPasswordError} />}
           <div className="mb-2">
             <label htmlFor="" style={{ color: "#A2A2A2" }}>
               <span className="after:content-['*'] after:ml-0.5 after:text-red-900 block">
@@ -136,7 +136,7 @@ const UpdatePassword = () => {
               value={userPassword.newPassword}
               autoComplete="current-password"
               className={`${inputStyle} ${
-                errors.newPassword
+                passwordErrors.newPassword
                   ? "border border-red-700"
                   : "border border-gray-300"
               }`}
@@ -144,8 +144,8 @@ const UpdatePassword = () => {
               required
             />
           </div>
-          {errors.newPassword && (
-            <h3 className="text-red-800 text-xs mb-3">{errors.newPassword}</h3>
+          {passwordErrors.newPassword && (
+            <InlineErrors error={passwordErrors.newPassword} />
           )}
           <p className="font-light text-xs mb-4">
             Your password must have at least eight characters and feature one
@@ -165,7 +165,7 @@ const UpdatePassword = () => {
               value={userPassword.password}
               autoComplete="current-password"
               className={`${inputStyle} ${
-                errors.password
+                passwordErrors.password
                   ? "border border-red-700"
                   : "border border-gray-300"
               }`}
@@ -173,18 +173,18 @@ const UpdatePassword = () => {
               required
             />
           </div>
-          {errors.password && (
-            <h3 className="text-red-800 text-xs mb-3">{errors.password}</h3>
+          {passwordErrors.password && (
+            <InlineErrors error={passwordErrors.password} />
           )}
           <div className="mt-7">
             <Button
               text={loading ? "Loading..." : "Edit"}
-              //   disabled={
-              //     Object.keys(errors).length > 0 ||
-              //     userPassword.newPassword === "" ||
-              //     userPassword.oldPassword === "" ||
-              //     userPassword.password === ""
-              //   }
+              disabled={
+                Object.keys(passwordErrors).length > 0 ||
+                userPassword.newPassword === "" ||
+                userPassword.oldPassword === "" ||
+                userPassword.password === ""
+              }
             />
           </div>
         </form>

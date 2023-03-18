@@ -43,15 +43,15 @@ const LoginPage = () => {
       navigate("/");
     } catch (error) {
       dispatch({ type: "FAILED", payload: error.response.data });
-      localStorage.removeItem("user")
+      localStorage.removeItem("user");
     }
   };
 
   return (
     <section className="py-5">
       <main className="flex items-center justify-center">
-        <div className="max-w-4xl w-full px-4">
-          <div className="max-w-4xl w-full space-y-5">
+        <div className="max-w-2xl w-full px-4">
+          <div className="max-w-2xl w-full space-y-5">
             <h2 className="text-center text-xl font-medium">Sign in</h2>
             <form className="space-y-2" onSubmit={handleLogin}>
               {/* <input type="hidden" name="remember" defaultValue="true" /> */}

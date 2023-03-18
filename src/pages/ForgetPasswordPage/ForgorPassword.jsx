@@ -1,11 +1,9 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
-import { useAuthContext } from "../../context/AuthContext";
-import { useUserProfileContext } from "../../context/UserProfileContext";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -23,7 +21,6 @@ const ForgotPassword = () => {
       );
       setLoading(false);
       toast.success(res.data.message);
-      console.log(res);
     } catch (error) {
       setLoading(false);
       toast.error(error.response?.data.message);

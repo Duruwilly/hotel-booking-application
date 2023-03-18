@@ -23,6 +23,22 @@ const PersonalDetails = () => {
     getUserDetails();
   }, [user.token]);
 
+  const [screenMatches, setScreenMatches] = useState(
+    window.matchMedia("(min-width: 1023px)").matches
+  );
+
+  useEffect(() => {
+    window
+      .matchMedia("(min-width: 1023px)")
+      .addEventListener("change", (e) => setScreenMatches(e.matches));
+
+    return () => {
+      window
+        .matchMedia("(min-width: 1023px)")
+        .removeEventListener("change", (e) => setScreenMatches(e.matches));
+    };
+  }, []);
+
   return (
     <>
       {loadingState ? (
@@ -34,7 +50,7 @@ const PersonalDetails = () => {
               <p className="font-semibold" style={{ flex: 1 }}>
                 Full Name
               </p>
-              <span className="capitalize font-light" style={{ flex: 3 }}>
+              <span className="capitalize font-light" style={{ flex: 2 }}>
                 {userProfileDetails?.fullname}
               </span>
             </div>
@@ -42,7 +58,7 @@ const PersonalDetails = () => {
               <p className="font-semibold" style={{ flex: 1 }}>
                 Country
               </p>
-              <span className="capitalize font-light" style={{ flex: 3 }}>
+              <span className="capitalize font-light" style={{ flex: 2 }}>
                 {userProfileDetails?.country}
               </span>
             </div>
@@ -50,7 +66,7 @@ const PersonalDetails = () => {
               <p className="font-semibold" style={{ flex: 1 }}>
                 Gender
               </p>
-              <span className="capitalize font-light" style={{ flex: 3 }}>
+              <span className="capitalize font-light" style={{ flex: 2 }}>
                 {userProfileDetails?.gender}
               </span>
             </div>
@@ -58,7 +74,7 @@ const PersonalDetails = () => {
               <p className="font-semibold" style={{ flex: 1 }}>
                 Phone Number
               </p>
-              <span className="capitalize font-light" style={{ flex: 3 }}>
+              <span className="capitalize font-light" style={{ flex: 2 }}>
                 {userProfileDetails?.mobileNumber}
               </span>
             </div>
@@ -69,7 +85,7 @@ const PersonalDetails = () => {
                     <p className="font-semibold" style={{ flex: 1 }}>
                       Secondary Phone Number
                     </p>
-                    <span className="capitalize font-light" style={{ flex: 3 }}>
+                    <span className="capitalize font-light" style={{ flex: 2 }}>
                       {mobile?.value}
                     </span>
                   </div>
@@ -79,7 +95,7 @@ const PersonalDetails = () => {
               <p className="font-semibold" style={{ flex: 1 }}>
                 Email
               </p>
-              <span className="capitalize font-light" style={{ flex: 3 }}>
+              <span className="capitalize font-light" style={{ flex: 2 }}>
                 {userProfileDetails?.email}
               </span>
             </div>
@@ -90,7 +106,7 @@ const PersonalDetails = () => {
                     <p className="font-semibold" style={{ flex: 1 }}>
                       Secondary Email
                     </p>
-                    <span className="capitalize font-light" style={{ flex: 3 }}>
+                    <span className="capitalize font-light" style={{ flex: 2 }}>
                       {email?.value}
                     </span>
                   </div>
@@ -369,7 +385,7 @@ const EditProfile = ({
                           onChange={handleChange}
                           required
                         />
-                       
+
                         <span className="text-sm">Secondary</span>
                       </div>
                     ))
