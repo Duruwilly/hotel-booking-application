@@ -73,7 +73,7 @@ const SingleHotel = () => {
     const fetchHotelRooms = async () => {
       setFetchStatus("pending");
       setLoading(true);
-      const url = `${WILL_TRIP_BASE_URL}/v1/hotels/find/${id}`;
+      const url = `${WILL_TRIP_BASE_URL}/hotels/find/${id}`;
       try {
         const res = await axios.get(url);
         setFetchStatus(res.data.status);

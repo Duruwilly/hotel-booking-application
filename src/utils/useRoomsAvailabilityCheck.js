@@ -37,7 +37,7 @@ const useRoomsAvailabilityCheck = () => {
   );
 
   let datesInBasket = basketItems.map((getRoomId) => getRoomId.dateSearch[0]);
-  console.log(datesInBasket.map((date) => new Date(date.startDate)));
+  // console.log(datesInBasket.map((date) => new Date(date.startDate)));
   // datesInBasket.map((date) => new Date(date.startDate));
   const getDatesInRangesInBasket = (startDate, endDate) => {
     // we get the current date from the state
@@ -110,14 +110,14 @@ const useRoomsAvailabilityCheck = () => {
     return dates;
   };
 
-  // const allDatesInBasket = getDatesInRangesInBasket(
-  //   datesInBasket.map((date) => new Date(date.startDate)),
-  //   datesInBasket.map((date) => new Date(date.endDate))
-  // );
   const allDatesInBasket = getDatesInRangesInBasket(
-    datesInBasket[0].startDate,
-    datesInBasket[0].endDate
+    datesInBasket.map((date) => new Date(date.startDate)),
+    datesInBasket.map((date) => new Date(date.endDate))
   );
+  // const allDatesInBasket = getDatesInRangesInBasket(
+  //   datesInBasket[0].startDate,
+  //   datesInBasket[0].endDate
+  // );
 
   // console.log(allDatesInBasket);
 

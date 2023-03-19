@@ -22,6 +22,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
   const { likedItemCheck } = useLikedItemCheck();
 
   let allArr = likedItemCheck();
+  
   const toggleLikedBtn = (itemId) => {
     const dataItem = data.filter((item) => item?._id === itemId);
     if (allArr.includes(itemId)) {

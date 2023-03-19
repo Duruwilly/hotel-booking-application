@@ -4,8 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { MdOutlineKingBed, MdOutlineSingleBed } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { removeItem } from "../../../redux/basketSlice";
+import axios from "axios";
+import { useAuthContext } from "../../../context/AuthContext";
+import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
+import { toast } from "react-toastify";
 
 const BasketItem = (props) => {
+  const { user } = useAuthContext();
   const {
     feature,
     roomOptions,
@@ -17,13 +22,32 @@ const BasketItem = (props) => {
     hotelName,
     exchangedPrice,
     convertPrice,
+    setFetchStatus,
   } = props;
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // const { days } = useDaysCalculate();
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   // console.log(searchQueryDates);
+
+  const deleteCartItems = async (id) => {
+    let url = `${WILL_TRIP_BASE_URL}/cart/delete-cart-item/${id}`;
+    try {
+      let response = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      console.log(response);
+      if (response.data.status === "success") {
+        setFetchStatus("idle");
+        toast.success(response?.data?.msg);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
 
   return (
     <>
@@ -43,7 +67,7 @@ const BasketItem = (props) => {
       >
         <div className="flex justify-between items-center pb-6">
           <p className="font-semibold capitalize">room</p>
-          <span className="font-semibold capitalize">{props[0].title}</span>
+          <span className="font-semibold capitalize">{props.title}</span>
         </div>
         <div className="flex flex-wrap justify-between items-center pb-6">
           <p className="text-gray-400 capitalize">dates</p>
@@ -65,16 +89,16 @@ const BasketItem = (props) => {
         <div className="flex justify-between items-center pb-6">
           <p className="text-gray-400 capitalize">beds</p>
           <span className="flex justify-cente items-center gap-1 text-sm font-semibold">
-            {props[0].maxPeople === 1 || props[0].maxPeople === 2 ? (
+            {props.maxPeople === 1 || props.maxPeople === 2 ? (
               <span className="flex justify-cente items-center gap-1 text-sm font-semibold">
                 <MdOutlineKingBed className="text-3xl" /> x 1
               </span>
-            ) : props[0].maxPeople === 3 ? (
+            ) : props.maxPeople === 3 ? (
               <span className="flex justify-cente items-center gap-1 text-sm font-semibold">
                 <MdOutlineKingBed className="text-3xl" /> x 1{" "}
                 <MdOutlineSingleBed className="text-3xl" /> x1{" "}
               </span>
-            ) : props[0].maxPeople === 4 ? (
+            ) : props.maxPeople === 4 ? (
               <span className="flex justify-cente items-center gap-1 text-sm font-semibold">
                 <MdOutlineKingBed className="text-3xl" /> x 2{" "}
               </span>
@@ -95,7 +119,7 @@ const BasketItem = (props) => {
           <p className="font-light text-gray-">
             {`${
               convertPrice === "USD" ? "$" : convertPrice === "EUR" ? "£" : "₦"
-            } ${[props[0].price * days * quantity * exchangedPrice]
+            } ${[props.price * days * quantity * exchangedPrice]
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}{" "}
             x {quantity}
@@ -108,7 +132,7 @@ const BasketItem = (props) => {
       >
         <span
           className="text-xl font-semibol text-red-700 cursor-pointer"
-          onClick={() => dispatch(removeItem(props[0]._id))}
+          onClick={() => deleteCartItems(props._id)}
         >
           Remove
         </span>
