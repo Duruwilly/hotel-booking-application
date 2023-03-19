@@ -7,6 +7,8 @@ import { useAuthContext } from "../../../../context/AuthContext";
 import PriceConversion from "../../../../components/PriceConversion/PriceConversion";
 import useDaysCalculate from "../../../../hooks/useDaysCalculate";
 import { addItem } from "../../../../redux/basketSlice";
+import { WILL_TRIP_BASE_URL } from "../../../../constants/base-urls";
+import { toast } from "react-toastify";
 
 const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
   const { user } = useAuthContext();
@@ -41,24 +43,54 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
   //     setFetchHotelStatus("idle");
   //   }, [hotelID]);
 
-  const addToBasket = (id) => {
-    const item = data.filter((itemId) => itemId._id === id);
+  // const addToBasket = (id) => {
+  //   const item = data.filter((itemId) => itemId._id === id);
+  //   if (user) {
+  //     dispatch(
+  //       addItem({
+  //         ...item,
+  //         roomOptions,
+  //         dateSearch,
+  //         days,
+  //         hotelName,
+  //         hotelCountry,
+  //         feature,
+  //       })
+  //     );
+  //     navigate("/basket");
+  //   } else {
+  //     navigate("/login ");
+  //     return;
+  //   }
+  // };
+
+  const addToBasket = async (id) => {
+    const item = data.filter((itemId) => itemId._id === id)[0];
+    const { price, maxPeople, roomNumbers, title } = item;
+    console.log(price);
+    const url = `${WILL_TRIP_BASE_URL}/cart`;
     if (user) {
-      dispatch(
-        addItem({
-          ...item,
+      try {
+        await axios.post(url, {
+          price,
+          maxPeople,
+          roomNumbers,
+          title,
           roomOptions,
           dateSearch,
           days,
-          hotelName,
           hotelCountry,
+          hotelName,
           feature,
-        })
-      );
-      navigate("/basket");
+          quantity: 1,
+          userID: user.id,
+        });
+      } catch (error) {
+        toast.error(error);
+      }
+      // navigate("/basket");
     } else {
-      navigate("/login ");
-      return;
+      navigate("/login");
     }
   };
 

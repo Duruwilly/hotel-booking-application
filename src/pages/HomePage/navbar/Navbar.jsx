@@ -30,13 +30,13 @@ const Navbar = () => {
   // const { loading, error, dispatch } = useAuthContext();
   // const [userProfileDetails, setUserProfileDetails] = useState();
 
-  let { totalQuantity } = useSelector((state) => state.basket);
+  // let { totalQuantity } = useSelector((state) => state.basket);
   let { totalFavQuantity } = useSelector((state) => state.favourite);
+  let [totalQuantity, setTotalQuantity] = useState();
 
   const { user, dispatch } = useAuthContext();
 
   const [stickyClass, setStickyClass] = useState("relative");
-
   const [stickySearchIcon, setStickySearchIcon] = useState("hidden");
 
   const [mobileNav, setMobileNav] = useState(false);
@@ -97,29 +97,32 @@ const Navbar = () => {
     getUserDetails();
   }, [user?.token]);
 
-  // useEffect(() => {
-  //   const getUserDetails = async () => {
-  //     // setLoading(true);
-  //     try {
-  //       const res = await axios.get(`${WILL_TRIP_BASE_URL}/users/${user.id}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${user.token}`,
-  //         },
-  //       });
-  //       console.log(res);
-  //       if (res.data.status === "success") {
-  //       }
-  //       // setLoading(false);
-  //       setUserProfileDetails(res.data.data);
-  //       console.log(userProfileDetails);
-  //       //   toast.success(res.data.msg);
-  //     } catch (error) {
-  //       // setLoading(false);
-  //       // toast.error(error.response.data.message);
-  //     }
-  //   };
-  //   getUserDetails();
-  // }, [user.id]);
+  const fetchTotalQuantity = async () => {
+    let url = `${WILL_TRIP_BASE_URL}/cart/${user?.id}/item-total-quantity`;
+    let response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${user?.token}`,
+      },
+    });
+    if (response.data.status === "success" && response.data.data != 0) {
+      setTotalQuantity(response.data.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchTotalQuantity();
+  }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetchTotalQuantity();
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
   // let toggleDropDownSearchHeader = location.pathname === "/" && location.pathname === '/destinations/hotels' && location.pathname === `/destinations/${destination}/hotels` && location.pathname === "/hotel/:hotelName/:location/:hotelId"
 
   return (
@@ -217,7 +220,7 @@ const Navbar = () => {
                 <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer relative toolti">
                   <BsBagCheck />
                 </div>
-                {totalQuantity === 0
+                {totalQuantity === undefined
                   ? false
                   : true && (
                       <div className="amount-container">

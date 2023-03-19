@@ -51,7 +51,7 @@ const FavouritesItem = ({ fav, exchangedPrice, convertPrice }) => {
             </p>
             <div className="flex justify-center items-cente gap-2">
               <Link
-                to={`/hotel/${fav.name}/${fav.country}/${fav._id}`}
+                to={`/hotel/${fav.name}/${fav.destination}/${fav._id}`}
                 className="bg-primary text-xs text-white uppercase py-3 w-full text-center"
               >
                 view hotel

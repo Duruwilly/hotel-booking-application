@@ -12,6 +12,7 @@ import { getCountries } from "../../utils/getCountries";
 import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
 import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
 import usePriceConversion from "../../utils/usePriceConversion";
+import { useBasketContext } from "../../context/BasketItemsContext";
 
 const Basket = () => {
   useTitle("Book the world best hotel");
@@ -20,7 +21,8 @@ const Basket = () => {
     "w-full focus:outline-none border border-gray-300 p-3 placeholder:text-sm block rounded-md";
   const { steps, setSteps, list, matches, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
-  const { basketItems } = useSelector((state) => state.basket);
+  const { basketItems, total, fetchStatus, setFetchStatus } =
+    useBasketContext();
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
@@ -33,6 +35,16 @@ const Basket = () => {
     getCountries().then((data) => {
       setCountries(data);
     });
+  }, []);
+
+  useEffect(() => {
+    setFetchStatus("idle");
+  }, []);
+
+  useEffect(() => {
+    window.onpopstate = () => {
+      setFetchStatus("idle");
+    };
   }, []);
 
   return (
@@ -54,6 +66,9 @@ const Basket = () => {
             setSteps={setSteps}
             convertPrice={convertPrice}
             fetchHotelStatus={fetchHotelStatus}
+            basketItems={basketItems}
+            total={total}
+            setFetchStatus={setFetchStatus}
           />
         </div>
         {basketItems.length > 0 && openModal && (
@@ -134,17 +149,18 @@ const Basket = () => {
 
 export default Basket;
 
-const Confirmation = ({ setSteps, convertPrice, fetchHotelStatus }) => {
-  let { basketItems } = useSelector((state) => state.basket);
+const Confirmation = ({
+  setSteps,
+  convertPrice,
+  fetchHotelStatus,
+  basketItems,
+  total,
+  setFetchStatus,
+}) => {
+  // let { basketItems } = useSelector((state) => state.basket);
   const navigate = useNavigate();
   const [exchangedPrice, setExchangedPrice] = useState();
   const { convertPrices } = usePriceConversion();
-
-  let total = 0;
-
-  basketItems.forEach((item) => {
-    total += item.quantity * item[0].price * item.days;
-  });
 
   useEffect(() => {
     setSteps(() => 1);
@@ -171,14 +187,15 @@ const Confirmation = ({ setSteps, convertPrice, fetchHotelStatus }) => {
           <PriceConversion />
         </div>
       ) : null}
-      {basketItems.length > 0 ? (
+      {basketItems && basketItems.length > 0 && (
         <div>
           {basketItems.map((basket) => (
-            <div key={basket[0]._id}>
+            <div key={basket._id}>
               <BasketItem
                 {...basket}
                 exchangedPrice={exchangedPrice}
                 convertPrice={convertPrice}
+                setFetchStatus={setFetchStatus}
               />
             </div>
           ))}
@@ -208,7 +225,8 @@ const Confirmation = ({ setSteps, convertPrice, fetchHotelStatus }) => {
             </button>
           </div>
         </div>
-      ) : (
+      )}
+      {basketItems.length < 0 && (
         <div className="flex justify-center flex-col items-center pt-10">
           <h1 className="font-light text-xl mb- text-gray-90  py-">
             Your basket is currently empty. For inspiration, try our{" "}

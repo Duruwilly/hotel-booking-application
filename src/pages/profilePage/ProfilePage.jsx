@@ -8,7 +8,7 @@ import { useTitle } from "../../hooks/useTitle";
 import UpdatePassword from "./component/UpdatePassword";
 
 const ProfilePage = () => {
-  useTitle("Book the world best hotel");
+  useTitle("My profile | Book the world best hotel | WillTrip");
   const { matches, setDropdownHeader } = useMediaQueriesContext();
   const [selectedTab, setSelectedTab] = useState("personal-details");
   const tabArr = [
@@ -29,6 +29,8 @@ const ProfilePage = () => {
     if (findArr.title === selectedTab) {
       tabArr.unshift(findArr);
     }
+    // iterate over the array and create a unique array
+    // use the findIndex method to check if there is already an item with the same value and title properties in the self array (the original arr array).
     const uniqueArr = tabArr.filter(
       (item, index, self) =>
         index ===
