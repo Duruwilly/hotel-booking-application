@@ -17,6 +17,7 @@ import PrivateRouteMiddleware from "./navigation/private-routes-middleware";
 import { useCheckAccess } from "./hooks/useCheckAccess";
 import { authRoutes } from "./navigation/auth-routes";
 import { useAuthContext } from "./context/AuthContext";
+import { FavouriteProvider } from "./context/FavouriteItemsContext";
 const FooterList = lazy(() => import("./pages/HomePage/footer/FooterList"));
 // import {
 //   Home,
@@ -65,6 +66,7 @@ function App() {
               }
             ></Route>
           ))}
+
           {authRoutes.map((route, index) => (
             <Route
               key={index}

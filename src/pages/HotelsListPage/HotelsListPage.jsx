@@ -247,7 +247,7 @@ const HotelsList = () => {
                       roomOptions={roomOptions}
                       hotel={hotel}
                       days={days}
-                      data={data}
+                      data={data.responseData}
                       exchangedPrice={exchangedPrice}
                     />
                   </div>

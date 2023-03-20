@@ -33,6 +33,7 @@ const Navbar = () => {
   // let { totalQuantity } = useSelector((state) => state.basket);
   let { totalFavQuantity } = useSelector((state) => state.favourite);
   let [totalQuantity, setTotalQuantity] = useState();
+  let [favouriteTotalQuantity, setFavouriteTotalQuantity] = useState();
 
   const { user, dispatch } = useAuthContext();
 
@@ -104,18 +105,32 @@ const Navbar = () => {
         Authorization: `Bearer ${user?.token}`,
       },
     });
-    if (response.data.status === "success" && response.data.data != 0) {
+    if (response.data.status === "success") {
       setTotalQuantity(response.data.data);
+    }
+  };
+
+  const fetchFavouriteTotalQuantity = async () => {
+    let url = `${WILL_TRIP_BASE_URL}/favourites/${user?.id}/item-total-quantity`;
+    let response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${user?.token}`,
+      },
+    });
+    if (response.data.status === "success") {
+      setFavouriteTotalQuantity(response.data.data);
     }
   };
 
   useEffect(() => {
     fetchTotalQuantity();
-  }, []);
+    fetchFavouriteTotalQuantity();
+  }, [user?.id]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       fetchTotalQuantity();
+      fetchFavouriteTotalQuantity();
     }, 1000);
 
     return () => {
@@ -205,11 +220,12 @@ const Navbar = () => {
                 <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer">
                   <BsFillHeartFill />
                 </div>
-                {totalFavQuantity === 0
+                {favouriteTotalQuantity === undefined ||
+                favouriteTotalQuantity === Number(0)
                   ? false
                   : true && (
                       <div className="amount-container">
-                        <p className="total-amount">{totalFavQuantity}</p>
+                        <p className="total-amount">{favouriteTotalQuantity}</p>
                       </div>
                     )}
               </Link>
@@ -220,7 +236,7 @@ const Navbar = () => {
                 <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer relative toolti">
                   <BsBagCheck />
                 </div>
-                {totalQuantity === undefined
+                {totalQuantity === undefined || totalQuantity === Number(0)
                   ? false
                   : true && (
                       <div className="amount-container">

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import image1 from "../../../assets/images/heroe.jpg";
 import image2 from "../../../assets/images/heroe2.jpg";
 import { AiFillHeart } from "react-icons/ai";
@@ -14,24 +14,66 @@ import {
 import useLikedItemCheck from "../../../utils/useLikedItemCheck";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import usePriceConversion from "../../../utils/usePriceConversion";
+import { useAuthContext } from "../../../context/AuthContext";
+import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useFavouriteContext } from "../../../context/FavouriteItemsContext";
 
 const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
   const { convertPrice } = useMediaQueriesContext();
+  const { user } = useAuthContext();
   const dispatch = useDispatch();
   let { likedBtnnColor } = useSelector((state) => state.favourite);
   const { likedItemCheck } = useLikedItemCheck();
+  const navigate = useNavigate();
+  const { favouriteItems } = useFavouriteContext();
 
-  let allArr = likedItemCheck();
-  
-  const toggleLikedBtn = (itemId) => {
-    const dataItem = data.filter((item) => item?._id === itemId);
-    if (allArr.includes(itemId)) {
-      dispatch(removeItem(itemId));
-      return;
+  const [allArr, setAllArr] = useState(likedItemCheck());
+
+  useEffect(() => {
+    setAllArr(likedItemCheck());
+  }, [favouriteItems]);
+
+  const toggleFavouriteBtn = async (id) => {
+    const item = data.filter((itemId) => itemId._id === id)[0];
+    const { price, _id, feature, destination, name } = item;
+    if (!allArr.includes(id)) {
+      let url = `${WILL_TRIP_BASE_URL}/favourites`;
+      if (user) {
+        try {
+          await axios.post(url, {
+            price,
+            _id,
+            feature,
+            destination,
+            name,
+            userID: user.id,
+            quantity: 1,
+          });
+          setAllArr([...allArr, id]);
+          dispatch(setLikedBtnColor("text-red-600"));
+        } catch (error) {
+          return toast.error(error);
+        }
+      } else {
+        navigate("/login");
+      }
     } else {
-      dispatch(setLikedBtnColor("text-red-600"));
-      dispatch(addItem(...dataItem));
-      return;
+      let url = `${WILL_TRIP_BASE_URL}/favourites/${id}/delete-favourite`;
+      try {
+        let response = await axios.delete(url, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        });
+        if (response?.data?.status === "success") {
+          setAllArr(allArr.filter((item) => item !== id)); // Remove the item from allArr
+          // toast.success(response?.data?.msg);
+        }
+      } catch (error) {
+        toast.error(error?.response?.data?.message);
+      }
     }
   };
 
@@ -88,7 +130,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
           >
             <AiFillHeart
               className=""
-              onClick={() => toggleLikedBtn(hotel._id)}
+              onClick={() => toggleFavouriteBtn(hotel._id)}
             />
           </button>
         </div>
