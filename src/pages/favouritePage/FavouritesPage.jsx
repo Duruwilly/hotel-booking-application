@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { favouriteBg, map } from "../../BgImageStyles/styles";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import { Link } from "react-router-dom";
@@ -8,19 +7,52 @@ import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHe
 import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
 import usePriceConversion from "../../utils/usePriceConversion";
 import FavouritesItem from "./component/FavouritesItem";
+import { useFavouriteContext } from "../../context/FavouriteItemsContext";
+import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
+import { useAuthContext } from "../../context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Favourites = () => {
   const { matches, setDropdownHeader, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
-  let { wishlistsItems } = useSelector((state) => state.favourite);
+  let { favouriteItems, setFetchStatus } = useFavouriteContext();
   const [exchangedPrice, setExchangedPrice] = useState();
   const { convertPrices } = usePriceConversion();
+  const { user } = useAuthContext();
+
+  const deleteFavourite = async (id) => {
+    let url = `${WILL_TRIP_BASE_URL}/favourites/${id}/delete-favourite`;
+    try {
+      let response = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+      if (response.data.status === "success") {
+        setFetchStatus("idle");
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
 
   useEffect(() => {
     convertPrices().then((data) => {
       setExchangedPrice(data);
     });
   }, [convertPrice, fetchHotelStatus]);
+
+  useEffect(() => {
+    setFetchStatus("idle");
+  }, []);
+
+  useEffect(() => {
+    window.onpopstate = () => {
+      setFetchStatus("idle");
+    };
+  }, []);
+
   return (
     <>
       {matches ? <SearchInputHeader /> : <ToggledSearchHeader />}
@@ -36,14 +68,15 @@ const Favourites = () => {
       </section>
       <section className="flex justify-center">
         <div className="w-full max-w-screen-xl">
-          {wishlistsItems.length > 0 ? (
+          {favouriteItems.length > 0 ? (
             <div className="grid lg:grid-cols-3 wishlist-item gap-4 py-10 px-4">
-              {wishlistsItems.map((fav) => (
+              {favouriteItems.map((fav) => (
                 <div key={fav._id}>
                   <FavouritesItem
                     fav={fav}
                     exchangedPrice={exchangedPrice}
                     convertPrice={convertPrice}
+                    deleteFavourite={deleteFavourite}
                   />
                 </div>
               ))}
