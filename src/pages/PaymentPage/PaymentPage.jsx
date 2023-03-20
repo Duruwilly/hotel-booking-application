@@ -20,7 +20,7 @@ const Payment = () => {
   useTitle("Book the world best hotel");
   const { steps, list, setSteps, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
-  const [exchangedPrice, setExchangedPrice] = useState();
+  const [exchangedPrice, setExchangedPrice] = useState(1);
   const { convertPrices } = usePriceConversion();
   useEffect(() => {
     setSteps(() => 2);

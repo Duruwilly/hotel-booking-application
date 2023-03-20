@@ -38,7 +38,7 @@ const SingleHotel = () => {
   let { destination } = useSelector((state) => state.searchState);
   const dispatch = useDispatch();
 
-  const [exchangedPrice, setExchangedPrice] = useState();
+  const [exchangedPrice, setExchangedPrice] = useState(1);
   const { convertPrices } = usePriceConversion();
 
   // using this to ge the hotel data that'd be passed to the liked items

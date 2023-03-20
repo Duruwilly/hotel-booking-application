@@ -145,7 +145,7 @@ const Confirmation = ({
   total,
 }) => {
   const navigate = useNavigate();
-  const [exchangedPrice, setExchangedPrice] = useState();
+  const [exchangedPrice, setExchangedPrice] = useState(1);
   const { convertPrices } = usePriceConversion();
 
   useEffect(() => {

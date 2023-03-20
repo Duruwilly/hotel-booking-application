@@ -19,7 +19,7 @@ const Room = ({ room, feature, addToBasket }) => {
 
   const [activeOpen, setActiveOpen] = useState("");
 
-  const [exchangedPrice, setExchangedPrice] = useState();
+  const [exchangedPrice, setExchangedPrice] = useState(1);
   const { convertPrice, fetchHotelStatus } = useMediaQueriesContext();
   const { convertPrices } = usePriceConversion();
 
