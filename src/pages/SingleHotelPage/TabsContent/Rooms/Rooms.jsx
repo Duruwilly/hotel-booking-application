@@ -34,36 +34,6 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
     }
   };
 
-  // let url = `http://localhost:8800/api/v1/hotels/room/${hotelID}`;
-
-  //   const { data, loading, error } = useFetch(url);
-  //   console.log(data, "at here too");
-
-  //   useEffect(() => {
-  //     setFetchHotelStatus("idle");
-  //   }, [hotelID]);
-
-  // const addToBasket = (id) => {
-  //   const item = data.filter((itemId) => itemId._id === id);
-  //   if (user) {
-  //     dispatch(
-  //       addItem({
-  //         ...item,
-  //         roomOptions,
-  //         dateSearch,
-  //         days,
-  //         hotelName,
-  //         hotelCountry,
-  //         feature,
-  //       })
-  //     );
-  //     navigate("/basket");
-  //   } else {
-  //     navigate("/login ");
-  //     return;
-  //   }
-  // };
-
   const addToBasket = async (id) => {
     const item = data.filter((itemId) => itemId._id === id)[0];
     const { price, maxPeople, roomNumbers, title } = item;

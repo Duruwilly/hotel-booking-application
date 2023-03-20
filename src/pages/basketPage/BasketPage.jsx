@@ -187,7 +187,7 @@ const Confirmation = ({
           <PriceConversion />
         </div>
       ) : null}
-      {basketItems && basketItems.length > 0 && (
+      {basketItems && basketItems.length > 0 ? (
         <div>
           {basketItems.map((basket) => (
             <div key={basket._id}>
@@ -225,8 +225,7 @@ const Confirmation = ({
             </button>
           </div>
         </div>
-      )}
-      {basketItems.length < 0 && (
+      ) : (
         <div className="flex justify-center flex-col items-center pt-10">
           <h1 className="font-light text-xl mb- text-gray-90  py-">
             Your basket is currently empty. For inspiration, try our{" "}

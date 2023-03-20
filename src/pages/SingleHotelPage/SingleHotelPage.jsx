@@ -3,7 +3,7 @@ import { heroeBg } from "../../BgImageStyles/styles";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 
 import { AiFillHeart } from "react-icons/ai";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import Spinner from "../../components/Spinner/Spinner";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
@@ -23,6 +23,9 @@ import Reviews from "./TabsContent/HotelReviews/Reviews";
 import Photos from "./TabsContent/HotelPhotos/Photos";
 import usePriceConversion from "../../utils/usePriceConversion";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
+import { useAuthContext } from "../../context/AuthContext";
+import { toast } from "react-toastify";
+import { useFavouriteContext } from "../../context/FavouriteItemsContext";
 
 const SingleHotel = () => {
   const locationID = useLocation();
@@ -62,6 +65,10 @@ const SingleHotel = () => {
   } = useMediaQueriesContext();
   let { likedBtnnColor } = useSelector((state) => state.favourite);
   const { likedItemCheck } = useLikedItemCheck();
+  const [allArr, setAllArr] = useState(likedItemCheck());
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
+  const { favouriteItems } = useFavouriteContext();
 
   // on re-search and returning back the hotel rooms page set the state to the location
   useEffect(() => {
@@ -105,19 +112,52 @@ const SingleHotel = () => {
     };
   }, []);
 
-  // liked funtions
-  let allArr = likedItemCheck();
-  const toggleLikedBtn = (itemId) => {
-    const dataItem = data.responseData?.filter((item) => item?._id === itemId);
-    if (allArr.includes(itemId)) {
-      dispatch(removeItem(itemId));
-      return;
+  const toggleFavouriteBtn = async (id) => {
+    const item = data.responseData?.filter((itemId) => itemId._id === id)[0];
+    const { price, _id, feature, destination, name } = item;
+    if (!allArr.includes(id)) {
+      let url = `${WILL_TRIP_BASE_URL}/favourites`;
+      if (user) {
+        try {
+          await axios.post(url, {
+            price,
+            _id,
+            feature,
+            destination,
+            name,
+            userID: user.id,
+            quantity: 1,
+          });
+          setAllArr([...allArr, id]);
+          dispatch(setLikedBtnColor("text-red-600"));
+        } catch (error) {
+          return toast.error(error);
+        }
+      } else {
+        navigate("/login");
+      }
     } else {
-      dispatch(setLikedBtnColor("text-red-600"));
-      dispatch(addItem(...dataItem));
-      return;
+      let url = `${WILL_TRIP_BASE_URL}/favourites/${id}/delete-favourite`;
+      try {
+        let response = await axios.delete(url, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        });
+        if (response?.data?.status === "success") {
+          setAllArr(allArr.filter((item) => item !== id)); // Remove the item from allArr
+          // toast.success(response?.data?.msg);
+        }
+      } catch (error) {
+        toast.error(error?.response?.data?.message);
+      }
     }
   };
+
+  // useEffect to update allArr when favouriteItems change
+  useEffect(() => {
+    setAllArr(likedItemCheck());
+  }, [favouriteItems]);
 
   const [activeTab, setActiveTab] = useState("select-a-room");
   const [tabScreenmatches, setTabScreenMatches] = useState(
@@ -289,7 +329,7 @@ const SingleHotel = () => {
                         : `text-gray-200`
                     }`}
                     style={{ background: "rgba(0,0,0,0.4)" }}
-                    onClick={() => toggleLikedBtn(singleHotel?._id)}
+                    onClick={() => toggleFavouriteBtn(singleHotel?._id)}
                   >
                     <AiFillHeart className="" />
                   </button>

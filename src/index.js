@@ -10,13 +10,14 @@ import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./redux/store";
 import { HotelDataContext } from "./context/HotelDataContext";
 import { RegisterAuthContextProvider } from "./context/RegisterAuthContext";
+import { FavouriteProvider } from "./context/FavouriteItemsContext";
 // import { UserContextProvider } from "./context/userProfileContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <MediaQueryContext>
-      <SearchContext>
+      <FavouriteProvider>
         <AuthContextProvider>
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
@@ -24,7 +25,7 @@ root.render(
             </PersistGate>
           </Provider>
         </AuthContextProvider>
-      </SearchContext>
+      </FavouriteProvider>
     </MediaQueryContext>
   </React.StrictMode>
 );

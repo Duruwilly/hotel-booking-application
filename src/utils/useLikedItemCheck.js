@@ -1,11 +1,13 @@
 import { useSelector } from "react-redux";
+import { useFavouriteContext } from "../context/FavouriteItemsContext";
 
 const useLikedItemCheck = () => {
-  let { wishlistsItems } = useSelector((state) => state.favourite);
+  const { favouriteItems } = useFavouriteContext();
+  // let { wishlistsItems } = useSelector((state) => state.favourite);
   const likedItemCheck = () => {
     const idArr = [];
-    for (let i = 0; i < wishlistsItems.length; i++) {
-      idArr.push(wishlistsItems[i]._id);
+    for (let i = 0; i < favouriteItems.length; i++) {
+      idArr.push(favouriteItems[i]._id);
     }
     return idArr;
   };
