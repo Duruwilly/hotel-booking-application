@@ -1,16 +1,15 @@
 import React from "react";
 import { format } from "date-fns";
-import { useDispatch, useSelector } from "react-redux";
 import { MdOutlineKingBed, MdOutlineSingleBed } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
-import { removeItem } from "../../../redux/basketSlice";
 import axios from "axios";
 import { useAuthContext } from "../../../context/AuthContext";
 import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
 import { toast } from "react-toastify";
+import { useBasketContext } from "../../../context/BasketItemsContext";
 
 const BasketItem = (props) => {
   const { user } = useAuthContext();
+  const { setFetchStatus } = useBasketContext();
   const {
     feature,
     roomOptions,
@@ -22,21 +21,14 @@ const BasketItem = (props) => {
     hotelName,
     exchangedPrice,
     convertPrice,
-    setFetchStatus,
   } = props;
-  // const navigate = useNavigate();
-
-  // const { days } = useDaysCalculate();
-
-  // const dispatch = useDispatch();
-  // console.log(searchQueryDates);
 
   const deleteCartItems = async (id) => {
-    let url = `${WILL_TRIP_BASE_URL}/cart/delete-cart-item/${id}`;
+    let url = `${WILL_TRIP_BASE_URL}/cart/${user?.id}/delete-cart-item/${id}`;
     try {
       let response = await axios.delete(url, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       });
       if (response.data.status === "success") {
@@ -55,7 +47,6 @@ const BasketItem = (props) => {
         style={{ borderBottom: "1px solid rgba(107,114,128,.1)" }}
       >
         <span className="text-gray-400 uppercase text-xs font-light ">
-          {/* {hotelCountry + "," + " " + hotelState} */}
           {hotelCountry}
         </span>
         <h2 className="text-3xl font-light">{hotelName}</h2>

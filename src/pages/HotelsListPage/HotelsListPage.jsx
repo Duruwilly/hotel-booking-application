@@ -1,13 +1,6 @@
 import React, { useEffect } from "react";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
-
-import { BiSort } from "react-icons/bi";
-import {
-  Link,
-  useLocation,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
 import Spinner from "../../components/Spinner/Spinner";
@@ -47,9 +40,7 @@ const HotelsList = () => {
     setQueryState,
     queryState,
   } = useMediaQueriesContext();
-  let { roomOptions, destination, searchQueryDates } = useSelector(
-    (state) => state.searchState
-  );
+  let { roomOptions } = useSelector((state) => state.searchState);
 
   const [openMapModal, setOpenMapModal] = useState(false);
   const [exchangedPrice, setExchangedPrice] = useState();
@@ -290,12 +281,6 @@ const HotelsList = () => {
               url={"/destinations/hotels"}
               query={queryState.query}
             />
-            {/* {Paginator({
-              currentPage: currentPage,
-              pages: data.pages,
-              url: "/destinations/hotels",
-              query: queryState.query,
-            })} */}
           </ul>
         </nav>
       ) : null}

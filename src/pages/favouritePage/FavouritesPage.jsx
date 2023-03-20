@@ -16,13 +16,13 @@ import { toast } from "react-toastify";
 const Favourites = () => {
   const { matches, setDropdownHeader, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
-  let { favouriteItems, setFetchStatus } = useFavouriteContext();
+  let { favouriteItems, setFavouriteFetchStatus } = useFavouriteContext();
   const [exchangedPrice, setExchangedPrice] = useState();
   const { convertPrices } = usePriceConversion();
   const { user } = useAuthContext();
 
   const deleteFavourite = async (id) => {
-    let url = `${WILL_TRIP_BASE_URL}/favourites/${id}/delete-favourite`;
+    let url = `${WILL_TRIP_BASE_URL}/favourites/${user?.id}/delete-favourite/${id}`;
     try {
       let response = await axios.delete(url, {
         headers: {
@@ -30,7 +30,7 @@ const Favourites = () => {
         },
       });
       if (response.data.status === "success") {
-        setFetchStatus("idle");
+        setFavouriteFetchStatus("idle");
       }
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -42,16 +42,6 @@ const Favourites = () => {
       setExchangedPrice(data);
     });
   }, [convertPrice, fetchHotelStatus]);
-
-  useEffect(() => {
-    setFetchStatus("idle");
-  }, []);
-
-  useEffect(() => {
-    window.onpopstate = () => {
-      setFetchStatus("idle");
-    };
-  }, []);
 
   return (
     <>

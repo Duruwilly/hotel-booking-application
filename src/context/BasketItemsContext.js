@@ -19,7 +19,7 @@ export const BasketProvider = ({ children }) => {
   const getCartItems = async () => {
     setLoading(true);
     setFetchStatus("pending");
-    let url = `${WILL_TRIP_BASE_URL}/cart/get-cart-items/${user.id}`;
+    let url = `${WILL_TRIP_BASE_URL}/cart/get-cart-items/${user?.id}`;
     try {
       let response = await axios.get(url, {
         headers: {
@@ -38,11 +38,18 @@ export const BasketProvider = ({ children }) => {
 
   useEffect(() => {
     if (fetchStatus === "idle") getCartItems();
-  }, [user.id, fetchStatus]);
+  }, [user?.id, fetchStatus]);
 
   return (
     <BasketContext.Provider
-      value={{ basketItems, total, fetchStatus, loading, setFetchStatus }}
+      value={{
+        basketItems,
+        total,
+        fetchStatus,
+        loading,
+        setFetchStatus,
+        setBasketItems,
+      }}
     >
       {children}
     </BasketContext.Provider>

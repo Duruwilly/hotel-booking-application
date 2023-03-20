@@ -16,9 +16,9 @@ const TravelTeamPage = lazy(() =>
 const TravelTeamProfilePage = lazy(() =>
   import("../pages/TravelTeam/TravelTeamProfilePage/TravelTeamProfilePage")
 );
-const RegisterPage = lazy(() => import("../pages/RegisterPage/RegisterPage"));
-const LoginPage = lazy(() => import("../pages/LoginPage/LoginPage"));
-const BasketPage = lazy(() => import("../pages/basketPage"));
+// const RegisterPage = lazy(() => import("../pages/RegisterPage/RegisterPage"));
+// const LoginPage = lazy(() => import("../pages/LoginPage/LoginPage"));
+const BasketPage = lazy(() => import("../pages/basketPage/BasketPage"));
 const PaymentPage = lazy(() => import("../pages/PaymentPage/PaymentPage"));
 const WishlistsPage = lazy(() =>
   import("../pages/favouritePage/FavouritesPage")
@@ -26,14 +26,14 @@ const WishlistsPage = lazy(() =>
 const TransactionsPage = lazy(() =>
   import("../pages/TransactionsPage/TransactionsPage")
 );
-const ProfilePage = lazy(() => import("../pages/profilePage/ProfilePage"));
+// const ProfilePage = lazy(() => import("../pages/profilePage/ProfilePage"));
 const ForgotPasswordPage = lazy(() =>
   import("../pages/ForgetPasswordPage/ForgorPassword")
 );
 const ResetPasswordLink = lazy(() =>
   import("../pages/ForgetPasswordPage/ResetPassword")
 );
-const NotFoundPage = lazy(() => import("../pages/NotFoundPage"))
+const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
 
 export const publicRoutes = [
   {

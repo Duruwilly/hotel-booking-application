@@ -6,9 +6,9 @@ import Room from "./Room";
 import { useAuthContext } from "../../../../context/AuthContext";
 import PriceConversion from "../../../../components/PriceConversion/PriceConversion";
 import useDaysCalculate from "../../../../hooks/useDaysCalculate";
-import { addItem } from "../../../../redux/basketSlice";
 import { WILL_TRIP_BASE_URL } from "../../../../constants/base-urls";
 import { toast } from "react-toastify";
+import { useBasketContext } from "../../../../context/BasketItemsContext";
 
 const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
   const { user } = useAuthContext();
@@ -18,6 +18,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
+  const { setFetchStatus } = useBasketContext();
 
   useEffect(() => {
     fetchRoom();
@@ -37,7 +38,6 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
   const addToBasket = async (id) => {
     const item = data.filter((itemId) => itemId._id === id)[0];
     const { price, maxPeople, roomNumbers, title } = item;
-    console.log(price);
     const url = `${WILL_TRIP_BASE_URL}/cart`;
     if (user) {
       try {
@@ -55,6 +55,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
           quantity: 1,
           userID: user.id,
         });
+        setFetchStatus("idle");
       } catch (error) {
         toast.error(error);
       }

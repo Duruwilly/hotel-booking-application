@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
@@ -19,9 +18,9 @@ const Basket = () => {
   const [countries, setCountries] = useState([]);
   const inputStyles =
     "w-full focus:outline-none border border-gray-300 p-3 placeholder:text-sm block rounded-md";
-  const { steps, setSteps, list, matches, convertPrice, fetchHotelStatus } =
+  const { steps, setSteps, list, matches, convertPrice, fetchHotelStatus, } =
     useMediaQueriesContext();
-  const { basketItems, total, fetchStatus, setFetchStatus } =
+  const { basketItems, total, setFetchStatus } =
     useBasketContext();
   const [openModal, setOpenModal] = useState(false);
 
@@ -35,16 +34,6 @@ const Basket = () => {
     getCountries().then((data) => {
       setCountries(data);
     });
-  }, []);
-
-  useEffect(() => {
-    setFetchStatus("idle");
-  }, []);
-
-  useEffect(() => {
-    window.onpopstate = () => {
-      setFetchStatus("idle");
-    };
   }, []);
 
   return (
@@ -68,7 +57,6 @@ const Basket = () => {
             fetchHotelStatus={fetchHotelStatus}
             basketItems={basketItems}
             total={total}
-            setFetchStatus={setFetchStatus}
           />
         </div>
         {basketItems.length > 0 && openModal && (
@@ -155,9 +143,7 @@ const Confirmation = ({
   fetchHotelStatus,
   basketItems,
   total,
-  setFetchStatus,
 }) => {
-  // let { basketItems } = useSelector((state) => state.basket);
   const navigate = useNavigate();
   const [exchangedPrice, setExchangedPrice] = useState();
   const { convertPrices } = usePriceConversion();
@@ -195,7 +181,6 @@ const Confirmation = ({
                 {...basket}
                 exchangedPrice={exchangedPrice}
                 convertPrice={convertPrice}
-                setFetchStatus={setFetchStatus}
               />
             </div>
           ))}
