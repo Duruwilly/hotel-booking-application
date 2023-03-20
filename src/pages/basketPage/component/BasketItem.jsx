@@ -39,7 +39,6 @@ const BasketItem = (props) => {
           Authorization: `Bearer ${user.token}`,
         },
       });
-      console.log(response);
       if (response.data.status === "success") {
         setFetchStatus("idle");
         toast.success(response?.data?.msg);

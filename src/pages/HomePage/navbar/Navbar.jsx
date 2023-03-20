@@ -100,25 +100,29 @@ const Navbar = () => {
 
   const fetchTotalQuantity = async () => {
     let url = `${WILL_TRIP_BASE_URL}/cart/${user?.id}/item-total-quantity`;
-    let response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${user?.token}`,
-      },
-    });
-    if (response.data.status === "success") {
-      setTotalQuantity(response.data.data);
+    if (user !== null) {
+      let response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+      if (response.data.status === "success") {
+        setTotalQuantity(response.data.data);
+      }
     }
   };
 
   const fetchFavouriteTotalQuantity = async () => {
     let url = `${WILL_TRIP_BASE_URL}/favourites/${user?.id}/item-total-quantity`;
-    let response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${user?.token}`,
-      },
-    });
-    if (response.data.status === "success") {
-      setFavouriteTotalQuantity(response.data.data);
+    if (user !== null) {
+      let response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+      if (response.data.status === "success") {
+        setFavouriteTotalQuantity(response.data.data);
+      }
     }
   };
 

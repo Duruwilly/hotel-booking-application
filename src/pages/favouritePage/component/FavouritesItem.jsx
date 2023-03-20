@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { removeItem } from "../../../redux/Favourites";
 import image1 from "../../../assets/images/heroe.jpg";
 import { Link } from "react-router-dom";
 
-const FavouritesItem = ({ fav, exchangedPrice, convertPrice }) => {
+const FavouritesItem = ({
+  fav,
+  exchangedPrice,
+  convertPrice,
+  deleteFavourite,
+}) => {
   const [activeItem, setActiveItem] = useState("");
-  const dispatch = useDispatch();
+
   return (
     <div className="bg-whit border border-gray-300">
       <div style={{ flex: 3 }}>
@@ -79,7 +82,7 @@ const FavouritesItem = ({ fav, exchangedPrice, convertPrice }) => {
             <div className="flex justify-center items-cente gap-2">
               <button
                 className="bg-primary text-xs text-white uppercase py-3 w-full"
-                onClick={() => dispatch(removeItem(fav._id))}
+                onClick={() => deleteFavourite(fav._id)}
               >
                 delete
               </button>

@@ -2,6 +2,7 @@ import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { WILL_TRIP_BASE_URL } from "../constants/base-urls";
+import useLikedItemCheck from "../utils/useLikedItemCheck";
 import { useAuthContext } from "./AuthContext";
 
 const FavouriteContext = createContext();
@@ -36,7 +37,6 @@ export const FavouriteProvider = ({ children }) => {
   useEffect(() => {
     if (fetchStatus === "idle") getFavouriteItems();
   }, [user.id, fetchStatus]);
-  
 
   return (
     <FavouriteContext.Provider
