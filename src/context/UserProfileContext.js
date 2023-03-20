@@ -1,6 +1,5 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { WILL_TRIP_BASE_URL } from "../constants/base-urls";
 import { useAuthContext } from "./AuthContext";
@@ -45,6 +44,7 @@ export const UserContextProvider = ({ children }) => {
         loadingState,
         fetchingState,
         setFetchingState,
+        setUserProfileDetails
       }}
     >
       {children}

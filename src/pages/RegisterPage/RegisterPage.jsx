@@ -1,17 +1,19 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
 import InlineErrors from "../../components/inlineValidationErrors/InlineErrors";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 import { useAuthContext } from "../../context/AuthContext";
+import { getCountries } from "../../utils/getCountries";
 import { validateEmail, validatePassword } from "../../utils/validation";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [passwordErrors, setPasswordErrors] = useState({});
   const [emailErrors, setEmailErrors] = useState({});
+  const [countries, setCountries] = useState([]);
   const inputStyle =
     "appearance-none rounded-sm relative block w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-input-border";
 
@@ -64,6 +66,12 @@ const RegisterPage = () => {
     }
   };
 
+  useEffect(() => {
+    getCountries().then((data) => {
+      setCountries(data);
+    });
+  }, []);
+
   return (
     <section className="py-5">
       <main className="flex items-center justify-center">
@@ -81,15 +89,20 @@ const RegisterPage = () => {
                 className={inputStyle}
                 onChange={handleChange}
               />
-              <input
-                type="text"
-                placeholder="Country"
-                id="country"
+              <select
                 name="country"
+                id="country"
                 required
-                className={inputStyle}
+                className={`${inputStyle} text-sm`}
                 onChange={handleChange}
-              />
+              >
+                <option value="">Select Country</option>
+                {countries?.map((country, index) => (
+                  <option value={country?.name} key={index}>
+                    {country?.name}
+                  </option>
+                ))}
+              </select>
               <input
                 type="email"
                 placeholder="Email address"

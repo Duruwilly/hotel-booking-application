@@ -15,25 +15,23 @@ import { useMediaQueriesContext } from "../../../context/MediaQueryContext";
 import MobileNav from "./MobileNav";
 import { useAuthContext } from "../../../context/AuthContext";
 import { IoIosArrowDown } from "react-icons/io";
-import { useSelector } from "react-redux";
 import { useUserProfileContext } from "../../../context/UserProfileContext";
-import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
-import axios from "axios";
+import { useBasketContext } from "../../../context/BasketItemsContext";
+import { useFavouriteContext } from "../../../context/FavouriteItemsContext";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const { matches, setDropdownHeader } = useMediaQueriesContext();
-  const { getUserDetails, userProfileDetails, setFetchingState } =
-    useUserProfileContext();
-  // const { loading, error, dispatch } = useAuthContext();
-  // const [userProfileDetails, setUserProfileDetails] = useState();
-
-  // let { totalQuantity } = useSelector((state) => state.basket);
-  let { totalFavQuantity } = useSelector((state) => state.favourite);
-  let [totalQuantity, setTotalQuantity] = useState();
-  let [favouriteTotalQuantity, setFavouriteTotalQuantity] = useState();
+  const {
+    getUserDetails,
+    userProfileDetails,
+    setFetchingState,
+  } = useUserProfileContext();
+  const { basketItems, setBasketItems, setFetchStatus } = useBasketContext();
+  const { favouriteItems, setFavouriteItems, setFavouriteFetchStatus } =
+    useFavouriteContext();
 
   const { user, dispatch } = useAuthContext();
 
@@ -86,63 +84,33 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    // e.preventDefault();
     dispatch({ type: "LOGOUT" });
+    setBasketItems([]);
+    setFavouriteItems([]);
   };
+
+  useEffect(() => {
+    if (!user) {
+      setBasketItems([]);
+      setFavouriteItems([]);
+    }
+  }, [user]);
 
   useEffect(() => {
     setFetchingState("idle");
   }, []);
 
   useEffect(() => {
-    getUserDetails();
-  }, [user?.token]);
-
-  const fetchTotalQuantity = async () => {
-    let url = `${WILL_TRIP_BASE_URL}/cart/${user?.id}/item-total-quantity`;
-    if (user !== null) {
-      let response = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      if (response.data.status === "success") {
-        setTotalQuantity(response.data.data);
-      }
-    }
-  };
-
-  const fetchFavouriteTotalQuantity = async () => {
-    let url = `${WILL_TRIP_BASE_URL}/favourites/${user?.id}/item-total-quantity`;
-    if (user !== null) {
-      let response = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      if (response.data.status === "success") {
-        setFavouriteTotalQuantity(response.data.data);
-      }
-    }
-  };
-
-  useEffect(() => {
-    fetchTotalQuantity();
-    fetchFavouriteTotalQuantity();
-  }, [user?.id]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      fetchTotalQuantity();
-      fetchFavouriteTotalQuantity();
-    }, 1000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
+    setFetchStatus("idle");
   }, []);
 
-  // let toggleDropDownSearchHeader = location.pathname === "/" && location.pathname === '/destinations/hotels' && location.pathname === `/destinations/${destination}/hotels` && location.pathname === "/hotel/:hotelName/:location/:hotelId"
+  useEffect(() => {
+    setFavouriteFetchStatus("idle");
+  }, []);
+
+  useEffect(() => {
+    getUserDetails();
+  }, [user?.token]);
 
   return (
     <>
@@ -224,14 +192,11 @@ const Navbar = () => {
                 <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer">
                   <BsFillHeartFill />
                 </div>
-                {favouriteTotalQuantity === undefined ||
-                favouriteTotalQuantity === Number(0)
-                  ? false
-                  : true && (
-                      <div className="amount-container">
-                        <p className="total-amount">{favouriteTotalQuantity}</p>
-                      </div>
-                    )}
+                {favouriteItems.length > 0 && (
+                  <div className="amount-container">
+                    <p className="total-amount">{favouriteItems.length}</p>
+                  </div>
+                )}
               </Link>
               <span className="tooltiptext">Favourite</span>
             </div>
@@ -240,13 +205,11 @@ const Navbar = () => {
                 <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer relative toolti">
                   <BsBagCheck />
                 </div>
-                {totalQuantity === undefined || totalQuantity === Number(0)
-                  ? false
-                  : true && (
-                      <div className="amount-container">
-                        <p className="total-amount">{totalQuantity}</p>
-                      </div>
-                    )}
+                {basketItems.length > 0 && (
+                  <div className="amount-container">
+                    <p className="total-amount">{basketItems.length}</p>
+                  </div>
+                )}
               </Link>
               <span className="tooltiptext">Basket</span>
             </div>

@@ -6,11 +6,7 @@ import { AiFillHeart } from "react-icons/ai";
 import { useMediaQueriesContext } from "../../../context/MediaQueryContext";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addItem,
-  removeItem,
-  setLikedBtnColor,
-} from "../../../redux/Favourites";
+import { setLikedBtnColor } from "../../../redux/Favourites";
 import useLikedItemCheck from "../../../utils/useLikedItemCheck";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import usePriceConversion from "../../../utils/usePriceConversion";
@@ -27,7 +23,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
   let { likedBtnnColor } = useSelector((state) => state.favourite);
   const { likedItemCheck } = useLikedItemCheck();
   const navigate = useNavigate();
-  const { favouriteItems } = useFavouriteContext();
+  const { favouriteItems, setFavouriteFetchStatus } = useFavouriteContext();
 
   const [allArr, setAllArr] = useState(likedItemCheck());
 
@@ -52,6 +48,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
             quantity: 1,
           });
           setAllArr([...allArr, id]);
+          setFavouriteFetchStatus("idle");
           dispatch(setLikedBtnColor("text-red-600"));
         } catch (error) {
           return toast.error(error);
@@ -60,7 +57,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
         navigate("/login");
       }
     } else {
-      let url = `${WILL_TRIP_BASE_URL}/favourites/${id}/delete-favourite`;
+      let url = `${WILL_TRIP_BASE_URL}/favourites/${user?.id}/delete-favourite/${id}`;
       try {
         let response = await axios.delete(url, {
           headers: {
@@ -68,6 +65,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
           },
         });
         if (response?.data?.status === "success") {
+          setFavouriteFetchStatus("idle");
           setAllArr(allArr.filter((item) => item !== id)); // Remove the item from allArr
           // toast.success(response?.data?.msg);
         }

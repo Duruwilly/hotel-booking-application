@@ -1,18 +1,16 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { heroeBg } from "../../BgImageStyles/styles";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
-
 import { AiFillHeart } from "react-icons/ai";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import Spinner from "../../components/Spinner/Spinner";
-import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import { useTitle } from "../../hooks/useTitle";
 import Rooms from "./TabsContent/Rooms/Rooms";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import useLikedItemCheck from "../../utils/useLikedItemCheck";
-import { addItem, removeItem, setLikedBtnColor } from "../../redux/Favourites";
+import { setLikedBtnColor } from "../../redux/Favourites";
 import axios from "axios";
 import { setDestination } from "../../redux/searchStateSlice";
 import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
@@ -68,7 +66,7 @@ const SingleHotel = () => {
   const [allArr, setAllArr] = useState(likedItemCheck());
   const { user } = useAuthContext();
   const navigate = useNavigate();
-  const { favouriteItems } = useFavouriteContext();
+  const { favouriteItems, setFavouriteFetchStatus } = useFavouriteContext();
 
   // on re-search and returning back the hotel rooms page set the state to the location
   useEffect(() => {
@@ -113,7 +111,7 @@ const SingleHotel = () => {
   }, []);
 
   const toggleFavouriteBtn = async (id) => {
-    const item = data.responseData?.filter((itemId) => itemId._id === id)[0];
+    const item = data.responseData.filter((itemId) => itemId._id === id)[0];
     const { price, _id, feature, destination, name } = item;
     if (!allArr.includes(id)) {
       let url = `${WILL_TRIP_BASE_URL}/favourites`;
@@ -129,6 +127,7 @@ const SingleHotel = () => {
             quantity: 1,
           });
           setAllArr([...allArr, id]);
+          setFavouriteFetchStatus("idle");
           dispatch(setLikedBtnColor("text-red-600"));
         } catch (error) {
           return toast.error(error);
@@ -137,7 +136,7 @@ const SingleHotel = () => {
         navigate("/login");
       }
     } else {
-      let url = `${WILL_TRIP_BASE_URL}/favourites/${id}/delete-favourite`;
+      let url = `${WILL_TRIP_BASE_URL}/favourites/${user?.id}/delete-favourite/${id}`;
       try {
         let response = await axios.delete(url, {
           headers: {
@@ -145,6 +144,7 @@ const SingleHotel = () => {
           },
         });
         if (response?.data?.status === "success") {
+          setFavouriteFetchStatus("idle");
           setAllArr(allArr.filter((item) => item !== id)); // Remove the item from allArr
           // toast.success(response?.data?.msg);
         }
@@ -335,7 +335,6 @@ const SingleHotel = () => {
                   </button>
                   <div>
                     <p className="text-sm font-extralight">
-                      {/* {singleHotel?.country + "," + " " + singleHotel?.state} */}
                       {singleHotel?.destination}
                     </p>
                     <p className="text-3xl">{singleHotel?.name}</p>

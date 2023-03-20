@@ -1,8 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { WILL_TRIP_BASE_URL } from "../constants/base-urls";
-import useLikedItemCheck from "../utils/useLikedItemCheck";
 import { useAuthContext } from "./AuthContext";
 
 const FavouriteContext = createContext();
@@ -12,12 +10,12 @@ export const FavouriteProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuthContext();
   const [error, setErrors] = useState(false);
-  const [fetchStatus, setFetchStatus] = useState("idle");
+  const [favouriteFetchStatus, setFavouriteFetchStatus] = useState("idle");
 
   const getFavouriteItems = async () => {
     setLoading(true);
-    setFetchStatus("pending");
-    let url = `${WILL_TRIP_BASE_URL}/favourites/${user.id}`;
+    setFavouriteFetchStatus("pending");
+    let url = `${WILL_TRIP_BASE_URL}/favourites/${user?.id}`;
     try {
       let response = await axios.get(url, {
         headers: {
@@ -26,7 +24,7 @@ export const FavouriteProvider = ({ children }) => {
       });
       if (response?.data?.status === "success") {
         setLoading(false);
-        setFetchStatus(response.data.status);
+        setFavouriteFetchStatus(response.data.status);
         setFavouriteItems(response?.data?.data);
       }
     } catch (error) {
@@ -35,12 +33,12 @@ export const FavouriteProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (fetchStatus === "idle") getFavouriteItems();
-  }, [user.id, fetchStatus]);
+    if (favouriteFetchStatus === "idle") getFavouriteItems();
+  }, [user?.id, favouriteFetchStatus]);
 
   return (
     <FavouriteContext.Provider
-      value={{ favouriteItems, fetchStatus, loading, setFetchStatus }}
+      value={{ favouriteItems, favouriteFetchStatus, loading, setFavouriteFetchStatus, setFavouriteItems }}
     >
       {children}
     </FavouriteContext.Provider>

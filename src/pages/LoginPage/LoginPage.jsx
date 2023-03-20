@@ -5,12 +5,18 @@ import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
 import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
+import { useBasketContext } from "../../context/BasketItemsContext";
+import { useFavouriteContext } from "../../context/FavouriteItemsContext";
+import { useUserProfileContext } from "../../context/UserProfileContext";
 
 const LoginPage = () => {
   const inputStyle =
     "appearance-none rounded-sm relative block w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-input-border";
 
   const [showPassword, setShowPassword] = useState(false);
+  const { setFetchStatus } = useBasketContext();
+  const { setFavouriteFetchStatus } = useFavouriteContext();
+  const { setFetchingState } = useUserProfileContext();
   const passwordToggle = () => {
     setShowPassword((prevState) => !prevState);
   };
@@ -39,10 +45,13 @@ const LoginPage = () => {
         `${WILL_TRIP_BASE_URL}/auth/login`,
         userDetails
       );
+      setFetchStatus("idle");
+      setFavouriteFetchStatus("idle");
+      setFetchingState("idle");
       dispatch({ type: "SUCCESS", payload: res.data });
       navigate("/");
     } catch (error) {
-      dispatch({ type: "FAILED", payload: error.response.data });
+      dispatch({ type: "FAILED", payload: error?.response?.data });
       localStorage.removeItem("user");
     }
   };
