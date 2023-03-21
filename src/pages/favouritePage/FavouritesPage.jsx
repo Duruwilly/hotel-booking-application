@@ -16,7 +16,8 @@ import { toast } from "react-toastify";
 const Favourites = () => {
   const { matches, setDropdownHeader, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
-  let { favouriteItems, setFavouriteFetchStatus } = useFavouriteContext();
+  let { favouriteItems, setFavouriteFetchStatus, getFavouriteItems } =
+    useFavouriteContext();
   const [exchangedPrice, setExchangedPrice] = useState();
   const { convertPrices } = usePriceConversion();
   const { user } = useAuthContext();
@@ -31,6 +32,7 @@ const Favourites = () => {
       });
       if (response.data.status === "success") {
         setFavouriteFetchStatus("idle");
+        getFavouriteItems(user)
       }
     } catch (error) {
       toast.error(error?.response?.data?.message);

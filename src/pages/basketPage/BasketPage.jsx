@@ -18,10 +18,9 @@ const Basket = () => {
   const [countries, setCountries] = useState([]);
   const inputStyles =
     "w-full focus:outline-none border border-gray-300 p-3 placeholder:text-sm block rounded-md";
-  const { steps, setSteps, list, matches, convertPrice, fetchHotelStatus, } =
+  const { steps, setSteps, list, matches, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
-  const { basketItems, total, setFetchStatus } =
-    useBasketContext();
+  const { basketItems, total } = useBasketContext();
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {

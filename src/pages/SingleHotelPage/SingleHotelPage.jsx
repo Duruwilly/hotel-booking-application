@@ -66,7 +66,8 @@ const SingleHotel = () => {
   const [allArr, setAllArr] = useState(likedItemCheck());
   const { user } = useAuthContext();
   const navigate = useNavigate();
-  const { favouriteItems, setFavouriteFetchStatus } = useFavouriteContext();
+  const { favouriteItems, setFavouriteFetchStatus, getFavouriteItems } =
+    useFavouriteContext();
 
   // on re-search and returning back the hotel rooms page set the state to the location
   useEffect(() => {
@@ -128,6 +129,7 @@ const SingleHotel = () => {
           });
           setAllArr([...allArr, id]);
           setFavouriteFetchStatus("idle");
+          getFavouriteItems(user);
           dispatch(setLikedBtnColor("text-red-600"));
         } catch (error) {
           return toast.error(error);
@@ -145,6 +147,7 @@ const SingleHotel = () => {
         });
         if (response?.data?.status === "success") {
           setFavouriteFetchStatus("idle");
+          getFavouriteItems(user);
           setAllArr(allArr.filter((item) => item !== id)); // Remove the item from allArr
           // toast.success(response?.data?.msg);
         }

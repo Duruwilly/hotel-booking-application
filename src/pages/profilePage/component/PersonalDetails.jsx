@@ -12,8 +12,13 @@ import Spinner from "../../../components/Spinner/Spinner";
 
 const PersonalDetails = () => {
   const { user } = useAuthContext();
-  const { getUserDetails, userProfileDetails, loadingState, setFetchingState } =
-    useUserProfileContext();
+  const {
+    getUserDetails,
+    userProfileDetails,
+    loadingState,
+    setFetchingState,
+    setUserProfileDetails,
+  } = useUserProfileContext();
   const [currWin, setCurrWin] = useState(true);
   useEffect(() => {
     setFetchingState("idle");
@@ -129,6 +134,7 @@ const PersonalDetails = () => {
         setCurrWin={setCurrWin}
         user={user}
         userProfileDetails={userProfileDetails}
+        setUserProfileDetails={setUserProfileDetails}
       />
     </>
   );
@@ -142,6 +148,7 @@ const EditProfile = ({
   user,
   userProfileDetails,
   setFetchingState,
+  setUserProfileDetails,
 }) => {
   const [countries, setCountries] = useState([]);
 
@@ -163,8 +170,6 @@ const EditProfile = ({
     email: userProfileDetails?.email,
     mobileNumber: userProfileDetails?.mobileNumber,
     gender: userProfileDetails?.gender,
-    otherMobileNumber: [],
-    otherEmail: [],
   });
 
   let {
@@ -173,8 +178,6 @@ const EditProfile = ({
     email,
     mobileNumber,
     gender,
-    otherMobileNumber,
-    otherEmail,
   } = userDetails;
 
   const handleChange = (e) => {
@@ -182,6 +185,24 @@ const EditProfile = ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleOtherEmailChange = (event, index) => {
+    const { value } = event.target;
+    setUserProfileDetails((prevState) => {
+      const newOtherEmail = [...prevState.otherEmail]; // create a copy of the array
+      newOtherEmail[index] = { ...newOtherEmail[index], value }; // update the value of the email at the specified index
+      return { ...prevState, otherEmail: newOtherEmail }; // update the state with the new array
+    });
+  };
+
+  const handleOtherMobileNumChange = (event, index) => {
+    const { value } = event.target;
+    setUserProfileDetails((prevState) => {
+      const newOtherTel = [...prevState.otherMobileNumber]; // create a copy of the array
+      newOtherTel[index] = { ...newOtherTel[index], value }; // update the value of the email at the specified index
+      return { ...prevState, otherMobileNumber: newOtherTel }; // update the state with the new array
+    });
   };
 
   const updateProfile = async (e) => {
@@ -196,12 +217,8 @@ const EditProfile = ({
           email: email,
           mobileNumber: mobileNumber,
           gender: gender,
-          otherMobileNumber:
-            otherMobileNumber.length > 0
-              ? otherMobileNumber
-              : userProfileDetails?.otherMobileNumber,
-          otherEmail:
-            otherEmail.length > 0 ? otherEmail : userProfileDetails?.otherEmail,
+          otherMobileNumber: userProfileDetails?.otherMobileNumber,
+          otherEmail: userProfileDetails?.otherEmail,
         },
         {
           headers: {
@@ -285,6 +302,7 @@ const EditProfile = ({
                     name="country"
                     id="country"
                     className="form-input text-sm"
+                    value={userDetails.country}
                     onChange={handleChange}
                   >
                     <option value="">{userDetails.country}</option>
@@ -369,26 +387,31 @@ const EditProfile = ({
                 </div>
                 {userProfileDetails?.otherMobileNumber &&
                 userProfileDetails?.otherMobileNumber?.length > 0
-                  ? userProfileDetails?.otherMobileNumber.map((mobile) => (
-                      <div
-                        className="py-5 w-full"
-                        style={{ maxWidth: "300px" }}
-                        key={mobile._id}
-                      >
-                        <label htmlFor="">Mobile Number</label>
-                        <input
-                          type="text"
-                          id="fullname"
-                          name="fullname"
-                          value={mobile?.value}
-                          className="form-input"
-                          onChange={handleChange}
-                          required
-                        />
+                  ? userProfileDetails?.otherMobileNumber.map(
+                      (mobile, index) => (
+                        <div
+                          className="py-5 w-full"
+                          style={{ maxWidth: "300px" }}
+                          key={mobile._id}
+                        >
+                          <label htmlFor="">Mobile Number</label>
+                          <input
+                            type="text"
+                            id="fullname"
+                            name="fullname"
+                            value={mobile?.value}
+                            className="form-input"
+                            onChange={(e) => {
+                              handleOtherMobileNumChange(e, index);
+                              console.log(e.target.value);
+                            }}
+                            required
+                          />
 
-                        <span className="text-sm">Secondary</span>
-                      </div>
-                    ))
+                          <span className="text-sm">Secondary</span>
+                        </div>
+                      )
+                    )
                   : null}
 
                 <div className="py-5">
@@ -456,7 +479,7 @@ const EditProfile = ({
                 </div>
                 {userProfileDetails?.otherEmail &&
                 userProfileDetails?.otherEmail?.length > 0
-                  ? userProfileDetails?.otherEmail.map((email) => (
+                  ? userProfileDetails?.otherEmail.map((email, index) => (
                       <div
                         className="py-5 w-full"
                         style={{ maxWidth: "300px" }}
@@ -469,7 +492,10 @@ const EditProfile = ({
                           name="fullname"
                           value={email?.value}
                           className="form-input"
-                          onChange={handleChange}
+                          onChange={(e) => {
+                            handleOtherEmailChange(e, index);
+                            console.log(e.target.value);
+                          }}
                           required
                         />
                         <span className="text-sm">Secondary</span>
