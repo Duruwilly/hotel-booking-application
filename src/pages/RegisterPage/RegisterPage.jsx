@@ -142,8 +142,8 @@ const RegisterPage = () => {
                   />
                 )}
               </div>
-              {passwordErrors.passwordError && (
-                <InlineErrors error={passwordErrors.passwordError} />
+              {passwordErrors.password && (
+                <InlineErrors error={passwordErrors.password} />
               )}
               <input
                 type="tel"

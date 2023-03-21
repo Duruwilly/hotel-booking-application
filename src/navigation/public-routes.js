@@ -93,7 +93,7 @@ export const publicRoutes = [
     element: WishlistsPage,
   },
   {
-    path: "/transactions",
+    path: "/transactions/:id",
     element: TransactionsPage,
   },
   // {

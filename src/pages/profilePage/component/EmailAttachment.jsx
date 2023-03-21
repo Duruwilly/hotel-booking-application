@@ -13,29 +13,13 @@ const EmailAttachment = ({
         <input
           type="email"
           id="email"
+          placeholder="Email address"
           name={`att-${ind}`}
           value={attachmentState.otherEmail}
           className="form-input"
           required
           onChange={(e) => {
             let idArr = e.target.name.split("-");
-            console.log(userDetails.otherEmail);
-            // console.log({
-            //   attachment: e.target.value ? e.target.value : {},
-            // });
-            // return setUserDetails((state) => {
-            //   return {
-            //     ...state,
-            //     otherEmail: [
-            //       ...state.otherEmail,
-            //       {
-            //         key: parseInt(idArr[1]),
-            //         value: e.target.value ? e.target.value : null,
-            //       },
-            //     ],
-            //   };
-            // });
-
             return setUserDetails((state) => {
               let prevAttachments = state.otherEmail;
 

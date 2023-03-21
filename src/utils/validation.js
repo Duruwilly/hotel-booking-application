@@ -10,7 +10,7 @@ const validatePassword = (e, id, value, passwordErrors, setPasswordErrors) => {
       ) {
         setPasswordErrors({
           ...passwordErrors,
-          passwordError:
+          password:
             "password must contain at lease one special character, uppercase and lowercase letters with at least a number, and must be 8 character or more",
         });
       } else {
