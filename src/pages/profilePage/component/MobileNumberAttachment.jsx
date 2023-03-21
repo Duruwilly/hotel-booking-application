@@ -19,18 +19,23 @@ const MobileNumberAttachment = ({
           className="form-input"
           required
           onChange={(e) => {
+            // spilt the id to get the number
             let idArr = e.target.name.split("-");
             return setUserDetails((state) => {
+              // get the content of the array
               let prevAttachments = state.otherMobileNumber;
-
+              // find the index of the of the object in the array
               const indexOfAttachment = prevAttachments.findIndex(
                 (att) => att?.key === parseInt(idArr[1])
               );
+              // if the index is greater than or equal to 0 find the value of the index of that object in the array
+              // if equal to e.target.value return it else null
               if (indexOfAttachment >= 0) {
                 prevAttachments[indexOfAttachment].value = e.target.value
                   ? e.target.value
                   : null;
               } else {
+                // if the index of the attachment is less than 1, then create an array with the key of 1 which is the idArr and the value in the input
                 prevAttachments = [
                   ...state.otherMobileNumber,
                   {

@@ -165,12 +165,26 @@ const EditProfile = ({
   });
 
   const [userDetails, setUserDetails] = useState({
-    fullname: userProfileDetails?.fullname,
-    country: userProfileDetails?.country,
-    email: userProfileDetails?.email,
-    mobileNumber: userProfileDetails?.mobileNumber,
-    gender: userProfileDetails?.gender,
+    fullname: "",
+    country: "",
+    email: "",
+    mobileNumber: "",
+    gender: "",
+    otherMobileNumber: [],
+    otherEmail: [],
   });
+
+  useEffect(() => {
+    setUserDetails({
+      fullname: userProfileDetails?.fullname || "",
+      country: userProfileDetails?.country || "",
+      email: userProfileDetails?.email || "",
+      mobileNumber: userProfileDetails?.mobileNumber || "",
+      gender: userProfileDetails?.gender || "",
+      otherMobileNumber: [],
+      otherEmail: [],
+    });
+  }, [userProfileDetails]);
 
   let {
     fullname,
@@ -178,6 +192,8 @@ const EditProfile = ({
     email,
     mobileNumber,
     gender,
+    otherMobileNumber,
+    otherEmail,
   } = userDetails;
 
   const handleChange = (e) => {
@@ -217,8 +233,12 @@ const EditProfile = ({
           email: email,
           mobileNumber: mobileNumber,
           gender: gender,
-          otherMobileNumber: userProfileDetails?.otherMobileNumber,
-          otherEmail: userProfileDetails?.otherEmail,
+          otherMobileNumber:
+            otherMobileNumber.length > 0
+              ? otherMobileNumber
+              : userProfileDetails?.otherMobileNumber,
+          otherEmail:
+            otherEmail.length > 0 ? otherEmail : userProfileDetails?.otherEmail,
         },
         {
           headers: {
@@ -403,7 +423,6 @@ const EditProfile = ({
                             className="form-input"
                             onChange={(e) => {
                               handleOtherMobileNumChange(e, index);
-                              console.log(e.target.value);
                             }}
                             required
                           />
