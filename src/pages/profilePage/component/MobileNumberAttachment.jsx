@@ -49,21 +49,6 @@ const MobileNumberAttachment = ({
                 otherMobileNumber: prevAttachments,
               };
             });
-            // console.log({
-            //   attachment: e.target.value ? e.target.value : {},
-            // });
-            // return setUserDetails((state) => {
-            //   return {
-            //     ...state,
-            //     otherMobileNumber: [
-            //       ...state.otherMobileNumber,
-            //       {
-            //         key: parseInt(idArr[1]),
-            //         value: e.target.value ? e.target.value : null,
-            //       },
-            //     ],
-            //   };
-            // });
           }}
         />
       </div>

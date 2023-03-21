@@ -246,13 +246,15 @@ const EditProfile = ({
           },
         }
       );
-      setLoading(false);
-      toast.success(res.data.msg);
-      setFetchingState("idle");
-      setCurrWin(true);
+      if (res.data.status === "success") {
+        setLoading(false);
+        toast.success(res.data.msg);
+        setFetchingState("idle");
+        setCurrWin(!currWin);
+      }
     } catch (error) {
       setLoading(false);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message);
     }
   };
 
@@ -291,6 +293,7 @@ const EditProfile = ({
                       name="gender"
                       id="male"
                       value="male"
+                      checked={userDetails.gender === "male"}
                       onChange={handleChange}
                     />{" "}
                     Male
@@ -301,19 +304,21 @@ const EditProfile = ({
                       name="gender"
                       id="female"
                       value="female"
+                      checked={userDetails.gender === "female"}
                       onChange={handleChange}
                     />{" "}
                     Female
                   </label>
-                  <label htmlFor="other" className="font-light">
+                  <label htmlFor="others" className="font-light">
                     <input
                       type="radio"
                       name="gender"
-                      id="other"
-                      value="other"
+                      id="others"
+                      value="others"
+                      checked={userDetails.gender === "others"}
                       onChange={handleChange}
                     />{" "}
-                    Other
+                    Others
                   </label>
                 </div>
                 <div className="py-5 w-full" style={{ maxWidth: "300px" }}>

@@ -136,7 +136,7 @@ const UpdatePassword = () => {
               value={userPassword.password}
               autoComplete="current-password"
               className={`${inputStyle} ${
-                passwordErrors.passwordError
+                passwordErrors.password
                   ? "border border-red-700"
                   : "border border-gray-300"
               }`}
@@ -144,8 +144,8 @@ const UpdatePassword = () => {
               required
             />
           </div>
-          {passwordErrors.passwordError && (
-            <InlineErrors error={passwordErrors.passwordError} />
+          {passwordErrors.password && (
+            <InlineErrors error={passwordErrors.password} />
           )}
           <p className="font-light text-xs mb-4">
             Your password must have at least eight characters and feature one
