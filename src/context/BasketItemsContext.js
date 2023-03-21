@@ -8,15 +8,16 @@ const BasketContext = createContext();
 export const BasketProvider = ({ children }) => {
   const [basketItems, setBasketItems] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
   const [error, setErrors] = useState(false);
   const [fetchStatus, setFetchStatus] = useState("idle");
 
-  const total = basketItems.reduce((acc, item) => {
+  const total = basketItems?.reduce((acc, item) => {
     return acc + item.quantity * item.price * item.days;
   }, 0);
+  // console.log(user);
 
-  const getCartItems = async () => {
+  const getCartItems = async (user) => {
     setLoading(true);
     setFetchStatus("pending");
     let url = `${WILL_TRIP_BASE_URL}/cart/get-cart-items/${user?.id}`;
@@ -28,7 +29,7 @@ export const BasketProvider = ({ children }) => {
       });
       if (response?.data?.status === "success") {
         setLoading(false);
-        setFetchStatus(response.data.status);
+        setFetchStatus(response?.data?.status);
         setBasketItems(response?.data?.data);
       }
     } catch (error) {
@@ -38,8 +39,8 @@ export const BasketProvider = ({ children }) => {
 
   useEffect(() => {
     if (fetchStatus === "idle") getCartItems();
-  }, [user?.id, fetchStatus]);
-
+  }, [fetchStatus]);
+  
   return (
     <BasketContext.Provider
       value={{
@@ -49,6 +50,7 @@ export const BasketProvider = ({ children }) => {
         loading,
         setFetchStatus,
         setBasketItems,
+        getCartItems,
       }}
     >
       {children}

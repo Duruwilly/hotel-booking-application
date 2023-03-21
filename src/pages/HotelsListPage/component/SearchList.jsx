@@ -23,7 +23,8 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
   let { likedBtnnColor } = useSelector((state) => state.favourite);
   const { likedItemCheck } = useLikedItemCheck();
   const navigate = useNavigate();
-  const { favouriteItems, setFavouriteFetchStatus } = useFavouriteContext();
+  const { favouriteItems, setFavouriteFetchStatus, getFavouriteItems } =
+    useFavouriteContext();
 
   const [allArr, setAllArr] = useState(likedItemCheck());
 
@@ -49,6 +50,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
           });
           setAllArr([...allArr, id]);
           setFavouriteFetchStatus("idle");
+          getFavouriteItems(user);
           dispatch(setLikedBtnColor("text-red-600"));
         } catch (error) {
           return toast.error(error);
@@ -66,6 +68,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
         });
         if (response?.data?.status === "success") {
           setFavouriteFetchStatus("idle");
+          getFavouriteItems(user);
           setAllArr(allArr.filter((item) => item !== id)); // Remove the item from allArr
           // toast.success(response?.data?.msg);
         }

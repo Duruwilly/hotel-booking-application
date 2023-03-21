@@ -43,7 +43,7 @@ const HotelsList = () => {
   let { roomOptions } = useSelector((state) => state.searchState);
 
   const [openMapModal, setOpenMapModal] = useState(false);
-  const [exchangedPrice, setExchangedPrice] = useState();
+  const [exchangedPrice, setExchangedPrice] = useState(1);
   const { convertPrices } = usePriceConversion();
 
   const toggleModal = () => {

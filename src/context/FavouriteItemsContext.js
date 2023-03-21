@@ -8,11 +8,11 @@ const FavouriteContext = createContext();
 export const FavouriteProvider = ({ children }) => {
   const [favouriteItems, setFavouriteItems] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
   const [error, setErrors] = useState(false);
   const [favouriteFetchStatus, setFavouriteFetchStatus] = useState("idle");
 
-  const getFavouriteItems = async () => {
+  const getFavouriteItems = async (user) => {
     setLoading(true);
     setFavouriteFetchStatus("pending");
     let url = `${WILL_TRIP_BASE_URL}/favourites/${user?.id}`;
@@ -34,11 +34,11 @@ export const FavouriteProvider = ({ children }) => {
 
   useEffect(() => {
     if (favouriteFetchStatus === "idle") getFavouriteItems();
-  }, [user?.id, favouriteFetchStatus]);
+  }, [favouriteFetchStatus]);
 
   return (
     <FavouriteContext.Provider
-      value={{ favouriteItems, favouriteFetchStatus, loading, setFavouriteFetchStatus, setFavouriteItems }}
+      value={{ favouriteItems, favouriteFetchStatus, loading, setFavouriteFetchStatus, setFavouriteItems, getFavouriteItems }}
     >
       {children}
     </FavouriteContext.Provider>

@@ -18,7 +18,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
-  const { setFetchStatus } = useBasketContext();
+  const { setFetchStatus, getCartItems } = useBasketContext();
 
   useEffect(() => {
     fetchRoom();
@@ -56,6 +56,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
           userID: user.id,
         });
         setFetchStatus("idle");
+        getCartItems(user);
       } catch (error) {
         toast.error(error);
       }
@@ -76,7 +77,6 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
                 room={room}
                 hotelName={hotelName}
                 hotelCountry={hotelCountry}
-                // hotelState={hotelState}
                 feature={feature}
                 addToBasket={addToBasket}
               />

@@ -14,12 +14,13 @@ const LoginPage = () => {
     "appearance-none rounded-sm relative block w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-input-border";
 
   const [showPassword, setShowPassword] = useState(false);
-  const { setFetchStatus } = useBasketContext();
+  const { setFetchStatus, fetchStatus } = useBasketContext();
   const { setFavouriteFetchStatus } = useFavouriteContext();
   const { setFetchingState } = useUserProfileContext();
   const passwordToggle = () => {
     setShowPassword((prevState) => !prevState);
   };
+  const { user } = useAuthContext();
 
   const [userDetails, setUserDetails] = useState({
     email: undefined,
@@ -45,10 +46,10 @@ const LoginPage = () => {
         `${WILL_TRIP_BASE_URL}/auth/login`,
         userDetails
       );
+      dispatch({ type: "SUCCESS", payload: res.data });
       setFetchStatus("idle");
       setFavouriteFetchStatus("idle");
       setFetchingState("idle");
-      dispatch({ type: "SUCCESS", payload: res.data });
       navigate("/");
     } catch (error) {
       dispatch({ type: "FAILED", payload: error?.response?.data });

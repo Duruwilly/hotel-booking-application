@@ -9,7 +9,7 @@ import { useBasketContext } from "../../../context/BasketItemsContext";
 
 const BasketItem = (props) => {
   const { user } = useAuthContext();
-  const { setFetchStatus } = useBasketContext();
+  const { setFetchStatus, getCartItems } = useBasketContext();
   const {
     feature,
     roomOptions,
@@ -17,7 +17,6 @@ const BasketItem = (props) => {
     days,
     quantity,
     hotelCountry,
-    // hotelState,
     hotelName,
     exchangedPrice,
     convertPrice,
@@ -33,6 +32,7 @@ const BasketItem = (props) => {
       });
       if (response.data.status === "success") {
         setFetchStatus("idle");
+        getCartItems(user);
         toast.success(response?.data?.msg);
       }
     } catch (error) {

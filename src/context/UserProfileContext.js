@@ -3,6 +3,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { WILL_TRIP_BASE_URL } from "../constants/base-urls";
 import { useAuthContext } from "./AuthContext";
+import { useBasketContext } from "./BasketItemsContext";
+import { useFavouriteContext } from "./FavouriteItemsContext";
 
 const UserContext = createContext();
 
@@ -11,6 +13,8 @@ export const UserContextProvider = ({ children }) => {
   const { user } = useAuthContext();
   const [loadingState, setLoadingState] = useState(false);
   const [fetchingState, setFetchingState] = useState("idle");
+  const { getCartItems } = useBasketContext();
+  const { getFavouriteItems } = useFavouriteContext();
 
   const getUserDetails = async () => {
     setLoadingState(true);
@@ -25,6 +29,8 @@ export const UserContextProvider = ({ children }) => {
         setLoadingState(false);
         setUserProfileDetails(res?.data?.data);
       }
+      getCartItems(user);
+      getFavouriteItems(user);
       //   toast.success(res.data.msg);
     } catch (error) {
       setLoadingState(false);
@@ -44,7 +50,7 @@ export const UserContextProvider = ({ children }) => {
         loadingState,
         fetchingState,
         setFetchingState,
-        setUserProfileDetails
+        setUserProfileDetails,
       }}
     >
       {children}

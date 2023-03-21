@@ -24,13 +24,10 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const { matches, setDropdownHeader } = useMediaQueriesContext();
-  const {
-    getUserDetails,
-    userProfileDetails,
-    setFetchingState,
-  } = useUserProfileContext();
-  const { basketItems, setBasketItems, setFetchStatus } = useBasketContext();
-  const { favouriteItems, setFavouriteItems, setFavouriteFetchStatus } =
+  const { getUserDetails, userProfileDetails, setFetchingState } =
+    useUserProfileContext();
+  const { basketItems, setBasketItems, getCartItems } = useBasketContext();
+  const { favouriteItems, setFavouriteItems, getFavouriteItems } =
     useFavouriteContext();
 
   const { user, dispatch } = useAuthContext();
@@ -91,8 +88,10 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!user) {
-      setBasketItems([]);
+      setBasketItems([]); // Clear basket items when user logs out
       setFavouriteItems([]);
+    } else if (basketItems.length > 0) {
+      setBasketItems([]); // Clear basket items if there are still items from previous user
     }
   }, [user]);
 
@@ -101,17 +100,10 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    setFetchStatus("idle");
-  }, []);
-
-  useEffect(() => {
-    setFavouriteFetchStatus("idle");
-  }, []);
-
-  useEffect(() => {
     getUserDetails();
+    getCartItems();
+    getFavouriteItems();
   }, [user?.token]);
-
   return (
     <>
       <header
@@ -205,7 +197,7 @@ const Navbar = () => {
                 <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer relative toolti">
                   <BsBagCheck />
                 </div>
-                {basketItems.length > 0 && (
+                {basketItems?.length > 0 && (
                   <div className="amount-container">
                     <p className="total-amount">{basketItems.length}</p>
                   </div>
