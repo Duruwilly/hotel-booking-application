@@ -394,8 +394,37 @@ const EditProfile = ({
                         />
                         <span className="text-sm">Primary</span>
                       </div>
-                      {attachmentState?.mobileNumberAttachments.map(
-                        (item, index) => (
+                      {userProfileDetails?.otherMobileNumber &&
+                      userProfileDetails?.otherMobileNumber?.length > 0
+                        ? userProfileDetails?.otherMobileNumber.map(
+                            (mobile, index) => (
+                              <div
+                                className="py-5 w-full"
+                                style={{ maxWidth: "300px" }}
+                                key={mobile._id}
+                              >
+                                <label htmlFor="">Mobile Number</label>
+                                <input
+                                  type="text"
+                                  id="fullname"
+                                  name="fullname"
+                                  value={mobile?.value}
+                                  className="form-input"
+                                  onChange={(e) => {
+                                    handleOtherMobileNumChange(e, index);
+                                  }}
+                                  required
+                                />
+                                <span className="text-sm">Secondary</span>
+                              </div>
+                            )
+                          )
+                        : null}
+                    </div>
+
+                    {attachmentState?.mobileNumberAttachments.map(
+                      (item, index) => (
+                        <div className="py-5" key={index}>
                           <MobileNumberAttachment
                             key={item.key}
                             attachmentState={attachmentState}
@@ -405,40 +434,13 @@ const EditProfile = ({
                             userDetails={userDetails}
                             setUserDetails={setUserDetails}
                           />
-                        )
-                      )}
-                    </div>
-                  </div>
-                </div>
-                {userProfileDetails?.otherMobileNumber &&
-                userProfileDetails?.otherMobileNumber?.length > 0
-                  ? userProfileDetails?.otherMobileNumber.map(
-                      (mobile, index) => (
-                        <div
-                          className="py-5 w-full"
-                          style={{ maxWidth: "300px" }}
-                          key={mobile._id}
-                        >
-                          <label htmlFor="">Mobile Number</label>
-                          <input
-                            type="text"
-                            id="fullname"
-                            name="fullname"
-                            value={mobile?.value}
-                            className="form-input"
-                            onChange={(e) => {
-                              handleOtherMobileNumChange(e, index);
-                            }}
-                            required
-                          />
-
-                          <span className="text-sm">Secondary</span>
                         </div>
                       )
-                    )
-                  : null}
+                    )}
+                  </div>
+                </div>
 
-                <div className="py-5">
+                <div className="py-">
                   <div className="flex justify-between">
                     <label htmlFor="">
                       <span className="after:content-['*'] after:ml-0.5 after:text-red-900 block">
@@ -488,44 +490,47 @@ const EditProfile = ({
                       required
                     />
                     <span className="text-sm">Primary</span>
+
+                    {userProfileDetails?.otherEmail &&
+                    userProfileDetails?.otherEmail?.length > 0
+                      ? userProfileDetails?.otherEmail.map((email, index) => (
+                          <div
+                            className="py-5 w-full"
+                            style={{ maxWidth: "300px" }}
+                            key={email._id}
+                          >
+                            <label htmlFor="">Email Address</label>
+                            <input
+                              type="text"
+                              id="fullname"
+                              name="fullname"
+                              value={email?.value}
+                              className="form-input"
+                              onChange={(e) => {
+                                handleOtherEmailChange(e, index);
+                              }}
+                              required
+                            />
+                            <span className="text-sm">Secondary</span>
+                          </div>
+                        ))
+                      : null}
+
                     {attachmentState?.emailAttachments.map((item, index) => (
-                      <EmailAttachment
-                        key={item.key}
-                        attachmentState={attachmentState}
-                        ind={item.key}
-                        setAttachmentState={setAttachmentState}
-                        handleChange={handleChange}
-                        userDetails={userDetails}
-                        setUserDetails={setUserDetails}
-                      />
+                      <div className="py-5" key={index}>
+                        <EmailAttachment
+                          key={item.key}
+                          attachmentState={attachmentState}
+                          ind={item.key}
+                          setAttachmentState={setAttachmentState}
+                          handleChange={handleChange}
+                          userDetails={userDetails}
+                          setUserDetails={setUserDetails}
+                        />
+                      </div>
                     ))}
                   </div>
                 </div>
-                {userProfileDetails?.otherEmail &&
-                userProfileDetails?.otherEmail?.length > 0
-                  ? userProfileDetails?.otherEmail.map((email, index) => (
-                      <div
-                        className="py-5 w-full"
-                        style={{ maxWidth: "300px" }}
-                        key={email._id}
-                      >
-                        <label htmlFor="">Email Address</label>
-                        <input
-                          type="text"
-                          id="fullname"
-                          name="fullname"
-                          value={email?.value}
-                          className="form-input"
-                          onChange={(e) => {
-                            handleOtherEmailChange(e, index);
-                            console.log(e.target.value);
-                          }}
-                          required
-                        />
-                        <span className="text-sm">Secondary</span>
-                      </div>
-                    ))
-                  : null}
               </div>
               <div className="mt-5 flex justify-between">
                 <Button text={loading ? "Loading..." : "Save Changes"} />

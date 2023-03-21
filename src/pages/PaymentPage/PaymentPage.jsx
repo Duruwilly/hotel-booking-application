@@ -15,6 +15,8 @@ import { clearBasket } from "../../redux/basketSlice";
 import axios from "axios";
 import { useAuthContext } from "../../context/AuthContext";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
+import { useBasketContext } from "../../context/BasketItemsContext";
+import { toast } from "react-toastify";
 
 const Payment = () => {
   useTitle("Book the world best hotel");
@@ -50,13 +52,14 @@ const Payment = () => {
 export default Payment;
 
 const PaymentCard = ({ convertPrice, exchangedPrice }) => {
-  let { basketItems } = useSelector((state) => state.basket);
+  // let { basketItems } = useSelector((state) => state.basket);
+  const { basketItems, total, getCartItems, setFetchStatus } =
+    useBasketContext();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let { days } = useDaysCalculate();
   const { user } = useAuthContext();
   let { putBookedRoomsDate } = useRoomsAvailabilityCheck();
-  let total = 0;
 
   var request_id = new Date();
   let day = String(request_id.getDate()).padStart(2, "0");
@@ -70,10 +73,6 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
   let randomNumber = (randomStr += random).split(".")[1];
 
   request_id = year + month + day + hour + minute + randomNumber;
-
-  basketItems.forEach((item) => {
-    total += item.quantity * item[0].price * item.days;
-  });
 
   const [error, setError] = useState(false);
   const [userPaymentData, setUserPaymentData] = useState({
@@ -95,9 +94,9 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
   let bookedRooms = basketItems.map((item) => ({
     hotelName: item?.hotelName,
     hotelLocation: item?.hotelCountry,
-    roomTitle: item[0]?.title,
-    roomPrice: item[0]?.price,
-    roomNumber: item[0]?.roomNumbers[0]?.number,
+    roomTitle: item?.title,
+    roomPrice: item?.price,
+    roomNumber: item?.roomNumbers[0]?.number,
     bookingStartDate: item?.dateSearch[0]?.startDate,
     bookingEndDate: item?.dateSearch[0]?.endDate,
     adult: item?.roomOptions?.adult,
@@ -105,7 +104,26 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
     days: item?.days,
     convertedPrice: convertPrice,
     transaction_id: request_id,
+    userID: item?.userID,
   }));
+
+  const clearAllCartItems = async (id) => {
+    let url = `${WILL_TRIP_BASE_URL}/cart/delete-all-item/${user?.id}`;
+    try {
+      let response = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+      if (response.data.status === "success") {
+        setFetchStatus("idle");
+        getCartItems(user);
+        toast.success(response?.data?.msg);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
 
   const paymentTransaction = async (e) => {
     e.preventDefault();
@@ -120,8 +138,10 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
           setUserPaymentData(() => ({
             [e.target.id]: "",
           }));
-          dispatch(clearBasket());
-          navigate("/");
+          // add the endpoint to clear the basket here
+          // dispatch(clearBasket());
+          clearAllCartItems()
+          navigate("/transactions/:id");
         }
       } catch (error) {
         setError(error);
@@ -266,7 +286,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
               booking summary
             </h1>
             {basketItems.map((basket) => (
-              <div key={basket[0]._id}>
+              <div key={basket._id}>
                 <BookingSummaryCard {...basket} />
               </div>
             ))}

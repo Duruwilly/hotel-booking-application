@@ -17,6 +17,7 @@ const MobileNumberAttachment = ({
           name={`att-${ind}`}
           value={userDetails.otherMobileNumber.value}
           className="form-input"
+          placeholder="Mobile Number"
           required
           onChange={(e) => {
             // spilt the id to get the number

@@ -13,6 +13,7 @@ const EmailAttachment = ({
         <input
           type="email"
           id="email"
+          placeholder="Email address"
           name={`att-${ind}`}
           value={attachmentState.otherEmail}
           className="form-input"

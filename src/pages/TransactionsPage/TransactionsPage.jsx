@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoMdDownload } from "react-icons/io";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useParams } from "react-router-dom";
+import { useAuthContext } from "../../context/AuthContext";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 const pdf = new jsPDF();
 
 const TransactionsPage = () => {
+  const { id } = useParams();
+  const [transactionsDetails, setTransactionsDetails] = useState({});
+  const [loading, setLoadingState] = useState(false);
+  const [fetchingState, setFetchingState] = useState("idle");
+  const { user } = useAuthContext();
   function finalPrint() {
     const input = document.getElementById("main");
     const width = pdf.internal.pageSize.getWidth();
@@ -24,6 +34,32 @@ const TransactionsPage = () => {
       pdf.save(`WillTripBooking.pdf`);
     });
   }
+
+  const getTransactions = async () => {
+    setLoadingState(true);
+    setFetchingState("pending");
+    try {
+      const res = await axios.get(
+        `${WILL_TRIP_BASE_URL}/${id}/transactions/single-transaction/${user?.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      if (res?.data?.status === "success") {
+        setLoadingState(false);
+        setTransactionsDetails(res?.data?.data);
+      }
+    } catch (error) {
+      setLoadingState(false);
+      toast.error(error.response?.data?.message);
+    }
+  };
+
+  // useEffect(() => {
+  //  getTransactions();
+  // }, [fetchingState]);
 
   return (
     <section className="flex justify-center items-center">
