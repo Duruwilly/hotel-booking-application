@@ -1,16 +1,14 @@
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { WILL_TRIP_BASE_URL } from "../constants/base-urls";
-import { useMediaQueriesContext } from "../context/MediaQueryContext";
+import { useBasketContext } from "../context/BasketItemsContext";
 
 const useRoomsAvailabilityCheck = () => {
-  let { dateSearch, searchQueryDates } = useSelector(
+  let { dateSearch } = useSelector(
     (state) => state.searchState
   );
-  let { basketItems } = useSelector((state) => state.basket);
-  let { date } = useMediaQueriesContext();
-
-  // console.log(basketItems);
+  // let { basketItems } = useSelector((state) => state.basket);
+  let { basketItems } = useBasketContext();
 
   const getDatesInRanges = (startDate, endDate) => {
     // we get the current date from the state
@@ -36,68 +34,9 @@ const useRoomsAvailabilityCheck = () => {
     dateSearch[0]?.endDate
   );
 
-  let datesInBasket = basketItems.map((getRoomId) => getRoomId.dateSearch[0]);
-  // console.log(datesInBasket.map((date) => new Date(date.startDate)));
-  // datesInBasket.map((date) => new Date(date.startDate));
+
   const getDatesInRangesInBasket = (startDate, endDate) => {
-    // we get the current date from the state
-    // let start = new Date(startDate);
-    // const end = new Date(endDate);
-    // let starts = "";
-    // let end = "";
-    // startDate.forEach((item, index) => {
-    //   starts += new Date(item) + " ";
-    // });
-
-    // endDate.forEach((item, index) => {
-    //   end += new Date(item) + " ";
-    // });
-    // console.log(starts, end);
-    // for(let i = starts; i <= end; i++){
-    //   console.log(i);
-    // }
-    // console.log(new Date(start));
-    // console.log(startDate, endDate);
-    // const data = []
-    // we get the time from the start date for better comparison
-    // const date = startDate.map((dates) => new Date(dates).getTime());
-    // console.log(date);
-    // data.push(...date)
-    // console.log(data);
-    // const setTheDate = startDate.map((dates) =>
-    //   new Date(dates).setDate(new Date(dates).getDate() + 1)
-    // );
-    // const getTheDate = startDate.map((dates) => new Date(dates).getDate() + 1);
-    // console.log(getTheDate);
-    // const dater = new Date(startDate[0]);
     const dates = [];
-    // console.log(dater, endDate[0]);
-    // while (dater <= endDate[0]) {
-    //   dates.push(new Date(dater).getTime());
-    //   dater.setDate(dater.getDate() + 1);
-    // }
-    // console.log(dates);
-    // while the start date is less then or equal to the end date in our state, we should push the start date to an array
-    // for (let i = startDate[0]; i <= endDate[0]; i + 1) {
-    //   console.log(i);
-    //   // dates.push(...date);
-    //   // startDate.map((dates) =>
-    //   //   new Date(dates).setDate(new Date(dates).getDate() + 1)
-    //   // );
-    // }
-
-    // for(let i = 0; i <= startDate.length; i++) {
-    //   console.log(startDate[i]);
-    // }
-    // console.log(startDate[0], endDate[0]);
-    //  for(let i = startDate[0]; i < endDate[0]; i++) {
-    //   console.log(endDate[i]);
-    //  }
-
-    // while (startDate[0] <= endDate[0]) {
-    //   dates.push(new Date(dater).getTime());
-    //   dater.setDate(dater.getDate() + 1);
-    // }
     const start = new Date(startDate);
     const end = new Date(endDate);
 
@@ -110,19 +49,6 @@ const useRoomsAvailabilityCheck = () => {
     return dates;
   };
 
-  const allDatesInBasket = getDatesInRangesInBasket(
-    datesInBasket.map((date) => new Date(date.startDate)),
-    datesInBasket.map((date) => new Date(date.endDate))
-  );
-  // const allDatesInBasket = getDatesInRangesInBasket(
-  //   datesInBasket[0].startDate,
-  //   datesInBasket[0].endDate
-  // );
-
-  // console.log(allDatesInBasket);
-
-  // console.log(allDatesInBasket[0]);
-  // console.log(allDatesInBasket);
   // map through the roomNumbers in the database. if some of the date includes the
   const isAvailable = (roomsNumber) => {
     const isFound = roomsNumber.map((num) =>
@@ -133,21 +59,31 @@ const useRoomsAvailabilityCheck = () => {
     return !isFound[0];
   };
 
+  // Within the inner Promise.all(), we are using the dateSearch property of the item to get the relevant dates for the roomObj. We are then calling the getDatesInRangesInBasket() function to generate an array of dates between the start and end dates for each date in the dateSearch array. These dates are stored in the dates array.
   const putBookedRoomsDate = async () => {
     try {
+      // using a nested Promise.all() to map the roomNumbers array for each item in the basketItems array.
       await Promise.all(
-        basketItems.map((getRoomId) =>
-          getRoomId[0].roomNumbers.map((id) => {
-            const res = axios.put(
-              `${WILL_TRIP_BASE_URL}/rooms/rooms-availability/${id._id}`,
-              { dates: allDatesInBasket }
-            );
-            return res.data;
-          })
-        )
+        basketItems.map((item) => {
+          return Promise.all(
+            item.roomNumbers.map(async (roomObj) => {
+              const dates = item.dateSearch.flatMap((date) => {
+                const startDate = new Date(date.startDate);
+                const endDate = new Date(date.endDate);
+                return getDatesInRangesInBasket(startDate, endDate);
+              });
+
+              const res = await axios.put(
+                `${WILL_TRIP_BASE_URL}/rooms/rooms-availability/${roomObj._id}`,
+                { dates }
+              );
+              return res.data;
+            })
+          );
+        })
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

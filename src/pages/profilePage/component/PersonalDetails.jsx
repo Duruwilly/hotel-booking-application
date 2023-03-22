@@ -20,6 +20,10 @@ const PersonalDetails = () => {
     setUserProfileDetails,
   } = useUserProfileContext();
   const [currWin, setCurrWin] = useState(true);
+
+  const toggleWin = () => {
+    setCurrWin(!currWin);
+  };
   useEffect(() => {
     setFetchingState("idle");
   }, []);
@@ -121,7 +125,7 @@ const PersonalDetails = () => {
               className="py-3 px-7 text-white hover:opacity-80 transition duration-700 ease-in-out"
               style={{ background: "#182428" }}
               onClick={() => {
-                setCurrWin(false);
+                toggleWin();
               }}
             >
               Edit
@@ -135,6 +139,7 @@ const PersonalDetails = () => {
         user={user}
         userProfileDetails={userProfileDetails}
         setUserProfileDetails={setUserProfileDetails}
+        toggleWin={toggleWin}
       />
     </>
   );
@@ -149,6 +154,7 @@ const EditProfile = ({
   userProfileDetails,
   setFetchingState,
   setUserProfileDetails,
+  toggleWin,
 }) => {
   const [countries, setCountries] = useState([]);
 
@@ -250,7 +256,7 @@ const EditProfile = ({
         setLoading(false);
         toast.success(res.data.msg);
         setFetchingState("idle");
-        setCurrWin(!currWin);
+        toggleWin();
       }
     } catch (error) {
       setLoading(false);
@@ -536,7 +542,7 @@ const EditProfile = ({
                 <Button text={loading ? "Loading..." : "Save Changes"} />
                 <button
                   className="py-3 px-14 border border-black rounded-sm"
-                  onClick={() => setCurrWin(true)}
+                  onClick={() => toggleWin()}
                 >
                   Cancel
                 </button>
