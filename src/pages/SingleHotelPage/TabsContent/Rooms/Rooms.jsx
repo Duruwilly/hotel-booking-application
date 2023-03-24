@@ -37,7 +37,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
 
   const addToBasket = async (id) => {
     const item = data.filter((itemId) => itemId._id === id)[0];
-    const { price, maxPeople, roomNumbers, title } = item;
+    const { price, maxPeople, roomNumbers, title, _id } = item;
     const url = `${WILL_TRIP_BASE_URL}/cart`;
     if (user) {
       try {
@@ -53,6 +53,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
           hotelName,
           feature,
           quantity: 1,
+          itemId: _id,
           userID: user.id,
         });
         setFetchStatus("idle");

@@ -7,8 +7,6 @@ import InlineErrors from "../../../components/inlineValidationErrors/InlineError
 import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
 import { useAuthContext } from "../../../context/AuthContext";
 import { getCountries } from "../../../utils/getCountries";
-import { userRolesSchema } from "../../../utils/userRolesSchema";
-
 import { validateEmail, validatePassword } from "../../../utils/validation";
 
 const RegisterPage = () => {
