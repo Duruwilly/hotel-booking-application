@@ -2,12 +2,14 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
-import InlineErrors from "../../components/inlineValidationErrors/InlineErrors";
-import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
-import { useAuthContext } from "../../context/AuthContext";
-import { getCountries } from "../../utils/getCountries";
-import { validateEmail, validatePassword } from "../../utils/validation";
+import { RegisterSignupBtn } from "../../../components/button/RegisterSignupBtn";
+import InlineErrors from "../../../components/inlineValidationErrors/InlineErrors";
+import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
+import { useAuthContext } from "../../../context/AuthContext";
+import { getCountries } from "../../../utils/getCountries";
+import { userRolesSchema } from "../../../utils/userRolesSchema";
+
+import { validateEmail, validatePassword } from "../../../utils/validation";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -32,6 +34,7 @@ const RegisterPage = () => {
     email: "",
     password: "",
     mobileNumber: "",
+    companyName: "",
   });
 
   const handleChange = (e) => {
@@ -53,12 +56,13 @@ const RegisterPage = () => {
     dispatch({ type: "START" });
     try {
       const res = await axios.post(
-        `${WILL_TRIP_BASE_URL}/auth/register`,
+        `${WILL_TRIP_BASE_URL}/auth/merchant/register`,
         userDetails
       );
+      console.log(res);
       // setLoading(false);
       dispatch({ type: "SUCCESS", payload: res.data });
-      navigate("/");
+      navigate("/merchant-home");
     } catch (error) {
       // setLoading(false);
       // setError(error.response.data);
@@ -78,13 +82,7 @@ const RegisterPage = () => {
         <div className="max-w-2xl w-full px-4">
           <div className="max-w-2xl w-full space-y-5">
             <h2 className="text-center text-xl font-medium">
-              Create a free account or become a{" "}
-              <Link
-                to="/merchant-register"
-                className="font-medium text-red-900 hover:text-red-700 underline"
-              >
-                merchant
-              </Link>
+              Create a free account
             </h2>
             <form className="space-y-2" onSubmit={handleLogin}>
               <input
@@ -95,6 +93,19 @@ const RegisterPage = () => {
                 className={inputStyle}
                 onChange={handleChange}
               />
+              <input
+                type="text"
+                placeholder="Enter Company's name"
+                id="companyName"
+                required
+                className={inputStyle}
+                onChange={handleChange}
+              />
+              {/* <select name="role" id="role"  defaultValue="merchant" className="form-input text-sm">
+                <option value="merchant" >
+                  Merchant user
+                </option>
+              </select> */}
               <select
                 name="country"
                 id="country"

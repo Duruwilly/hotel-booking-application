@@ -6,10 +6,10 @@ const LoginPage = lazy(() => import("../pages/LoginPage/LoginPage"));
 export const authRoutes = [
   {
     path: "/register",
-    element: RegisterPage,
+    component: RegisterPage,
   },
   {
     path: "/login",
-    element: LoginPage,
+    component: LoginPage,
   },
 ];

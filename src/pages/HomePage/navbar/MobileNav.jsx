@@ -4,7 +4,7 @@ import { MobileNavBtn } from "../../../components/button/MobileNavBtn";
 import { IoIosArrowDown } from "react-icons/io";
 import { useAuthContext } from "../../../context/AuthContext";
 
-const MobileNav = ({ toggle, userProfileDetails }) => {
+const MobileNav = ({ toggle, userProfileDetails, handleLogout }) => {
   const { user } = useAuthContext();
 
   return (
@@ -27,8 +27,20 @@ const MobileNav = ({ toggle, userProfileDetails }) => {
               <IoIosArrowDown className="text-inherit text-xl" />
             </div>
             <ul onClick={toggle}>
-              <li className="text-center capitalize">profile</li>
-              <li className="text-center capitalize">logout</li>
+              <Link to="/my-account">
+                <li className="capitalize">Profile</li>
+              </Link>
+              <Link to="/transactions">
+                <li className="capitalize">My Bookings</li>
+              </Link>
+              <li
+                className="capitalize"
+                onClick={() => {
+                  handleLogout();
+                }}
+              >
+                Logout
+              </li>
             </ul>
           </div>
         ) : (

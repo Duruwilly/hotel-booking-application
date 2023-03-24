@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useAuthContext } from "../context/AuthContext";
 
-export const useCheckAccess = () => {
+export const AuthCheckAccess = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [checkingStatus, setCheckingStatus] = useState(true);
   const isMounted = useRef(true);

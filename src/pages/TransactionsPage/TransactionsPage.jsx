@@ -40,7 +40,7 @@ const TransactionsPage = () => {
     setFetchingState("pending");
     try {
       const res = await axios.get(
-        `${WILL_TRIP_BASE_URL}/${id}/transactions/single-transaction/${user?.id}`,
+        `${WILL_TRIP_BASE_URL}/transactions/single-transaction/${user?.id}`,
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -63,7 +63,7 @@ const TransactionsPage = () => {
 
   return (
     <section className="flex justify-center items-center">
-      <div className="w-full max-w-screen-sm h-screen px-4 mt-7">
+      <div className="w-full max-w-screen-sm h-scree px-4 mt- py-5">
         <div
           className="flex justify-end items-center text-red-900"
           onClick={finalPrint}
