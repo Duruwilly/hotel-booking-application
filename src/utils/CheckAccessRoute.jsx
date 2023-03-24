@@ -1,11 +1,8 @@
 import axios from "axios";
-import React, { lazy, useEffect, useMemo, useState } from "react";
-import SearchButtonSpinner from "../components/Spinner/SearchButtonSpinner";
+import React, { lazy, useEffect, useState } from "react";
 import Spinner from "../components/Spinner/Spinner";
 import { WILL_TRIP_BASE_URL } from "../constants/base-urls";
 import { useAuthContext } from "../context/AuthContext";
-import CheckAccessUtil from "./CheckAccessUtil";
-// const UnathorizedPage = lazy(() => import("../pages/UnauthorizePage"));
 const UnauthorizedPage = lazy(() => import("../pages/UnauthorizePage"));
 
 const CheckAccessRoute = ({ role, component: Component }) => {

@@ -269,7 +269,10 @@ const HotelsList = () => {
       )}
       {openMapModal && (
         <Modal>
-          <Map setOpenMapModal={setOpenMapModal} />
+          <Map
+            setOpenMapModal={setOpenMapModal}
+            destination={searchParams.get("query")}
+          />
         </Modal>
       )}
       {data.responseData && data.responseData.length > 0 ? (

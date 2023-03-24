@@ -72,7 +72,8 @@ const SingleHotel = () => {
   // on re-search and returning back the hotel rooms page set the state to the location
   useEffect(() => {
     if (location && location !== "") dispatch(setDestination(location));
-  }, []);
+    // check this later. if it give a bug
+  }, [location]);
 
   // fetches a particular hotel based on the id
   useEffect(() => {
@@ -113,7 +114,7 @@ const SingleHotel = () => {
 
   const toggleFavouriteBtn = async (id) => {
     const item = data.responseData.filter((itemId) => itemId._id === id)[0];
-    const { price, _id, feature, destination, name } = item;
+    const { price, _id, feature, destination, name, } = item;
     if (!allArr.includes(id)) {
       let url = `${WILL_TRIP_BASE_URL}/favourites`;
       if (user) {
