@@ -1,26 +1,20 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
-import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
-import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
-import { useBasketContext } from "../../context/BasketItemsContext";
-import { useFavouriteContext } from "../../context/FavouriteItemsContext";
-import { useUserProfileContext } from "../../context/UserProfileContext";
+import React, { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { RegisterSignupBtn } from "../../../components/button/RegisterSignupBtn";
+import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
+import { useAuthContext } from "../../../context/AuthContext";
+import { useUserProfileContext } from "../../../context/UserProfileContext";
 
 const LoginPage = () => {
-  const inputStyle =
-    "appearance-none rounded-sm relative block w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-input-border";
-
   const [showPassword, setShowPassword] = useState(false);
-  const { setFetchStatus, fetchStatus } = useBasketContext();
-  const { setFavouriteFetchStatus } = useFavouriteContext();
+
   const { setFetchingState } = useUserProfileContext();
+
   const passwordToggle = () => {
     setShowPassword((prevState) => !prevState);
   };
-  const { user } = useAuthContext();
 
   const [userDetails, setUserDetails] = useState({
     email: undefined,
@@ -43,14 +37,12 @@ const LoginPage = () => {
     dispatch({ type: "START" });
     try {
       const res = await axios.post(
-        `${WILL_TRIP_BASE_URL}/auth/login`,
+        `${WILL_TRIP_BASE_URL}/auth/merchant/login`,
         userDetails
       );
       dispatch({ type: "SUCCESS", payload: res.data });
-      setFetchStatus("idle");
-      setFavouriteFetchStatus("idle");
       setFetchingState("idle");
-      navigate("/");
+      navigate("/merchant-home");
     } catch (error) {
       dispatch({ type: "FAILED", payload: error?.response?.data });
       localStorage.removeItem("user");
@@ -62,15 +54,7 @@ const LoginPage = () => {
       <main className="flex items-center justify-center">
         <div className="max-w-2xl w-full px-4">
           <div className="max-w-2xl w-full space-y-5">
-            <h2 className="text-center text-xl font-medium">
-              Sign in or as a{" "}
-              <Link
-                to="/merchant-login"
-                className="font-medium text-red-900 hover:text-red-700 underline"
-              >
-                merchant
-              </Link>
-            </h2>
+            <h2 className="text-center text-xl font-medium">Sign in</h2>
             <form className="space-y-2" onSubmit={handleLogin}>
               {/* <input type="hidden" name="remember" defaultValue="true" /> */}
               <input
@@ -78,7 +62,7 @@ const LoginPage = () => {
                 id="email"
                 name="email"
                 placeholder="Email address"
-                className={inputStyle}
+                className="form-input"
                 onChange={handleChange}
                 required
               />
@@ -88,7 +72,7 @@ const LoginPage = () => {
                   id="password"
                   name="password"
                   placeholder="Password"
-                  className={inputStyle}
+                  className="form-input"
                   onChange={handleChange}
                   required
                 />
@@ -130,11 +114,11 @@ const LoginPage = () => {
             <p className="text-center">
               Don't have an account?{" "}
               <Link
-                to="/register"
+                to="/merchant-register"
                 className="font-medium text-red-900 hover:text-red-700 underline"
               >
                 Sign up
-              </Link>{" "}
+              </Link>
             </p>
             <p className="text-center text-sm">
               <Link to="/term-and-condition">

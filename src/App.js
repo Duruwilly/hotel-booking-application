@@ -12,7 +12,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { privateRoutes } from "./navigation/private-routes";
 import PrivateRouteMiddleware from "./navigation/private-routes-middleware";
-import { useCheckAccess } from "./hooks/useCheckAccess";
+import { AuthCheckAccess, useCheckAccess } from "./utils/AuthCheckAccess";
 import { authRoutes } from "./navigation/auth-routes";
 import { useAuthContext } from "./context/AuthContext";
 const FooterList = lazy(() => import("./pages/HomePage/footer/FooterList"));
@@ -37,8 +37,9 @@ const FooterList = lazy(() => import("./pages/HomePage/footer/FooterList"));
 
 function App() {
   const { setDropdownHeader } = useMediaQueriesContext();
-  const { loggedIn } = useCheckAccess();
+  // const { loggedIn } = useCheckAccess();
   const { user } = useAuthContext();
+  const { loggedIn } = AuthCheckAccess();
 
   const closeModal = () => {
     setDropdownHeader(false);
@@ -52,14 +53,25 @@ function App() {
           <Navbar />
         </Suspense>
         <Routes>
+          {/* {publicRoutes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                <Suspense fallback={<Spinner />}>{<route.component />}</Suspense>
+              }
+            ></Route>
+          ))} */}
           {publicRoutes.map((route, index) => (
             <Route
               key={index}
               path={route.path}
               element={
-                <Suspense fallback={<Spinner />}>{<route.element />}</Suspense>
+                <Suspense fallback={<Spinner />}>
+                  <route.component />
+                </Suspense>
               }
-            ></Route>
+            />
           ))}
 
           {authRoutes.map((route, index) => (
@@ -68,10 +80,10 @@ function App() {
               path={route.path}
               element={
                 <Suspense fallback={<Spinner />}>
-                  {user ? <Navigate to="/" /> : <route.element />}
+                  {user ? <Navigate to="/" /> : <route.component />}
                 </Suspense>
               }
-            ></Route>
+            />
           ))}
           {privateRoutes.map((route, index) => (
             <Route
@@ -83,7 +95,7 @@ function App() {
                 path={route.path}
                 element={
                   <Suspense fallback={<Spinner />}>
-                    {<route.element />}
+                    {<route.component />}
                   </Suspense>
                 }
               />

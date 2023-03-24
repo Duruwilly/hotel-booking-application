@@ -417,11 +417,13 @@
   left: 0;
   width: 100%;
   /* color: aliceblue; */
-  /* min-width: 250px; */
+  min-width: 130px;
   background-color: rgb(31, 41, 55);
-  /* flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start; */
+  padding: 12px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   opacity: 0;
   visibility: hidden;
   box-shadow: 0px 0px 65px 0px rgba(0, 0, 0, 0.1);
@@ -455,11 +457,17 @@
   /* width: 100%; */
   display: block;
   color: inherit;
+  text-align: center;
   font-size: 16px;
   /* line-height: 28px;x */
   /* font-weight: 500; */
-  padding: 10px 20px;
+  padding: 10px 0px;
   transition: 500ms;
+}
+
+.dropdown ul li:hover {
+  color: white;
+  font-weight: 600;
 }
 
 .lines {
@@ -779,7 +787,6 @@ tr:nth-child(even) {
 
 .form-input:focus {
   outline: none;
-  
 }
 
 @layer base {

@@ -1,4 +1,6 @@
 import { lazy } from "react";
+import CheckAccessRoute from "../utils/CheckAccessRoute";
+// import CheckRouteAccess from "../utils/CheckAccessRoute";
 const HomePage = lazy(() => import("../pages/HomePage/Home"));
 const HotelsListPage = lazy(() =>
   import("../pages/HotelsListPage/HotelsListPage")
@@ -23,9 +25,9 @@ const PaymentPage = lazy(() => import("../pages/PaymentPage/PaymentPage"));
 const WishlistsPage = lazy(() =>
   import("../pages/favouritePage/FavouritesPage")
 );
-const TransactionsPage = lazy(() =>
-  import("../pages/TransactionsPage/TransactionsPage")
-);
+// const TransactionsPage = lazy(() =>
+//   import("../pages/TransactionsPage/TransactionsPage")
+// );
 // const ProfilePage = lazy(() => import("../pages/profilePage/ProfilePage"));
 const ForgotPasswordPage = lazy(() =>
   import("../pages/ForgetPasswordPage/ForgorPassword")
@@ -35,81 +37,107 @@ const ResetPasswordLink = lazy(() =>
 );
 const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
 
+const MerchantRegisterPage = lazy(() =>
+  import("../pages/MerchantPage/RegisterPage/RegisterPage")
+);
+
+const MerchantLoginPage = lazy(() =>
+  import("../pages/MerchantPage/LoginPage/LoginPage")
+);
+
+const MerchantHomePage = lazy(() =>
+  import("../pages/MerchantPage/MerchantHomePage/MerchantHome")
+);
+
 export const publicRoutes = [
   {
     path: "/",
-    element: HomePage,
+    component: HomePage,
   },
   {
     path: "/destinations/hotels",
-    element: HotelsListPage,
+    component: HotelsListPage,
   },
   {
     path: "/hotel/:hotelName/:location/:hotelId",
-    element: SingleHotelPage,
+    component: SingleHotelPage,
   },
   {
     path: "/about-us",
-    element: AboutUsPage,
+    component: AboutUsPage,
   },
   {
     path: "/about-us/:id",
-    element: BookWithUsPage,
+    component: BookWithUsPage,
   },
   // {
   //   path: "/reviews",
-  //   element: ReviewsPage,
+  //   component: ReviewsPage,
   // },
   {
     path: "/contact",
-    element: ContactPage,
+    component: ContactPage,
   },
   {
     path: "/travel-team",
-    element: TravelTeamPage,
+    component: TravelTeamPage,
   },
   {
     path: "/travel-team/:teamName/:id",
-    element: TravelTeamProfilePage,
+    component: TravelTeamProfilePage,
   },
   // {
   //   path: "/register",
-  //   element: RegisterPage,
+  //   component: RegisterPage,
   // },
   // {
   //   path: "/login",
-  //   element: LoginPage,
+  //   component: LoginPage,
   // },
   {
     path: "/basket",
-    element: BasketPage,
+    component: BasketPage,
   },
   {
     path: "/payment",
-    element: PaymentPage,
+    component: PaymentPage,
   },
   {
     path: "/wishlists",
-    element: WishlistsPage,
-  },
-  {
-    path: "/transactions/:id",
-    element: TransactionsPage,
+    component: WishlistsPage,
   },
   // {
+  //   path: "/transactions",
+  //   component: TransactionsPage,
+  // },
+  // {
   //   path: "/my-account",
-  //   element: ProfilePage,
+  //   component: ProfilePage,
   // },
   {
     path: "/forgot-password",
-    element: ForgotPasswordPage,
+    component: ForgotPasswordPage,
   },
   {
     path: "/users/resetpassword/:resetToken",
-    element: ResetPasswordLink,
+    component: ResetPasswordLink,
+  },
+  {
+    path: "/merchant-register",
+    component: MerchantRegisterPage,
+  },
+  {
+    path: "/merchant-login",
+    component: MerchantLoginPage,
+  },
+  {
+    path: "/merchant-home",
+    component: () => (
+      <CheckAccessRoute role="merchant" component={MerchantHomePage} />
+    ),
   },
   {
     path: "*",
-    element: NotFoundPage,
+    component: NotFoundPage,
   },
 ];

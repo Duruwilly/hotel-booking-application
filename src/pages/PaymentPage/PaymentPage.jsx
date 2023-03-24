@@ -52,12 +52,10 @@ const Payment = () => {
 export default Payment;
 
 const PaymentCard = ({ convertPrice, exchangedPrice }) => {
-  // let { basketItems } = useSelector((state) => state.basket);
   const { basketItems, total, getCartItems, setFetchStatus } =
     useBasketContext();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let { days } = useDaysCalculate();
   const { user } = useAuthContext();
   let { putBookedRoomsDate } = useRoomsAvailabilityCheck();
 
@@ -141,7 +139,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
           // add the endpoint to clear the basket here
           // dispatch(clearBasket());
           clearAllCartItems()
-          navigate("/transactions/:id");
+          navigate("/transactions");
         }
       } catch (error) {
         setError(error);

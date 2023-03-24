@@ -84,6 +84,7 @@ const Navbar = () => {
     dispatch({ type: "LOGOUT" });
     setBasketItems([]);
     setFavouriteItems([]);
+    navigate("/");
   };
 
   useEffect(() => {
@@ -156,16 +157,18 @@ const Navbar = () => {
                 </div>
                 <ul>
                   <Link to="/my-account">
-                    <li className="capitalize">profile</li>
+                    <li className="capitalize">Profile</li>
+                  </Link>
+                  <Link to="/transactions">
+                    <li className="capitalize">My Bookings</li>
                   </Link>
                   <li
                     className="capitalize"
                     onClick={() => {
                       handleLogout();
-                      navigate("/");
                     }}
                   >
-                    logout
+                    Logout
                   </li>
                 </ul>
               </div>
@@ -216,6 +219,7 @@ const Navbar = () => {
             <MobileNav
               toggle={toggleMobileNav}
               userProfileDetails={userProfileDetails}
+              handleLogout={handleLogout}
             />
           </div>
         </div>

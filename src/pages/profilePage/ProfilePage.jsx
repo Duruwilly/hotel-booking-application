@@ -1,28 +1,75 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PersonalDetailsPage from ".";
 import { profileBg } from "../../BgImageStyles/styles";
 import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHeader";
 import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
+import { useUserProfileContext } from "../../context/UserProfileContext";
 import { useTitle } from "../../hooks/useTitle";
+import MerchantHome from "../MerchantPage/MerchantHomePage/MerchantHome";
 import UpdatePassword from "./component/UpdatePassword";
 
 const ProfilePage = () => {
   useTitle("My profile | Book the world best hotel | WillTrip");
   const { matches, setDropdownHeader } = useMediaQueriesContext();
   const [selectedTab, setSelectedTab] = useState("personal-details");
-  const tabArr = [
-    {
-      value: "personal details",
-      title: "personal-details",
-      panel: <PersonalDetailsPage />,
-    },
-    {
-      value: "update password",
-      title: "update-password",
-      panel: <UpdatePassword />,
-    },
-  ];
+  const { userProfileDetails } = useUserProfileContext();
+  const navigate = useNavigate();
+  // const tabArr = [
+  //   {
+  //     value: "personal details",
+  //     title: "personal-details",
+  //     panel: <PersonalDetailsPage />,
+  //   },
+  //   {
+  //     value: "update password",
+  //     title: "update-password",
+  //     panel: <UpdatePassword />,
+  //   },
+
+  // ];
+
+  const tabArr =
+    userProfileDetails?.role === "merchant"
+      ? [
+          {
+            value: "personal details",
+            title: "personal-details",
+            panel: <PersonalDetailsPage />,
+          },
+          {
+            value: "update password",
+            title: "update-password",
+            panel: <UpdatePassword />,
+          },
+          {
+            value: (
+              <span onClick={() => navigate("/merchant-home")}>Add Hotels</span>
+            ),
+            title: "add-hotels",
+            panel: <MerchantHome />,
+          },
+          {
+            value: (
+              <span onClick={() => navigate("/view-listings")}>View Listings</span>
+            ),
+            title: "view-listings",
+            panel: <UpdatePassword />,
+          },
+        ]
+      : [
+          {
+            value: "personal details",
+            title: "personal-details",
+            panel: <PersonalDetailsPage />,
+          },
+          {
+            value: "update password",
+            title: "update-password",
+            panel: <UpdatePassword />,
+          },
+        ];
 
   const tabShiftArr = () => {
     const findArr = tabArr.find((arr) => arr.title === selectedTab);
