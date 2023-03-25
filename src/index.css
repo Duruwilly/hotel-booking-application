@@ -62,6 +62,13 @@
   padding: 0 1rem;
 }
 
+.auth-overlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 10rem 0 7rem;
+}
+/* favourite map image */
 .map-overlay {
   width: 100%;
   height: 100%;
@@ -787,6 +794,32 @@ tr:nth-child(even) {
 
 .form-input:focus {
   outline: none;
+}
+
+/* login-register breakpoint */
+@media screen and (min-width: 750px) {
+  .login-register {
+    display: flex;
+    flex-direction: row;
+    gap: 5rem;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .register-small-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .register-small-screen div {
+    max-width: 24rem;
+    width: 100%;
+  }
 }
 
 @layer base {

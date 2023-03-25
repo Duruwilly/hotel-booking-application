@@ -14,7 +14,7 @@ const Map = ({ setOpenMapModal, destination }) => {
   const [lat, setLat] = useState(42.35);
   const [zoom, setZoom] = useState(9);
 
-  // Function to get coordinates from search input
+  
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
@@ -37,6 +37,7 @@ const Map = ({ setOpenMapModal, destination }) => {
           setLat(coordinates[1]);
           setLng(coordinates[0]);
           setZoom(12);
+          // used to set the map's center to the geocoded location.
           map.current.setCenter(coordinates);
           if (marker.current) {
             marker.current.setLngLat(coordinates);

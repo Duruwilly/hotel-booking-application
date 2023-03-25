@@ -19,6 +19,7 @@ import mapBg from "../assets/images/map.svg";
 import overviewFacilitiesbg from "../assets/images/overviewFacBg.jpg";
 import overviewFoodsbg from "../assets/images/overviewFoodsBg.jpg";
 import profilebg from "../assets/images/profile.jpg";
+import loginbg from "../assets/images/login2.jpg";
 
 export const heroeBg = {
   width: "100%",
@@ -28,6 +29,18 @@ export const heroeBg = {
   backgroundSize: "cover",
   backgroundRepeat: "no-repeat",
   height: "50vh",
+  position: "relative",
+};
+
+export const loginBg = {
+  width: "100%",
+  maxWidth: "100vw",
+  padding: "0",
+  backgroundImage: `url(${loginbg})`,
+  // backgroundPosition: "center",
+  // backgroundSize: "cover",
+  // backgroundRepeat: "no-repeat",
+  height: "100%",
   position: "relative",
 };
 

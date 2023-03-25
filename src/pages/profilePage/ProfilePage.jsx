@@ -151,8 +151,8 @@ const ProfilePage = () => {
 
             <div style={{ flex: 4 }} className="bg-white shadow-xl">
               {!screenMatches && (
-                <div className="bg-primary  w-full relative overflow-hidde overflow-x-hidde py-3">
-                  <ul className="text-white text-center font-normal space-y-4 tracking-widest text-[.75rem] fle justify-aroun uppercase overflow-x-hidden overflow-y-hidden">
+                <div className="bg-primary  w-full relative py-3">
+                  <ul className="text-white text-center font-normal space-y-4 tracking-widest text-[.75rem] uppercase overflow-x-hidden overflow-y-hidden">
                     {duplicateArr.map((tab, index) => (
                       <div key={index} className="relative">
                         <li
