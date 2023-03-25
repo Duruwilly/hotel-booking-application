@@ -75,132 +75,134 @@ const RegisterPage = () => {
   }, []);
 
   return (
-    <section className="py-5">
-      <main className="flex items-center justify-center">
-        <div className="max-w-2xl w-full px-4">
-          <div className="max-w-2xl w-full space-y-5">
-            <h2 className="text-center text-xl font-medium">
-              Create a free account
-            </h2>
-            <form className="space-y-2" onSubmit={handleLogin}>
-              <input
-                type="name"
-                placeholder="Full Name"
-                id="fullname"
-                required
-                className={inputStyle}
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                placeholder="Enter Company's name"
-                id="companyName"
-                required
-                className={inputStyle}
-                onChange={handleChange}
-              />
-              {/* <select name="role" id="role"  defaultValue="merchant" className="form-input text-sm">
-                <option value="merchant" >
-                  Merchant user
-                </option>
-              </select> */}
-              <select
-                name="country"
-                id="country"
-                required
-                className={`${inputStyle} text-sm`}
-                onChange={handleChange}
-              >
-                <option value="">Select Country</option>
-                {countries?.map((country, index) => (
-                  <option value={country?.name} key={index}>
-                    {country?.name}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="email"
-                placeholder="Email address"
-                id="email"
-                name="email"
-                required
-                className={inputStyle}
-                onChange={handleChange}
-              />
-              {emailErrors.emailError && (
-                <InlineErrors error={emailErrors.emailError} />
-              )}
-              <div className="relative">
+    <>
+      <section className="py-5">
+        <main className="flex items-center justify-center">
+          <div className="max-w-2xl w-full px-4">
+            <div className="max-w-2xl w-full space-y-5">
+              <h2 className="text-center text-xl font-medium">
+                Create a free account
+              </h2>
+              <form className="space-y-2" onSubmit={handleLogin}>
                 <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  id="password"
-                  name="password"
+                  type="name"
+                  placeholder="Full Name"
+                  id="fullname"
                   required
                   className={inputStyle}
                   onChange={handleChange}
                 />
-                {showPassword && (
-                  <FaEye
-                    className="absolute top-5 right-1 mr-2 cursor-pointer"
-                    size={15}
-                    color="#1e1e1e"
-                    onClick={passwordToggle}
-                  />
+                <input
+                  type="text"
+                  placeholder="Enter Company's name"
+                  id="companyName"
+                  required
+                  className={inputStyle}
+                  onChange={handleChange}
+                />
+                {/* <select name="role" id="role"  defaultValue="merchant" className="form-input text-sm">
+                <option value="merchant" >
+                  Merchant user
+                </option>
+              </select> */}
+                <select
+                  name="country"
+                  id="country"
+                  required
+                  className={`${inputStyle} text-sm`}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Country</option>
+                  {countries?.map((country, index) => (
+                    <option value={country?.name} key={index}>
+                      {country?.name}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="email"
+                  placeholder="Email address"
+                  id="email"
+                  name="email"
+                  required
+                  className={inputStyle}
+                  onChange={handleChange}
+                />
+                {emailErrors.emailError && (
+                  <InlineErrors error={emailErrors.emailError} />
                 )}
-                {!showPassword && (
-                  <FaEyeSlash
-                    className="absolute top-5 right-1 mr-2 cursor-pointer"
-                    size={15}
-                    color="#1e1e1e"
-                    onClick={passwordToggle}
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    id="password"
+                    name="password"
+                    required
+                    className={inputStyle}
+                    onChange={handleChange}
                   />
+                  {showPassword && (
+                    <FaEye
+                      className="absolute top-5 right-1 mr-2 cursor-pointer"
+                      size={15}
+                      color="#1e1e1e"
+                      onClick={passwordToggle}
+                    />
+                  )}
+                  {!showPassword && (
+                    <FaEyeSlash
+                      className="absolute top-5 right-1 mr-2 cursor-pointer"
+                      size={15}
+                      color="#1e1e1e"
+                      onClick={passwordToggle}
+                    />
+                  )}
+                </div>
+                {passwordErrors.password && (
+                  <InlineErrors error={passwordErrors.password} />
                 )}
-              </div>
-              {passwordErrors.password && (
-                <InlineErrors error={passwordErrors.password} />
+                <input
+                  type="tel"
+                  placeholder="Mobile Number"
+                  id="mobileNumber"
+                  name="mobileNumber"
+                  required
+                  className={inputStyle}
+                  onChange={handleChange}
+                />
+                <RegisterSignupBtn
+                  disabled={
+                    userDetails.email === "" &&
+                    userDetails.fullname === "" &&
+                    userDetails.country === "" &&
+                    userDetails.mobileNumber === "" &&
+                    userDetails.password === ""
+                  }
+                  text={loading ? "loading..." : "Sign up"}
+                />
+              </form>
+              {error && (
+                <p className="text-red-700 text-center">{error.message}</p>
               )}
-              <input
-                type="tel"
-                placeholder="Mobile Number"
-                id="mobileNumber"
-                name="mobileNumber"
-                required
-                className={inputStyle}
-                onChange={handleChange}
-              />
-              <RegisterSignupBtn
-                disabled={
-                  userDetails.email === "" &&
-                  userDetails.fullname === "" &&
-                  userDetails.country === "" &&
-                  userDetails.mobileNumber === "" &&
-                  userDetails.password === ""
-                }
-                text={loading ? "loading..." : "Sign up"}
-              />
-            </form>
-            {error && (
-              <p className="text-red-700 text-center">{error.message}</p>
-            )}
-            <p className="text-center">
-              Already have an account?{" "}
-              <Link
-                to="/login"
-                className="font-medium text-red-900 hover:text-red-700 underline"
-              >
-                Sign in{" "}
-              </Link>
-            </p>
-            <p className="text-center text-sm">
-              <Link to="/term-and-condition">
-                By continuing you agree to the Policy and Rules of WillTrip
-              </Link>
-            </p>
+              <p className="text-center">
+                Already have an account?{" "}
+                <Link
+                  to="/merchant-login"
+                  className="font-medium text-red-900 hover:text-red-700 underline"
+                >
+                  Sign in{" "}
+                </Link>
+              </p>
+              {/* <p className="text-center text-sm">
+                <Link to="/term-and-condition">
+                  By continuing you agree to the Policy and Rules of WillTrip
+                </Link>
+              </p> */}
+            </div>
           </div>
-        </div>
-      </main>
-    </section>
+        </main>
+      </section>
+    </>
   );
 };
 

@@ -120,11 +120,11 @@ const LoginPage = () => {
                 Sign up
               </Link>
             </p>
-            <p className="text-center text-sm">
+            {/* <p className="text-center text-sm">
               <Link to="/term-and-condition">
                 By continuing you agree to the Policy and Rules of WillTrip
               </Link>
-            </p>
+            </p> */}
           </div>
         </div>
       </main>
