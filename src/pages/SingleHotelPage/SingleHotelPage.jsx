@@ -24,6 +24,7 @@ import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 import { useAuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import { useFavouriteContext } from "../../context/FavouriteItemsContext";
+import NearbyHotelsPage from "../NearbyHotels/NearbyHotelsPage";
 
 const SingleHotel = () => {
   const locationID = useLocation();
@@ -114,7 +115,7 @@ const SingleHotel = () => {
 
   const toggleFavouriteBtn = async (id) => {
     const item = data.responseData.filter((itemId) => itemId._id === id)[0];
-    const { price, _id, feature, destination, name, } = item;
+    const { price, _id, feature, destination, name } = item;
     if (!allArr.includes(id)) {
       let url = `${WILL_TRIP_BASE_URL}/favourites`;
       if (user) {
@@ -406,6 +407,12 @@ const SingleHotel = () => {
               {activeTabPanel}
             </div>
           </section>
+          <NearbyHotelsPage
+            location={location}
+            convertPrice={convertPrice}
+            exchangedPrice={exchangedPrice}
+            currentHotelId={id}
+          />
         </>
       )}
     </>

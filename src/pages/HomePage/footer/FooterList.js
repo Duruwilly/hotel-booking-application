@@ -8,7 +8,7 @@ const FooterList = () => {
   return (
     <>
       <PhoneContact />
-      <NewsLetter />
+      {/* <NewsLetter /> */}
       <FooterLinks />
       <Footer />
     </>

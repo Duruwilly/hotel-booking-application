@@ -703,17 +703,26 @@
 .custom-paginator ul {
   list-style: none;
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .custom-paginator ul li {
-  display: inline;
+  /* display: inline; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-right: 7px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
 }
 
 .custom-paginator ul li a {
   text-decoration: none;
   color: #000000;
-  padding: 3px 7px 3px 7px;
+  /* padding: 3px 7px 3px 7px; */
   font-style: normal;
   font-weight: 400;
   /* font-size: 14px; */
@@ -723,9 +732,12 @@
 
 .custom-paginator ul li.active {
   text-decoration: none;
+  /* border-radius: 50%;
+  width: 50px;
+  height: 50px; */
   background: rgb(127 29 29);
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  padding: 3px 7px 3px 7px;
+  /* box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1); */
+  /* padding: 3px 7px 3px 7px; */
 }
 
 .custom-paginator ul li.active a {

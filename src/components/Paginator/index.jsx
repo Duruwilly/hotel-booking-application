@@ -1,5 +1,6 @@
 import React from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { Link } from "react-router-dom";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 
@@ -66,7 +67,7 @@ export const Paginator = ({ currentPage, pages, url, query }) => {
                 // (query === "" ? "" : "&" + query)
               }
             >
-              <FaAngleLeft className="inline text-xl" />
+              <SlArrowLeft className="inline text-xl" />
             </Link>
           </li>
         ) : (
@@ -75,7 +76,7 @@ export const Paginator = ({ currentPage, pages, url, query }) => {
             onClick={() => setFetchHotelStatus("idle")}
           >
             <a>
-              <FaAngleLeft className="inline text-xl" />
+              <SlArrowLeft className="inline text-xl" />
             </a>
           </li>
         )}
@@ -118,7 +119,7 @@ export const Paginator = ({ currentPage, pages, url, query }) => {
                 // (query === "" ? "" : "&" + query)
               }
             >
-              <FaAngleRight className="inline text-xl" />
+              <SlArrowRight className="inline text-xl" />
             </Link>
           </li>
         ) : (
@@ -127,7 +128,7 @@ export const Paginator = ({ currentPage, pages, url, query }) => {
             onClick={() => setFetchHotelStatus("idle")}
           >
             <a>
-              <FaAngleRight className="inline text-xl" />
+              <SlArrowRight className="inline text-xl" />
             </a>
           </li>
         )}
