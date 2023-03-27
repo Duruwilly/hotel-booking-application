@@ -7,7 +7,7 @@ import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSear
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import { useUserProfileContext } from "../../context/UserProfileContext";
 import { useTitle } from "../../hooks/useTitle";
-import MerchantHome from "../MerchantPage/MerchantHomePage/MerchantHome";
+import MerchantHome from "../MerchantPage/MerchantHomePage/MerchantHomePage";
 import UpdatePassword from "./component/UpdatePassword";
 
 const ProfilePage = () => {
@@ -50,13 +50,13 @@ const ProfilePage = () => {
             title: "add-hotels",
             panel: <MerchantHome />,
           },
-          {
-            value: (
-              <span onClick={() => navigate("/view-listings")}>View Listings</span>
-            ),
-            title: "view-listings",
-            panel: <UpdatePassword />,
-          },
+          // {
+          //   value: (
+          //     <span onClick={() => navigate("/view-listings")}>View Listings</span>
+          //   ),
+          //   title: "view-listings",
+          //   panel: <UpdatePassword />,
+          // },
         ]
       : [
           {

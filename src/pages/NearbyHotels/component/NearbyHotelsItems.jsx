@@ -18,8 +18,8 @@ const NearbyHotelsItems = ({ data, exchangedPrice, convertPrice }) => {
           </p>
           <p className="font-light text-lg capitalize">{data?.name}</p>
           <p className="flex justify-between">
-            <span className="text-gray-400">Price from</span>
-            <span>{`${
+            <span className="text-[#575757] text-sm">Price from</span>
+            <span className="text-[#19242f] text-xl">{`${
               convertPrice === "USD" ? "$" : convertPrice === "EUR" ? "£" : "₦"
             } ${[data?.price * exchangedPrice]
               .toString()

@@ -46,7 +46,7 @@ const MerchantLoginPage = lazy(() =>
 );
 
 const MerchantHomePage = lazy(() =>
-  import("../pages/MerchantPage/MerchantHomePage/MerchantHome")
+  import("../pages/MerchantPage/MerchantHomePage")
 );
 
 export const publicRoutes = [
@@ -122,14 +122,14 @@ export const publicRoutes = [
     path: "/users/resetpassword/:resetToken",
     component: ResetPasswordLink,
   },
-  {
-    path: "/merchant-register",
-    component: MerchantRegisterPage,
-  },
-  {
-    path: "/merchant-login",
-    component: MerchantLoginPage,
-  },
+  // {
+  //   path: "/merchant-register",
+  //   component: MerchantRegisterPage,
+  // },
+  // {
+  //   path: "/merchant-login",
+  //   component: MerchantLoginPage,
+  // },
   {
     path: "/merchant-home",
     component: () => (
