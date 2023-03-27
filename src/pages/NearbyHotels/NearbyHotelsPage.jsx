@@ -61,7 +61,7 @@ const NearbyHotelsPage = ({
 
   return (
     <>
-      {data && (
+      {data && data.length > 0 ? (
         <section>
           <div className="bg-primary py-4 w-full uppercase text-gray-200 text-sm font-medium text-center">
             hotels nearby
@@ -82,7 +82,7 @@ const NearbyHotelsPage = ({
             </div>
           </main>
         </section>
-      )}
+      ) : null}
     </>
   );
 };

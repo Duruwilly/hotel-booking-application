@@ -7,7 +7,7 @@ const Modal = ({ toggle, children }) => {
       style={{ background: "rgba(0, 0, 0, 0.8)" }}
       //   onClick={() => toggle()}
     >
-      <div className="w-full max-w-screen-xl relative shadow-md">
+      <div className="w-full max-w-screen-xl relative shadow-md overflow-y-auto">
         {children}
       </div>
     </div>
