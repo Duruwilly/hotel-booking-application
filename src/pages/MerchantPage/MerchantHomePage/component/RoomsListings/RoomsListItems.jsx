@@ -8,7 +8,8 @@ import { useAuthContext } from "../../../../../context/AuthContext";
 import { useAddHotelContext } from "../../context/AddhotelContext";
 
 const RoomsListItems = ({ data, hotelId }) => {
-  const { initializeState } = useAddHotelContext();
+  const { initializeState, toggleEditRoomModal, setEditRoomState } =
+    useAddHotelContext();
   const { user } = useAuthContext();
   const hotelBg = {
     width: "100%",
@@ -47,7 +48,13 @@ const RoomsListItems = ({ data, hotelId }) => {
               view hotel
             </button>
           </Link>
-          <button className="bg-secondary w-ful py-4 px-5 uppercase text-xs text-white">
+          <button
+            className="bg-secondary w-ful py-4 px-5 uppercase text-xs text-white"
+            onClick={() => {
+              toggleEditRoomModal();
+              setEditRoomState(data);
+            }}
+          >
             edit hotel
           </button>
         </div>

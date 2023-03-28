@@ -6,7 +6,13 @@ import { useAddHotelContext } from "../../context/AddhotelContext";
 import HotelRoomsListings from "../RoomsListings/HotelRoomsListings";
 
 const ListingsItem = ({ data }) => {
-  const { deleteHotel, addRoomsModal, setGetHotelId } = useAddHotelContext();
+  const {
+    deleteHotel,
+    addRoomsModal,
+    setGetHotelId,
+    toggleEditHotelModal,
+    setEditHotelState,
+  } = useAddHotelContext();
   const hotelBg = {
     width: "100%",
     padding: "0",
@@ -29,7 +35,13 @@ const ListingsItem = ({ data }) => {
                     view hotel
                   </button>
                 </Link>
-                <button className="bg-secondary w-ful py-4 px-5 uppercase text-xs text-white">
+                <button
+                  className="bg-secondary w-ful py-4 px-5 uppercase text-xs text-white"
+                  onClick={() => {
+                    toggleEditHotelModal();
+                    setEditHotelState(data);
+                  }}
+                >
                   edit hotel
                 </button>
               </div>

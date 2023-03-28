@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import CreateHotelForm from "./component/AddHotel";
+import EditHotelModal from "./component/HotelListings/EditHotelModal";
 import Listings from "./component/HotelListings/Listings";
 import AddRooms from "./component/RoomsListings/AddRooms";
+import EditRoomsList from "./component/RoomsListings/EditRoomsList";
 import { useAddHotelContext } from "./context/AddhotelContext";
 
 const MerchantHomePage = () => {
@@ -34,6 +36,8 @@ const MerchantHomePage = () => {
       </section>
       <CreateHotelForm />
       <AddRooms />
+      <EditHotelModal />
+      <EditRoomsList />
     </>
   );
 };

@@ -9,6 +9,10 @@ const AddHotelContext = createContext();
 export const AddHotelProvider = ({ children }) => {
   const [openAddModal, setAddModal] = useState(false);
   const [openAddRoomsModal, setOpenAddRoomsModal] = useState(false);
+  const [editHotelModal, setEditHotelModal] = useState(false);
+  const [editRoomModal, setEditRoomModal] = useState(false);
+  const [editHotelState, setEditHotelState] = useState({});
+  const [editRoomState, setEditRoomState] = useState({});
   const [getHotelId, setGetHotelId] = useState();
   const [fetchUserListing, setFetchUserListing] = useState({
     fetching: true,
@@ -27,7 +31,6 @@ export const AddHotelProvider = ({ children }) => {
     destination: "",
     feature: "",
     address: "",
-    photos: "",
     price: "",
     overview: "",
     facilities: "",
@@ -50,6 +53,14 @@ export const AddHotelProvider = ({ children }) => {
 
   const addRoomsModal = () => {
     setOpenAddRoomsModal(!openAddRoomsModal);
+  };
+
+  const toggleEditHotelModal = () => {
+    setEditHotelModal(!editHotelModal);
+  };
+
+  const toggleEditRoomModal = () => {
+    setEditRoomModal(!editRoomModal);
   };
 
   const fetchListings = async () => {
@@ -169,23 +180,6 @@ export const AddHotelProvider = ({ children }) => {
     }
   };
 
-  const deleteRoom = async (id) => {
-    let url = `${WILL_TRIP_BASE_URL}/rooms/${id}/merchant`;
-    try {
-      let response = await axios.delete(url, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      if (response.data.status === "success") {
-        initializeState();
-        toast.success(response?.data?.msg);
-      }
-    } catch (error) {
-      toast.error(error?.response?.data?.message);
-    }
-  };
-
   const addHotelOnChange = (e) => {
     if (e.target.files) {
       setListingsData((prev) => ({
@@ -223,10 +217,31 @@ export const AddHotelProvider = ({ children }) => {
       };
     });
     setListingsData((state) => {
-      return { ...state, listingsData: "" };
+      return {
+        ...state,
+        name: "",
+        destination: "",
+        feature: "",
+        address: "",
+        photos: [],
+        price: "",
+        overview: "",
+        facilities: "",
+        foods_and_drinks: "",
+        location: "",
+      };
+    });
+    setRoomsListings((state) => {
+      return {
+        ...state,
+        title: "",
+        description: "",
+        price: 0,
+        maxPeople: 0,
+        roomNumbers: [{ number: 0 }],
+      };
     });
   };
-  // console.log([roomsListings.roomNumbers[0].number = 5]);
   return (
     <AddHotelContext.Provider
       value={{
@@ -249,6 +264,15 @@ export const AddHotelProvider = ({ children }) => {
         roomsListings,
         setRoomsListings,
         addRoomsOnChange,
+        toggleEditHotelModal,
+        editHotelModal,
+        setListingsData,
+        editRoomModal,
+        toggleEditRoomModal,
+        setEditHotelState,
+        editHotelState,
+        setEditRoomState,
+        editRoomState,
       }}
     >
       {children}
