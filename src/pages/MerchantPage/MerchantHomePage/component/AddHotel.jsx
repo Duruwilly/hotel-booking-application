@@ -4,6 +4,7 @@ import Modal from "../../../../components/Modal/Modal";
 import { useAddHotelContext } from "../context/AddhotelContext";
 
 const CreateHotelForm = () => {
+  
   const {
     openAddModal,
     toggleModal,
@@ -22,7 +23,7 @@ const CreateHotelForm = () => {
                 className="text-whit absolute top-4 right-4 text-2xl cursor-pointer"
               />
               <form
-                className="py-24 px-8"
+                className="py-14 px-8"
                 onSubmit={(e) => {
                   e.preventDefault();
                   submitListings();

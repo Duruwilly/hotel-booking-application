@@ -17,9 +17,21 @@ const EditHotelModal = () => {
     listingsData,
     initializeState,
   } = useAddHotelContext();
+  const [editListingHotel, setEditListingHotel] = useState({
+    name: "",
+    destination: "",
+    feature: "",
+    address: "",
+    price: "",
+    overview: "",
+    facilities: "",
+    foods_and_drinks: "",
+    location: "",
+    photos: [],
+  });
 
   useEffect(() => {
-    setListingsData({
+    setEditListingHotel({
       name: editHotelState?.name || "",
       destination: editHotelState?.destination || "",
       feature: editHotelState?.feature || "",
@@ -34,7 +46,7 @@ const EditHotelModal = () => {
   }, [editHotelState]);
 
   const handleChange = (e) => {
-    setListingsData((prev) => ({
+    setEditListingHotel((prev) => ({
       ...prev,
       [e.target.id]: e.target.value,
     }));
@@ -45,7 +57,7 @@ const EditHotelModal = () => {
     try {
       let res = await axios.put(
         url,
-        { ...listingsData },
+        { ...editListingHotel },
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -73,7 +85,7 @@ const EditHotelModal = () => {
                 className="text-whit absolute top-4 right-4 text-2xl cursor-pointer"
               />
               <form
-                className="py-24 px-8"
+                className="py-14 px-8"
                 onSubmit={(e) => {
                   e.preventDefault();
                   submitEditHotelsListing();
@@ -88,7 +100,7 @@ const EditHotelModal = () => {
                         className="form-input"
                         placeholder="Enter Hotel name"
                         id="name"
-                        value={listingsData.name}
+                        value={editListingHotel.name}
                         onChange={handleChange}
                       />
                     </div>
@@ -99,7 +111,7 @@ const EditHotelModal = () => {
                         className="form-input"
                         placeholder="Enter destination eg. Lagos, nigeria"
                         id="destination"
-                        value={listingsData.destination}
+                        value={editListingHotel.destination}
                         onChange={handleChange}
                       />
                     </div>
@@ -112,7 +124,7 @@ const EditHotelModal = () => {
                         className="form-input"
                         placeholder="Enter price"
                         id="price"
-                        value={listingsData.price}
+                        value={editListingHotel.price}
                         onChange={handleChange}
                       />
                     </div>
@@ -125,7 +137,7 @@ const EditHotelModal = () => {
                         className="form-input"
                         placeholder="Enter package"
                         id="feature"
-                        value={listingsData.feature}
+                        value={editListingHotel.feature}
                         onChange={handleChange}
                       />
                     </div>
@@ -138,7 +150,7 @@ const EditHotelModal = () => {
                         className="form-input"
                         placeholder="Enter address"
                         id="address"
-                        value={listingsData.address}
+                        value={editListingHotel.address}
                         onChange={handleChange}
                       />
                     </div>
@@ -150,7 +162,7 @@ const EditHotelModal = () => {
                       id="location"
                       placeholder="Write a brief description of the location and it's surrounding environment"
                       className="form-input"
-                      value={listingsData.location}
+                      value={editListingHotel.location}
                       onChange={handleChange}
                     ></textarea>
                   </div>
@@ -161,7 +173,7 @@ const EditHotelModal = () => {
                       id="overview"
                       placeholder="Write a brief summary of the hotel"
                       className="form-input"
-                      value={listingsData.overview}
+                      value={editListingHotel.overview}
                       onChange={handleChange}
                     ></textarea>
                   </div>
@@ -172,7 +184,7 @@ const EditHotelModal = () => {
                       id="facilities"
                       placeholder="Write a brief summary of the hotel facilities"
                       className="form-input"
-                      value={listingsData.facilities}
+                      value={editListingHotel.facilities}
                       onChange={handleChange}
                     ></textarea>
                   </div>
@@ -185,7 +197,7 @@ const EditHotelModal = () => {
                       id="foods_and_drinks"
                       placeholder="Write a brief summary of the foods and drinks in the hotel"
                       className="form-input"
-                      value={listingsData.foods_and_drinks}
+                      value={editListingHotel.foods_and_drinks}
                       onChange={handleChange}
                     ></textarea>
                   </div>
