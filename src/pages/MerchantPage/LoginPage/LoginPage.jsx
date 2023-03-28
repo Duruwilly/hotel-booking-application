@@ -6,8 +6,10 @@ import { RegisterSignupBtn } from "../../../components/button/RegisterSignupBtn"
 import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
 import { useAuthContext } from "../../../context/AuthContext";
 import { useUserProfileContext } from "../../../context/UserProfileContext";
+import { useTitle } from "../../../hooks/useTitle";
 
 const LoginPage = () => {
+  useTitle("WillTrip | merchant login");
   const [showPassword, setShowPassword] = useState(false);
 
   const { setFetchingState } = useUserProfileContext();

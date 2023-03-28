@@ -6,10 +6,12 @@ import { RegisterSignupBtn } from "../../../components/button/RegisterSignupBtn"
 import InlineErrors from "../../../components/inlineValidationErrors/InlineErrors";
 import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
 import { useAuthContext } from "../../../context/AuthContext";
+import { useTitle } from "../../../hooks/useTitle";
 import { getCountries } from "../../../utils/getCountries";
 import { validateEmail, validatePassword } from "../../../utils/validation";
 
 const RegisterPage = () => {
+  useTitle("WillTrip | merchant register");
   const navigate = useNavigate();
   const [passwordErrors, setPasswordErrors] = useState({});
   const [emailErrors, setEmailErrors] = useState({});

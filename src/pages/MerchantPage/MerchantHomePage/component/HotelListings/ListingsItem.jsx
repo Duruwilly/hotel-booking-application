@@ -30,7 +30,7 @@ const ListingsItem = ({ data }) => {
           <div style={hotelBg} className="relative">
             <div className="heroe-overlay flex justify-center items-center flex-col">
               <div className="flex justify-center gap-3 items-cente">
-                <Link to={`${data?.name}/${data?._id}`} className="">
+                <Link to={`/view-hotel-listing/${data?.name}/${data?._id}`} className="">
                   <button className="bg-green-800 w-ful py-4 px-5 uppercase text-xs text-white">
                     view hotel
                   </button>

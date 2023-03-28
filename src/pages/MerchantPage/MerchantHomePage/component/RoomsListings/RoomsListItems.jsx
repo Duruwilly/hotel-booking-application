@@ -43,7 +43,7 @@ const RoomsListItems = ({ data, hotelId }) => {
     <div style={hotelBg} className="relative">
       <div className="heroe-overlay flex justify-center items-center flex-col">
         <div className="flex justify-center gap-3 items-cente">
-          <Link to="/" className="">
+          <Link to={`/view-room/${data.title}/${data._id}`} className="">
             <button className="bg-green-800 w-ful py-4 px-5 uppercase text-xs text-white">
               view hotel
             </button>

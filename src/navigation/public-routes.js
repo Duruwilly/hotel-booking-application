@@ -49,6 +49,18 @@ const MerchantHomePage = lazy(() =>
   import("../pages/MerchantPage/MerchantHomePage")
 );
 
+const ViewHotelListingPage = lazy(() =>
+  import(
+    "../pages/MerchantPage/MerchantHomePage/component/HotelListings/ViewHotelList"
+  )
+);
+
+const ViewRoomListingPage = lazy(() =>
+  import(
+    "../pages/MerchantPage/MerchantHomePage/component/RoomsListings/ViewRoomsListing"
+  )
+);
+
 export const publicRoutes = [
   {
     path: "/",
@@ -134,6 +146,18 @@ export const publicRoutes = [
     path: "/merchant-home",
     component: () => (
       <CheckAccessRoute role="merchant" component={MerchantHomePage} />
+    ),
+  },
+  {
+    path: "/view-hotel-listing/:hotelName/:id",
+    component: () => (
+      <CheckAccessRoute role="merchant" component={ViewHotelListingPage} />
+    ),
+  },
+  {
+    path: "/view-room/:roomTitle/:id",
+    component: () => (
+      <CheckAccessRoute role="merchant" component={ViewRoomListingPage} />
     ),
   },
   {
