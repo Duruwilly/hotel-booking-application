@@ -16,8 +16,10 @@ import { BsTelephone } from "react-icons/bs";
 import { CiCircleCheck } from "react-icons/ci";
 import { HiOutlineGift } from "react-icons/hi";
 import { BsPersonCircle } from "react-icons/bs";
+import { useTitle } from "../../hooks/useTitle";
 
 const LoginRegisterPage = () => {
+  useTitle("WillTrip | login");
   const [showPassword, setShowPassword] = useState(false);
   const { setFetchStatus } = useBasketContext();
   const { setFavouriteFetchStatus } = useFavouriteContext();

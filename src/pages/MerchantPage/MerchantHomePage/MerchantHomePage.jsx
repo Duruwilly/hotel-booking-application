@@ -5,10 +5,12 @@ import Listings from "./component/HotelListings/Listings";
 import AddRooms from "./component/RoomsListings/AddRooms";
 import EditRoomsList from "./component/RoomsListings/EditRoomsList";
 import { useAddHotelContext } from "./context/AddhotelContext";
+import { useTitle } from "../../../hooks/useTitle";
 
 const MerchantHomePage = () => {
   const { toggleModal, initializeState, clearState, user } =
     useAddHotelContext();
+  useTitle("Merchant home page | WillTrip");
 
   useEffect(() => {
     initializeState();
