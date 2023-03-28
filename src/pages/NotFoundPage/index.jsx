@@ -5,8 +5,8 @@ import { useTitle } from "../../hooks/useTitle";
 const NotFoundPage = () => {
   useTitle("404");
   return (
-    <section className="flex justify-center items-cente">
-      <div className="w-full max-w-screen-lg px-4 py-8">
+    <section className="flex justify-center">
+      <div className="w-full max-w-screen-lg px-4 py-20">
         <div>
           <h1 className="fone-semibold tracking-widest text-center">
             404, sorry you seem to have entered an invalid url

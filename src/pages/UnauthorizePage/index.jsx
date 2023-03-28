@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const index = () => {
   return (
     <section className="flex justify-center items-cente">
-      <div className="w-full max-w-screen-lg px-4 py-8">
+      <div className="w-full max-w-screen-lg px-4 py-20">
         <div>
           <h1 className="font-semibold tracking-widest text-center">
             Sorry, you do not have access to this page

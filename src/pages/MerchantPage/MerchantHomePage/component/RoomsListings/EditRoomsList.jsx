@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Modal from "../../../../../components/Modal/Modal";
@@ -9,18 +9,19 @@ import { useAddHotelContext } from "../../context/AddhotelContext";
 
 const EditRoomsList = () => {
   const { user } = useAuthContext();
-  const {
-    initializeState,
-    editRoomModal,
-    setRoomsListings,
-    roomsListings,
-    editRoomState,
-    toggleEditRoomModal,
-    addRoomsOnChange,
-  } = useAddHotelContext();
+  const { initializeState, editRoomModal, editRoomState, toggleEditRoomModal } =
+    useAddHotelContext();
+
+  const [editRoomList, setEditRoomList] = useState({
+    title: "",
+    description: "",
+    price: 0,
+    maxPeople: 0,
+    roomNumbers: [{ number: 0 }],
+  });
 
   useEffect(() => {
-    setRoomsListings({
+    setEditRoomList({
       title: editRoomState?.title || "",
       description: editRoomState?.description || "",
       price: editRoomState?.price || 0,
@@ -34,7 +35,7 @@ const EditRoomsList = () => {
     try {
       let res = await axios.put(
         url,
-        { ...roomsListings },
+        { ...editRoomList },
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -49,6 +50,13 @@ const EditRoomsList = () => {
     } catch (error) {
       toast.error(error?.data?.response.message);
     }
+  };
+
+  const roomsOnChange = (e) => {
+    setEditRoomList((prev) => ({
+      ...prev,
+      [e.target.id]: e.target.value,
+    }));
   };
 
   return (
@@ -77,8 +85,8 @@ const EditRoomsList = () => {
                         className="form-input"
                         placeholder="Enter room title eg. executive"
                         id="title"
-                        value={roomsListings.title}
-                        onChange={addRoomsOnChange}
+                        value={editRoomList.title}
+                        onChange={roomsOnChange}
                       />
                     </div>
                     <div className="w-full">
@@ -88,8 +96,8 @@ const EditRoomsList = () => {
                         className="form-input"
                         placeholder="Enter price for this particular room"
                         id="price"
-                        value={roomsListings.price}
-                        onChange={addRoomsOnChange}
+                        value={editRoomList.price}
+                        onChange={roomsOnChange}
                       />
                     </div>
                   </div>
@@ -101,8 +109,8 @@ const EditRoomsList = () => {
                         className="form-input"
                         placeholder="Enter max people for this particular room"
                         id="maxPeople"
-                        value={roomsListings.maxPeople}
-                        onChange={addRoomsOnChange}
+                        value={editRoomList.maxPeople}
+                        onChange={roomsOnChange}
                       />
                     </div>
 
@@ -113,10 +121,10 @@ const EditRoomsList = () => {
                         className="form-input"
                         placeholder="Enter room number"
                         id="number"
-                        value={roomsListings.roomNumbers[0].number}
+                        value={editRoomList.roomNumbers[0].number}
                         onChange={(e) => {
                           const newNumber = e.target.value;
-                          setRoomsListings((prev) => {
+                          setEditRoomList((prev) => {
                             const updatedRoomNumbers = prev.roomNumbers.map(
                               (room) => {
                                 return { ...room, number: newNumber };
@@ -138,8 +146,8 @@ const EditRoomsList = () => {
                       id="description"
                       placeholder="Write a brief description of the room"
                       className="form-input"
-                      value={roomsListings.description}
-                      onChange={addRoomsOnChange}
+                      value={editRoomList.description}
+                      onChange={roomsOnChange}
                     ></textarea>
                   </div>
                   <div className="flex justify-center">
