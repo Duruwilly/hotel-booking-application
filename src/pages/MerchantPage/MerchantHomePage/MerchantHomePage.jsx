@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import CreateHotelForm from "./component/AddHotel";
 import EditHotelModal from "./component/HotelListings/EditHotelModal";
 import Listings from "./component/HotelListings/Listings";
 import AddRooms from "./component/RoomsListings/AddRooms";
 import EditRoomsList from "./component/RoomsListings/EditRoomsList";
 import { useAddHotelContext } from "./context/AddhotelContext";
 import { useTitle } from "../../../hooks/useTitle";
+import CreateHotelForm from "./component/HotelListings/AddHotel";
 
 const MerchantHomePage = () => {
   const { toggleModal, initializeState, clearState, user } =
@@ -22,7 +22,7 @@ const MerchantHomePage = () => {
 
   return (
     <>
-      <section className="flex justify-center items-cente">
+      <section className="flex justify-center">
         <div className="w-full max-w-screen-xl px-4 py-6">
           <div>
             <button

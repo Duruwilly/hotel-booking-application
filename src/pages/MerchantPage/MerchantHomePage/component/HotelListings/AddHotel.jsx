@@ -1,7 +1,7 @@
 import React from "react";
 import { FaTimes } from "react-icons/fa";
-import Modal from "../../../../components/Modal/Modal";
-import { useAddHotelContext } from "../context/AddhotelContext";
+import Modal from "../../../../../components/Modal/Modal";
+import { useAddHotelContext } from "../../context/AddhotelContext";
 
 const CreateHotelForm = () => {
   const {
