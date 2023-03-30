@@ -9,7 +9,7 @@ const FavouritesItem = ({
   deleteFavourite,
 }) => {
   const [activeItem, setActiveItem] = useState("");
-
+console.log(fav.itemId);
   return (
     <div className="bg-whit border border-gray-300">
       <div style={{ flex: 3 }}>

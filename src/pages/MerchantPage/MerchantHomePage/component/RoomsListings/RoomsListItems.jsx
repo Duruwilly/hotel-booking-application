@@ -45,7 +45,7 @@ const RoomsListItems = ({ data, hotelId }) => {
         <div className="flex justify-center gap-3 items-cente">
           <Link to={`/view-room/${data.title}/${data._id}`} className="">
             <button className="bg-green-800 w-ful py-4 px-5 uppercase text-xs text-white">
-              view hotel
+              view room
             </button>
           </Link>
           <button
@@ -55,7 +55,7 @@ const RoomsListItems = ({ data, hotelId }) => {
               setEditRoomState(data);
             }}
           >
-            edit hotel
+            edit room
           </button>
         </div>
         <div className="flex justify-center mt-3">
