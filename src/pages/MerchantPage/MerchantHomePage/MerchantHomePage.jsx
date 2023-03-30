@@ -26,7 +26,7 @@ const MerchantHomePage = () => {
         <div className="w-full max-w-screen-xl px-4 py-6">
           <div>
             <button
-              className="bg-secondary text-white rounded-md float-lef py-2 capitalize w-1/6"
+              className="bg-secondary text-white rounded-md float-lef py-2 capitalize w- px-6"
               style={{ boxShadow: "0 2px 6px 0 rgba(0, 0, 0, 0.9)" }}
               onClick={() => toggleModal()}
             >

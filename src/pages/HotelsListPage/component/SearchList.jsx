@@ -25,6 +25,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
   const navigate = useNavigate();
   const { favouriteItems, setFavouriteFetchStatus, getFavouriteItems } =
     useFavouriteContext();
+  //  favouriteItems.filter((item) => console.log(item.itemId));
 
   const [allArr, setAllArr] = useState(likedItemCheck());
 
@@ -35,13 +36,15 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
   const toggleFavouriteBtn = async (id) => {
     const item = data.filter((itemId) => itemId._id === id)[0];
     const { price, _id, feature, destination, name } = item;
+    const itemId = favouriteItems.filter((item) => item?.itemId === id)[0];
+
     if (!allArr.includes(id)) {
       let url = `${WILL_TRIP_BASE_URL}/favourites`;
       if (user) {
         try {
           await axios.post(url, {
             price,
-            _id,
+            itemId: _id,
             feature,
             destination,
             name,
@@ -59,18 +62,17 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
         navigate("/login");
       }
     } else {
-      let url = `${WILL_TRIP_BASE_URL}/favourites/${user?.id}/delete-favourite/${id}`;
+      let url = `${WILL_TRIP_BASE_URL}/favourites/${user?.id}/delete-favourite/${itemId._id}`;
       try {
         let response = await axios.delete(url, {
           headers: {
             Authorization: `Bearer ${user?.token}`,
           },
         });
-        if (response?.data?.status === "success") {
+        if (response.data.status === "success") {
           setFavouriteFetchStatus("idle");
           getFavouriteItems(user);
-          setAllArr(allArr.filter((item) => item !== id)); // Remove the item from allArr
-          // toast.success(response?.data?.msg);
+          setAllArr(allArr.filter((item) => item !== id));
         }
       } catch (error) {
         toast.error(error?.response?.data?.message);
@@ -128,11 +130,9 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
               allArr.includes(hotel._id) ? likedBtnnColor : `text-gray-200`
             }`}
             style={{ background: "rgba(0,0,0,0.4)" }}
+            onClick={() => toggleFavouriteBtn(hotel._id)}
           >
-            <AiFillHeart
-              className=""
-              onClick={() => toggleFavouriteBtn(hotel._id)}
-            />
+            <AiFillHeart className="" />
           </button>
         </div>
       </div>

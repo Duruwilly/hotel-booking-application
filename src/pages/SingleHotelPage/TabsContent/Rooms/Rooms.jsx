@@ -66,6 +66,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
       navigate("/login");
     }
   };
+  
 
   return (
     <>
