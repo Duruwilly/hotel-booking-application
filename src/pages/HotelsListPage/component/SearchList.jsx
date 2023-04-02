@@ -25,7 +25,6 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
   const navigate = useNavigate();
   const { favouriteItems, setFavouriteFetchStatus, getFavouriteItems } =
     useFavouriteContext();
-  //  favouriteItems.filter((item) => console.log(item.itemId));
 
   const [allArr, setAllArr] = useState(likedItemCheck());
 

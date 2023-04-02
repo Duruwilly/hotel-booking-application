@@ -5,6 +5,7 @@ import {
 } from "../../../../BgImageStyles/styles";
 
 const Overview = ({ singleHotel }) => {
+  console.log(singleHotel);
   return (
     <>
       {singleHotel.feature && (

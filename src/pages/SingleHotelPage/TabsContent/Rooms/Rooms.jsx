@@ -79,7 +79,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
   return (
     <>
       <div className="flex justify-center">
-        <div className="w-full max-w-screen-lg mt-">
+        <div className="w-full max-w-screen-lg px-4 mt-">
           <PriceConversion />
           {data.map((room) => (
             <div key={room._id} className="mt-3">

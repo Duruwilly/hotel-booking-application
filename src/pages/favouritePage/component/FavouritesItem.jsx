@@ -13,7 +13,7 @@ const FavouritesItem = ({
   return (
     <div className="bg-whit border border-gray-300">
       <div style={{ flex: 3 }}>
-        <Link to={`/hotel/${fav.name}/${fav.destination}/${fav._id}`}>
+        <Link to={`/hotel/${fav.name}/${fav.destination}/${fav.itemId}`}>
           <div>
             <img src={fav.photos[0]?.url} alt="" />
           </div>
