@@ -46,24 +46,45 @@ const EditHotelModal = () => {
   }, [editHotelState]);
 
   const handleChange = (e) => {
-    setEditListingHotel((prev) => ({
-      ...prev,
-      [e.target.id]: e.target.value,
-    }));
+    if (!e.target.files) {
+      setEditListingHotel((prev) => ({
+        ...prev,
+        [e.target.id]: e.target.value,
+      }));
+    }
+    if (e.target.files) {
+      setEditListingHotel((prev) => ({
+        ...prev,
+        photos: e.target.files,
+      }));
+    }
   };
 
   const submitEditHotelsListing = async () => {
     let url = `${WILL_TRIP_BASE_URL}/hotels/merchant/${editHotelState._id}`;
+
+    const formData = new FormData();
+    formData.append("name", editListingHotel.name);
+    formData.append("destination", editListingHotel.destination);
+    formData.append("feature", editListingHotel.feature);
+    formData.append("address", editListingHotel.address);
+    formData.append("price", editListingHotel.price);
+    formData.append("overview", editListingHotel.overview);
+    formData.append("facilities", editListingHotel.facilities);
+    formData.append("foods_and_drinks", editListingHotel.foods_and_drinks);
+    formData.append("location", editListingHotel.location);
+
+    for (let i = 0; i < editListingHotel.photos.length; i++) {
+      formData.append("photos", editListingHotel.photos[i]);
+    }
+
     try {
-      let res = await axios.put(
-        url,
-        { ...editListingHotel },
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
-      );
+      const res = await axios.put(url, formData, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       if (res.data.status === "success") {
         toast.success(res?.data?.msg);
         initializeState();

@@ -9,31 +9,39 @@ import useDaysCalculate from "../../../../hooks/useDaysCalculate";
 import { WILL_TRIP_BASE_URL } from "../../../../constants/base-urls";
 import { toast } from "react-toastify";
 import { useBasketContext } from "../../../../context/BasketItemsContext";
+import SearchButtonSpinner from "../../../../components/Spinner/SearchButtonSpinner";
 
 const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
   const { user } = useAuthContext();
   let { days } = useDaysCalculate();
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
   const { setFetchStatus, getCartItems } = useBasketContext();
 
   useEffect(() => {
+    const controller = new AbortController();
+    const fetchRoom = async () => {
+      try {
+        let url = `http://localhost:8800/api/v1/hotels/room/${hotelID}`;
+        const res = await axios.get(url);
+        setData(res.data.data);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
     fetchRoom();
+    return () => {
+      controller.abort();
+    };
   }, [hotelID]);
 
   // fetches rooms
-  const fetchRoom = async () => {
-    try {
-      let url = `http://localhost:8800/api/v1/hotels/room/${hotelID}`;
-      const res = await axios.get(url);
-      setData(res.data.data);
-    } catch (error) {
-      setError(error);
-    }
-  };
 
   const addToBasket = async (id) => {
     const item = data.filter((itemId) => itemId._id === id)[0];
@@ -66,8 +74,8 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
       navigate("/login");
     }
   };
-  
 
+  if (loading || data.length === 0) return <SearchButtonSpinner />;
   return (
     <>
       <div className="flex justify-center">

@@ -147,6 +147,7 @@ const CreateHotelForm = () => {
                       type="file"
                       id="photos"
                       className="form-input"
+                      style={{color: "#495057", backgroundClip: "padding-box"}}
                       placeholder="Upload images"
                       accept=".jpg,.png,.jpeg"
                       multiple

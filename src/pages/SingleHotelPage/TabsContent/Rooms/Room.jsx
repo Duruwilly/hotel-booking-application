@@ -39,11 +39,11 @@ const Room = ({ room, feature, addToBasket }) => {
     if (dir === "l") {
       // newSliderNumber would return the last image in the array if sliderNumber is 0 else keep sliding left
       newSliderNumber =
-        sliderNumber === 0 ? sliderImg.length - 1 : sliderNumber - 1;
+        sliderNumber === 0 ? room.photos.length - 1 : sliderNumber - 1;
     } else {
       // newSliderNumber would return the first image in the array if sliderNumber is equal to the last image else keep sliding right
       newSliderNumber =
-        sliderNumber === sliderImg.length - 1 ? 0 : sliderNumber + 1;
+        sliderNumber === room.photos.length - 1 ? 0 : sliderNumber + 1;
     }
     setSliderNumber(newSliderNumber);
   };
@@ -69,7 +69,7 @@ const Room = ({ room, feature, addToBasket }) => {
       ) : null}
       <div className="bg-white border border-gray-200 flex flex-col md:flex-row gap-6">
         <div style={{ flex: 3, position: "relative" }}>
-          <img src={sliderImg[sliderNumber].src} alt="" className="w-full" />
+          <img src={room.photos[sliderNumber]?.url} alt="" className="w-full" />
           <button className="text-4xl absolute left-5 top-[50%] cursor-pointer text-white opacity-70 hover:text-white hover:opacity-100 z-20">
             <SlArrowLeft
               className=""
@@ -186,7 +186,7 @@ const Room = ({ room, feature, addToBasket }) => {
                     : convertPrice === "EUR"
                     ? "£"
                     : "₦"
-                } ${[room?.price * exchangedPrice]
+                } ${[Math.round(room?.price * exchangedPrice)]
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
               </span>
@@ -204,7 +204,7 @@ const Room = ({ room, feature, addToBasket }) => {
                     : convertPrice === "EUR"
                     ? "£"
                     : "₦"
-                } ${[room?.price * days * exchangedPrice]
+                } ${[Math.round(room?.price * days * exchangedPrice)]
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
               </span>

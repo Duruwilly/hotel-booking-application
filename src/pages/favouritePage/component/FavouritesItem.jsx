@@ -9,13 +9,13 @@ const FavouritesItem = ({
   deleteFavourite,
 }) => {
   const [activeItem, setActiveItem] = useState("");
-console.log(fav.itemId);
+
   return (
     <div className="bg-whit border border-gray-300">
       <div style={{ flex: 3 }}>
         <Link to={`/hotel/${fav.name}/${fav.destination}/${fav._id}`}>
           <div>
-            <img src={image1} alt="" />
+            <img src={fav.photos[0]?.url} alt="" />
           </div>
         </Link>
       </div>
@@ -34,7 +34,7 @@ console.log(fav.itemId);
                     : convertPrice === "EUR"
                     ? "£"
                     : "₦"
-                } ${[fav.price * exchangedPrice]
+                } ${[Math.round(fav.price * exchangedPrice)]
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
               </span>

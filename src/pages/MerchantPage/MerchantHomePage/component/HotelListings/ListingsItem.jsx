@@ -16,7 +16,9 @@ const ListingsItem = ({ data }) => {
   const hotelBg = {
     width: "100%",
     padding: "0",
-    backgroundImage: `url(${hotelbg})`,
+    backgroundImage: `url(${
+      data.photos[0]?.url ? data.photos[0]?.url : hotelbg
+    })`,
     backgroundPosition: "center",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
@@ -30,7 +32,10 @@ const ListingsItem = ({ data }) => {
           <div style={hotelBg} className="relative">
             <div className="heroe-overlay flex justify-center items-center flex-col">
               <div className="flex justify-center gap-3 items-cente">
-                <Link to={`/view-hotel-listing/${data?.name}/${data?._id}`} className="">
+                <Link
+                  to={`/view-hotel-listing/${data?.name}/${data?._id}`}
+                  className=""
+                >
                   <button className="bg-green-800 w-ful py-4 px-5 uppercase text-xs text-white">
                     view hotel
                   </button>
@@ -65,7 +70,7 @@ const ListingsItem = ({ data }) => {
             </div>
             <div className="absolute top-0 right-0">
               <button
-                className="rounded-full w-12 h-12 p-0 border-0 inline-flex items-center justify-center text-2xl text-gray-200"
+                className="rounded-full w-12 h-12 p-0 border-0 inline-flex items-center justify-center text-2xl text-gray-200 delete-animation"
                 onClick={() => deleteHotel(data?._id)}
               >
                 <FaTrash />
@@ -74,7 +79,7 @@ const ListingsItem = ({ data }) => {
           </div>
         </div>
       </main>
-      <HotelRoomsListings hotelId={data?._id} />
+      {data && <HotelRoomsListings hotelId={data?._id} />}
     </>
   );
 };

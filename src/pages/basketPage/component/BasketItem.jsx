@@ -109,7 +109,7 @@ const BasketItem = (props) => {
           <p className="font-light text-gray-">
             {`${
               convertPrice === "USD" ? "$" : convertPrice === "EUR" ? "£" : "₦"
-            } ${[props.price * days * quantity * exchangedPrice]
+            } ${[Math.round(props.price * days * quantity * exchangedPrice)]
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}{" "}
             x {quantity}

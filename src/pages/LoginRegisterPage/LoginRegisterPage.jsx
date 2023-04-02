@@ -66,7 +66,7 @@ const LoginRegisterPage = () => {
       setFetchStatus("idle");
       setFavouriteFetchStatus("idle");
       setFetchingState("idle");
-      navigate("/");
+      // navigate("/");
     } catch (error) {
       dispatch({ type: "FAILED", payload: error?.response?.data });
       localStorage.removeItem("user");

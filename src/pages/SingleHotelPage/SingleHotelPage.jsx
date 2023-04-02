@@ -36,6 +36,17 @@ const SingleHotel = () => {
   const [fetchStatus, setFetchStatus] = useState("idle");
   const [openPhotosModal, setOpenPhotosModal] = useState(false);
 
+  const heroeBg = {
+    width: "100%",
+    padding: "0",
+    backgroundImage: `url(${singleHotel?.photos[0]?.url})`,
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    height: "50vh",
+    position: "relative",
+  };
+
   let { destination } = useSelector((state) => state.searchState);
   const dispatch = useDispatch();
 
@@ -115,9 +126,9 @@ const SingleHotel = () => {
 
   const toggleFavouriteBtn = async (id) => {
     const item = data.responseData.filter((itemId) => itemId._id === id)[0];
-    const { price, _id, feature, destination, name } = item;
-    const itemId = favouriteItems.filter((item) => item?.itemId === id)[0]
-  
+    const { price, _id, feature, destination, name, photos } = item;
+    const itemId = favouriteItems.filter((item) => item?.itemId === id)[0];
+
     if (!allArr.includes(id)) {
       let url = `${WILL_TRIP_BASE_URL}/favourites`;
       if (user) {
@@ -128,6 +139,7 @@ const SingleHotel = () => {
             feature,
             destination,
             name,
+            photos,
             userID: user.id,
             quantity: 1,
           });
@@ -197,7 +209,11 @@ const SingleHotel = () => {
     },
     {
       panel: (
-        <Photos openPhotosModal={openPhotosModal} toggleModal={toggleModal} />
+        <Photos
+          openPhotosModal={openPhotosModal}
+          toggleModal={toggleModal}
+          singleHotel={singleHotel}
+        />
       ),
       name: "photos",
       value: "photos",
@@ -358,7 +374,7 @@ const SingleHotel = () => {
                         : convertPrice === "EUR"
                         ? "£"
                         : "₦"
-                    } ${[singleHotel?.price * exchangedPrice]
+                    } ${[Math.round(singleHotel?.price * exchangedPrice)]
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
                   </p>
