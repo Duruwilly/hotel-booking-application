@@ -35,7 +35,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
 
   const toggleFavouriteBtn = async (id) => {
     const item = data.filter((itemId) => itemId._id === id)[0];
-    const { price, _id, feature, destination, name } = item;
+    const { price, _id, feature, destination, name, photos } = item;
     const itemId = favouriteItems.filter((item) => item?.itemId === id)[0];
 
     if (!allArr.includes(id)) {
@@ -48,6 +48,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
             feature,
             destination,
             name,
+            photos,
             userID: user.id,
             quantity: 1,
           });
@@ -97,11 +98,11 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
     if (dir === "l") {
       // newSliderNumber would return the last image in the array if sliderNumber is 0 else we'll keep sliding left
       newSliderNumber =
-        sliderNumber === 0 ? sliderImg.length - 1 : sliderNumber - 1;
+        sliderNumber === 0 ? hotel.photos.length - 1 : sliderNumber - 1;
     } else {
       // if sliderNumber is equal to 1, show the first image else keep sliding right
       newSliderNumber =
-        sliderNumber === sliderImg.length - 1 ? 0 : sliderNumber + 1;
+        sliderNumber === hotel.photos.length - 1 ? 0 : sliderNumber + 1;
     }
 
     setSliderNumber(newSliderNumber);
@@ -112,7 +113,11 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
       <div style={{ flex: 3, position: "relative" }}>
         <Link to={`/hotel/${hotel.name}/${hotel.destination}/${hotel._id}`}>
           <div>
-            <img src={sliderImg[sliderNumber].src} alt="" />
+            <img
+              src={hotel.photos[sliderNumber]?.url}
+              alt=""
+              className=" object-cover"
+            />
           </div>
         </Link>
 
@@ -180,7 +185,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
                   : convertPrice === "EUR"
                   ? "£"
                   : "₦"
-              } ${[hotel.price * exchangedPrice]
+              } ${[Math.round(hotel.price * exchangedPrice)]
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
             </p>

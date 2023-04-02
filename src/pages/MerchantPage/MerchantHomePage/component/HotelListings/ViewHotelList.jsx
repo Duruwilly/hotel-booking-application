@@ -49,9 +49,9 @@ const ViewHotelList = () => {
     <section className="flex justify-center">
       <div className="w-full max-w-screen-lg px-4 py-6">
         <main>
-          {/* {imgSrc === "" ? (
+          {imgSrc === "" ? (
             <img
-              src={singleHotel.photos[0]}
+              src={singleHotel.photos[0]?.url}
               alt={singleHotel.name}
               className="lg:w-full w-full lg:h-80 h-auto object-contain object-center rounded"
             />
@@ -66,47 +66,15 @@ const ViewHotelList = () => {
             {singleHotel.photos.map((img, index) => (
               <span key={index} className="rounded mx-auto">
                 <img
-                  src={img}
+                  src={img.url}
                   alt={singleHotel.name}
                   className={
-                    imgSrc === img
-                      ? "h-16 w-16 object-contain object-center rounded border border-red-900 bg-purple-100 p-1 cursor-pointer"
+                    imgSrc === img.url
+                      ? "h-16 w-16 object-contain object-center rounded p-1 cursor-pointer"
                       : "h-16 w-16 object-contain object-center cursor-pointer"
                   }
                   onClick={() => {
-                    setImgSrc(img);
-                  }}
-                />
-              </span>
-            ))}
-          </div> */}
-
-          {imgSrc === "" ? (
-            <img
-              src={dummyImg[0].src}
-              alt=""
-              className="lg:w-full w-full lg:h-80 h-auto object-contain object-center rounded"
-            />
-          ) : (
-            <img
-              src={imgSrc}
-              alt=""
-              className="lg:w-full w-full lg:h-80 h-auto object-contain object-center rounded"
-            />
-          )}
-          <div className="flex justify-center gap-6 mt-2">
-            {dummyImg.map((img, index) => (
-              <span key={index} className="rounded mx-aut">
-                <img
-                  src={img.src}
-                  alt=""
-                  className={
-                    imgSrc === img.src
-                      ? "h-16 w-16 object-contain object-center rounded border cursor-pointer"
-                      : "h-16 w-16 object-contain object-center cursor-pointer"
-                  }
-                  onClick={() => {
-                    setImgSrc(img.src);
+                    setImgSrc(img.url);
                   }}
                 />
               </span>

@@ -8,7 +8,7 @@ const Listings = () => {
 
   return (
     <>
-      <section className="my-16">
+      <section className="my-16 h-s">
         {fetchUserListing.fetching ? (
           <Spinner />
         ) : fetchUserListing.responseData &&

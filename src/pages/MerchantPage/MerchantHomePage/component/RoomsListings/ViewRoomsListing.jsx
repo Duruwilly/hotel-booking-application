@@ -49,64 +49,32 @@ const ViewRoomsListing = () => {
     <section className="flex justify-center">
       <div className="w-full max-w-screen-lg px-4 py-6">
         <main>
-          {/* {imgSrc === "" ? (
+          {imgSrc === "" ? (
             <img
-              src={singleHotel.photos[0]}
-              alt={singleHotel.name}
+              src={singleRoom.photos[0]?.url}
+              alt={singleRoom.title}
               className="lg:w-full w-full lg:h-80 h-auto object-contain object-center rounded"
             />
           ) : (
             <img
               src={imgSrc}
-              alt={singleHotel.name}
+              alt={singleRoom.title}
               className="lg:w-full w-full lg:h-80 h-auto object-contain object-center rounded"
             />
           )}
           <div className="container grid gap-1 ml-auto grid-cols-5 mx-auto mt-2 justify-center items-center">
-            {singleHotel.photos.map((img, index) => (
+            {singleRoom.photos.map((img, index) => (
               <span key={index} className="rounded mx-auto">
                 <img
-                  src={img}
-                  alt={singleHotel.name}
+                  src={img.url}
+                  alt={singleRoom.title}
                   className={
-                    imgSrc === img
-                      ? "h-16 w-16 object-contain object-center rounded border border-red-900 bg-purple-100 p-1 cursor-pointer"
-                      : "h-16 w-16 object-contain object-center cursor-pointer"
-                  }
-                  onClick={() => {
-                    setImgSrc(img);
-                  }}
-                />
-              </span>
-            ))}
-          </div> */}
-
-          {imgSrc === "" ? (
-            <img
-              src={dummyImg[0].src}
-              alt=""
-              className="lg:w-full w-full lg:h-80 h-auto object-contain object-center rounded"
-            />
-          ) : (
-            <img
-              src={imgSrc}
-              alt=""
-              className="lg:w-full w-full lg:h-80 h-auto object-contain object-center rounded"
-            />
-          )}
-          <div className="flex justify-center gap-6 mt-2">
-            {dummyImg.map((img, index) => (
-              <span key={index} className="rounded mx-aut">
-                <img
-                  src={img.src}
-                  alt=""
-                  className={
-                    imgSrc === img.src
+                    imgSrc === img.url
                       ? "h-16 w-16 object-contain object-center rounded border cursor-pointer"
                       : "h-16 w-16 object-contain object-center cursor-pointer"
                   }
                   onClick={() => {
-                    setImgSrc(img.src);
+                    setImgSrc(img.url);
                   }}
                 />
               </span>

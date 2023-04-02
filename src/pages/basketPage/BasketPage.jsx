@@ -195,7 +195,7 @@ const Confirmation = ({
                   : convertPrice === "EUR"
                   ? "£"
                   : "₦"
-              } ${[total * exchangedPrice]
+              } ${[Math.round(total * exchangedPrice)]
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
             </p>

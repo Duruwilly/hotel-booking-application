@@ -5,7 +5,7 @@ import Modal from "../../../../components/Modal/Modal";
 import image1 from "../../../../assets/images/heroe.jpg";
 import image2 from "../../../../assets/images/heroe2.jpg";
 
-const Photos = ({ openPhotosModal, toggleModal }) => {
+const Photos = ({ openPhotosModal, toggleModal, singleHotel }) => {
   const sliderImg = [
     {
       src: image1,
@@ -23,11 +23,11 @@ const Photos = ({ openPhotosModal, toggleModal }) => {
     if (dir === "l") {
       // newSliderNumber would return the last image in the array if sliderNumber is 0 else we'll keep sliding left
       newSliderNumber =
-        sliderNumber === 0 ? sliderImg.length - 1 : sliderNumber - 1;
+        sliderNumber === 0 ? singleHotel.photos.length - 1 : sliderNumber - 1;
     } else {
       // if sliderNumber is equal to 1, show the first image else keep sliding right
       newSliderNumber =
-        sliderNumber === sliderImg.length - 1 ? 0 : sliderNumber + 1;
+        sliderNumber === singleHotel.photos.length - 1 ? 0 : sliderNumber + 1;
     }
 
     setSliderNumber(newSliderNumber);
@@ -39,7 +39,7 @@ const Photos = ({ openPhotosModal, toggleModal }) => {
           <div className="flex justify-center items-center">
             <div className=" w-full max-w-screen-sm relative shadow-md">
               <div>
-                <img src={sliderImg[sliderNumber].src} alt="" />
+                <img src={singleHotel.photos[sliderNumber]?.url} alt="" />
               </div>
 
               <button className="text-4xl absolute left-0 top-[50%] cursor-pointer text-white opacity-70 hover:text-white hover:opacity-100 z-20">

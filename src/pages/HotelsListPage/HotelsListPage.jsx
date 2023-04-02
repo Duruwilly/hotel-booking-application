@@ -149,7 +149,7 @@ const HotelsList = () => {
             <div className="fle justify-betwee items-cente">
               <ul className="flex my-0 mx-auto list-none relative">
                 <li className="uppercase text-xs border border-gray-900 bg-primary py-3 w-full text-white text-center list-none font-semibold">
-                  {data.length} hotels
+                  {data.responseData.length} hotels
                 </li>
                 <select
                   value={sortPrice}

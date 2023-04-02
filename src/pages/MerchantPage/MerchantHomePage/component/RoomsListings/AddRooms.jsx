@@ -103,6 +103,21 @@ const AddRooms = () => {
                       onChange={addRoomsOnChange}
                     ></textarea>
                   </div>
+                  <div>
+                    <label htmlFor="">
+                      Add images (
+                      <small>First image is the title picture</small>)
+                    </label>
+                    <input
+                      type="file"
+                      id="photos"
+                      className="form-input"
+                      placeholder="Upload images"
+                      accept=".jpg,.png,.jpeg"
+                      multiple
+                      onChange={addRoomsOnChange}
+                    />
+                  </div>
                   <div className="flex justify-center">
                     <button
                       type="submit"

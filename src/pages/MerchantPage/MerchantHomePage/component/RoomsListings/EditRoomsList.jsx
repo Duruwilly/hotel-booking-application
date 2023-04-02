@@ -18,6 +18,7 @@ const EditRoomsList = () => {
     price: 0,
     maxPeople: 0,
     roomNumbers: [{ number: 0 }],
+    photos: [],
   });
 
   useEffect(() => {
@@ -26,22 +27,38 @@ const EditRoomsList = () => {
       description: editRoomState?.description || "",
       price: editRoomState?.price || 0,
       maxPeople: editRoomState.maxPeople || 0,
-      roomNumbers: editRoomState.roomNumbers || [{ number: 0 }],
+      roomNumbers: editRoomState?.roomNumbers || [{ number: 0 }],
+      photos: editRoomState?.photos || [],
     });
   }, [editRoomState]);
 
   const submitEditRoomListing = async () => {
     let url = `${WILL_TRIP_BASE_URL}/rooms/merchant/${editRoomState._id}`;
-    try {
-      let res = await axios.put(
-        url,
-        { ...editRoomList },
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
+
+    const formData = new FormData();
+    formData.append("title", editRoomList.title);
+    formData.append("price", editRoomList.price);
+    formData.append("description", editRoomList.description);
+    formData.append("maxPeople", editRoomList.maxPeople);
+    for (let i = 0; i < editRoomList.roomNumbers.length; i++) {
+      formData.append(
+        `roomNumbers[${i}][number]`,
+        editRoomList.roomNumbers[i].number
       );
+    }
+
+    for (let i = 0; i < editRoomList.photos.length; i++) {
+      formData.append("photos", editRoomList.photos[i]);
+    }
+
+    try {
+      const res = await axios.put(url, formData, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       if (res.data.status === "success") {
         toast.success(res?.data?.msg);
         initializeState();
@@ -53,11 +70,27 @@ const EditRoomsList = () => {
   };
 
   const roomsOnChange = (e) => {
-    setEditRoomList((prev) => ({
-      ...prev,
-      [e.target.id]: e.target.value,
-    }));
+    if (e.target.files) {
+      setEditRoomList((prev) => ({
+        ...prev,
+        photos: e.target.files,
+      }));
+    }
+
+    if (!e.target.files) {
+      setEditRoomList((prev) => ({
+        ...prev,
+        [e.target.id]: e.target.value,
+      }));
+    }
   };
+
+  // const roomsOnChange = (e) => {
+  //   setEditRoomList((prev) => ({
+  //     ...prev,
+  //     [e.target.id]: e.target.value,
+  //   }));
+  // };
 
   return (
     <>
@@ -149,6 +182,21 @@ const EditRoomsList = () => {
                       value={editRoomList.description}
                       onChange={roomsOnChange}
                     ></textarea>
+                  </div>
+                  <div>
+                    <label htmlFor="">
+                      Add images (
+                      <small>First image is the title picture</small>)
+                    </label>
+                    <input
+                      type="file"
+                      id="photos"
+                      className="form-input"
+                      placeholder="Upload images"
+                      accept=".jpg,.png,.jpeg"
+                      multiple
+                      onChange={roomsOnChange}
+                    />
                   </div>
                   <div className="flex justify-center">
                     <button

@@ -14,7 +14,9 @@ const RoomsListItems = ({ data, hotelId }) => {
   const hotelBg = {
     width: "100%",
     padding: "0",
-    backgroundImage: `url(${hotelbg})`,
+    backgroundImage: `url(${
+      data.photos[0]?.url ? data.photos[0]?.url : hotelbg
+    })`,
     backgroundPosition: "center",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
@@ -24,18 +26,20 @@ const RoomsListItems = ({ data, hotelId }) => {
 
   const deleteRoom = async (id) => {
     let url = `${WILL_TRIP_BASE_URL}/rooms/${id}/merchant/${hotelId}`;
-    try {
-      let response = await axios.delete(url, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      if (response.data.status === "success") {
-        initializeState();
-        toast.success(response?.data?.msg);
+    if (window.confirm("Are you sure you want to proceed?")) {
+      try {
+        let response = await axios.delete(url, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        });
+        if (response.data.status === "success") {
+          initializeState();
+          toast.success(response?.data?.msg);
+        }
+      } catch (error) {
+        toast.error(error?.response?.data?.message);
       }
-    } catch (error) {
-      toast.error(error?.response?.data?.message);
     }
   };
 

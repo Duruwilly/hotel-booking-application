@@ -10,7 +10,7 @@ const NearbyHotelsItems = ({ data, exchangedPrice, convertPrice }) => {
           to={`/hotel/${data?.name}/${data?.destination}/${data?._id}`}
           className=""
         >
-          <img src={examImg} alt="" />
+          <img src={data.photos[0]?.url} alt="" />
         </Link>
         <div class="services-one__single-conten relative block px-4 py-4 space-y-2">
           <p className="text-gray-400 uppercase text-xs font-light tracking-wider">
