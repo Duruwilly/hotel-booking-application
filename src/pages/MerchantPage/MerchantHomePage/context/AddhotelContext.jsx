@@ -14,6 +14,7 @@ export const AddHotelProvider = ({ children }) => {
   const [editHotelState, setEditHotelState] = useState({});
   const [editRoomState, setEditRoomState] = useState({});
   const [getHotelId, setGetHotelId] = useState();
+  const [requestStatus, setRequestStatus] = useState("idle");
 
   const [fetchUserListing, setFetchUserListing] = useState({
     fetching: true,
@@ -93,7 +94,7 @@ export const AddHotelProvider = ({ children }) => {
 
   const submitListings = async () => {
     let url = `${WILL_TRIP_BASE_URL}/hotels/merchant`;
-
+    setRequestStatus("pending");
     const formData = new FormData();
     formData.append("name", listingsData.name);
     formData.append("destination", listingsData.destination);
@@ -118,6 +119,7 @@ export const AddHotelProvider = ({ children }) => {
       });
       if (response?.data?.status === "success") {
         toast.success(response?.data?.msg);
+        setRequestStatus(response?.data?.status);
         toggleModal();
         initializeState();
       } else {
@@ -156,7 +158,7 @@ export const AddHotelProvider = ({ children }) => {
 
   const addRooms = async () => {
     const url = `${WILL_TRIP_BASE_URL}/rooms/${getHotelId}/merchant`;
-
+    setRequestStatus("pending");
     const formData = new FormData();
     formData.append("title", roomsListings.title);
     formData.append("price", roomsListings.price);
@@ -184,6 +186,7 @@ export const AddHotelProvider = ({ children }) => {
 
       if (response?.data?.status === "success") {
         toast.success(response?.data?.msg);
+        setRequestStatus(response?.data?.status);
         addRoomsModal();
         initializeState();
       } else {
@@ -343,6 +346,7 @@ export const AddHotelProvider = ({ children }) => {
         editHotelState,
         setEditRoomState,
         editRoomState,
+        requestStatus,
       }}
     >
       {children}

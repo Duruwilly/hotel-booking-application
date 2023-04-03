@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import hotelbg from "../../../../../assets/images/heroe.jpg";
 import { useAddHotelContext } from "../../context/AddhotelContext";
 import HotelRoomsListings from "../RoomsListings/HotelRoomsListings";
+import moment from "moment";
 
 const ListingsItem = ({ data }) => {
   const {
@@ -13,6 +14,7 @@ const ListingsItem = ({ data }) => {
     toggleEditHotelModal,
     setEditHotelState,
   } = useAddHotelContext();
+
   const hotelBg = {
     width: "100%",
     padding: "0",
@@ -25,6 +27,51 @@ const ListingsItem = ({ data }) => {
     height: "50vh",
     position: "relative",
   };
+
+  var currentDate = moment(new Date(), "YYYY-MM-DD");
+  var startDate = moment(new Date(data?.createdAt), "YYYY-MM-DD");
+
+  let timeframe = "";
+  let diff = currentDate.diff(startDate, "years");
+
+  if (diff > 0) {
+    timeframe = diff === 1 ? diff + " year ago" : diff + " years ago";
+  } else {
+    let diff = currentDate.diff(startDate, "months");
+    if (diff > 0) {
+      timeframe = diff === 1 ? diff + " month ago" : diff + " months ago";
+    } else {
+      let diff = currentDate.diff(startDate, "weeks");
+      if (diff > 0) {
+        timeframe = diff === 1 ? diff + " week ago" : diff + " weeks ago";
+      } else {
+        let diff = currentDate.diff(startDate, "days");
+        if (diff > 0) {
+          timeframe = diff === 1 ? diff + " day ago" : diff + " days ago";
+        } else {
+          let diff = currentDate.diff(startDate, "hours");
+          if (diff > 0) {
+            timeframe = diff === 1 ? diff + " hour ago" : diff + " hours ago";
+          } else {
+            let diff = currentDate.diff(startDate, "minutes");
+            if (diff > 0) {
+              timeframe =
+                diff === 1 ? diff + " minute ago" : diff + " minutes ago";
+            } else {
+              let diff = currentDate.diff(startDate, "seconds");
+              if (diff > 0) {
+                timeframe =
+                  diff === 1 ? diff + " second ago" : diff + " seconds ago";
+              } else {
+                timeframe = "";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   return (
     <>
       <main className="flex justify-center items-center my-16">
@@ -36,12 +83,12 @@ const ListingsItem = ({ data }) => {
                   to={`/view-hotel-listing/${data?.name}/${data?._id}`}
                   className=""
                 >
-                  <button className="bg-green-800 w-ful py-4 px-5 uppercase text-xs text-white">
+                  <button className="bg-green-700 hover:bg-green-800 duration-500 w-ful py-3 px-5 uppercase text-xs text-white">
                     view hotel
                   </button>
                 </Link>
                 <button
-                  className="bg-secondary w-ful py-4 px-5 uppercase text-xs text-white"
+                  className="bg-secondar bg-red-700 hover:bg-red-800 duration-500 w-ful py-3 px-5 uppercase text-xs text-white"
                   onClick={() => {
                     toggleEditHotelModal();
                     setEditHotelState(data);
@@ -52,7 +99,7 @@ const ListingsItem = ({ data }) => {
               </div>
               <div className="flex justify-center mt-3">
                 <button
-                  className="bg-primary w-full py-4 px-5 uppercase text-xs text-white"
+                  className="bg-primary w-full py-3 px-5 uppercase text-xs text-white"
                   onClick={() => {
                     addRoomsModal();
                     setGetHotelId(data._id);
@@ -77,6 +124,7 @@ const ListingsItem = ({ data }) => {
               </button>
             </div>
           </div>
+          <span>{timeframe}</span>
         </div>
       </main>
       {data && <HotelRoomsListings hotelId={data?._id} />}

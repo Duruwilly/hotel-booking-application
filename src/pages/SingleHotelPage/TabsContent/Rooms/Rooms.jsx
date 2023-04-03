@@ -22,6 +22,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
   let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
   const { setFetchStatus, getCartItems } = useBasketContext();
 
+  // fetches rooms
   useEffect(() => {
     const controller = new AbortController();
     const fetchRoom = async () => {
@@ -40,8 +41,6 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
       controller.abort();
     };
   }, [hotelID]);
-
-  // fetches rooms
 
   const addToBasket = async (id) => {
     const item = data.filter((itemId) => itemId._id === id)[0];
@@ -79,7 +78,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
   return (
     <>
       <div className="flex justify-center">
-        <div className="w-full max-w-screen-lg mt-">
+        <div className="w-full max-w-screen-lg px-4">
           <PriceConversion />
           {data.map((room) => (
             <div key={room._id} className="mt-3">

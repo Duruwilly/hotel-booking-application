@@ -11,6 +11,7 @@ const AddRooms = () => {
     addRooms,
     addRoomsOnChange,
     setRoomsListings,
+    requestStatus,
   } = useAddHotelContext();
   return (
     <>
@@ -120,10 +121,11 @@ const AddRooms = () => {
                   </div>
                   <div className="flex justify-center">
                     <button
+                      disabled={requestStatus === "pending"}
                       type="submit"
                       className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-light cursor-pointer w-full"
                     >
-                      submit
+                      {requestStatus === "pending" ? "submitting..." : "submit"}
                     </button>
                   </div>
                 </div>

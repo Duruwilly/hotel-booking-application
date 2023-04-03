@@ -12,13 +12,14 @@ import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Spinner from "../../components/Spinner/Spinner";
 
 const Favourites = () => {
   const { matches, setDropdownHeader, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
-  let { favouriteItems, setFavouriteFetchStatus, getFavouriteItems } =
+  let { favouriteItems, setFavouriteFetchStatus, getFavouriteItems, loading } =
     useFavouriteContext();
-  const [exchangedPrice, setExchangedPrice] = useState();
+  const [exchangedPrice, setExchangedPrice] = useState(1);
   const { convertPrices } = usePriceConversion();
   const { user } = useAuthContext();
 
@@ -32,7 +33,8 @@ const Favourites = () => {
       });
       if (response.data.status === "success") {
         setFavouriteFetchStatus("idle");
-        getFavouriteItems(user)
+        getFavouriteItems(user);
+        toast.success(response.data.msg);
       }
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -58,9 +60,10 @@ const Favourites = () => {
           </p>
         </div>
       </section>
+      {loading && <Spinner />}
       <section className="flex justify-center">
         <div className="w-full max-w-screen-xl">
-          {favouriteItems.length > 0 ? (
+          {favouriteItems.length > 0 && (
             <div className="grid lg:grid-cols-3 wishlist-item gap-4 py-10 px-4">
               {favouriteItems.map((fav) => (
                 <div key={fav._id}>
@@ -73,7 +76,8 @@ const Favourites = () => {
                 </div>
               ))}
             </div>
-          ) : (
+          )}
+          {favouriteItems.length === 0 && (
             <div className="flex justify-center items-center py-10 px-4">
               <div className="w-full max-w-screen-sm">
                 <div className="bg-whit border border-gray-300">

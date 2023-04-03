@@ -71,11 +71,13 @@ const NearbyHotelsPage = ({
               <div className="w-full max-w-screen-xl py-10 px-4">
                 <OwlCarousel className="owl-carousel owl-theme" {...options}>
                   {data.map((data) => (
-                    <NearbyHotelsItems
-                      data={data}
-                      convertPrice={convertPrice}
-                      exchangedPrice={exchangedPrice}
-                    />
+                    <div key={data._id}>
+                      <NearbyHotelsItems
+                        data={data}
+                        convertPrice={convertPrice}
+                        exchangedPrice={exchangedPrice}
+                      />
+                    </div>
                   ))}
                 </OwlCarousel>
               </div>

@@ -48,12 +48,12 @@ const RoomsListItems = ({ data, hotelId }) => {
       <div className="heroe-overlay flex justify-center items-center flex-col">
         <div className="flex justify-center gap-3 items-cente">
           <Link to={`/view-room/${data.title}/${data._id}`} className="">
-            <button className="bg-green-800 w-ful py-4 px-5 uppercase text-xs text-white">
+            <button className="bg-green-700 hover:bg-green-800 duration-500 w-ful py-3 px-5 uppercase text-xs text-white">
               view room
             </button>
           </Link>
           <button
-            className="bg-secondary w-ful py-4 px-5 uppercase text-xs text-white"
+            className="bg-secondar bg-red-700 hover:bg-red-800 duration-500 w-ful py-3 px-5 uppercase text-xs text-white"
             onClick={() => {
               toggleEditRoomModal();
               setEditRoomState(data);
@@ -64,7 +64,7 @@ const RoomsListItems = ({ data, hotelId }) => {
         </div>
         <div className="flex justify-center mt-3">
           <button
-            className="bg-primary w-full py-4 px-5 uppercase text-xs text-white"
+            className="bg-primary w-full py-3 px-5 uppercase text-xs text-white"
             onClick={() => deleteRoom(data._id)}
           >
             delete room
