@@ -21,7 +21,8 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
   const { user } = useAuthContext();
   const dispatch = useDispatch();
   let { likedBtnnColor } = useSelector((state) => state.favourite);
-  const { likedItemCheck } = useLikedItemCheck();
+  const { likedItemCheck, addToFavourites, deleteFromFavourites } =
+    useLikedItemCheck();
   const navigate = useNavigate();
   const { favouriteItems, setFavouriteFetchStatus, getFavouriteItems } =
     useFavouriteContext();
@@ -32,50 +33,86 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
     setAllArr(likedItemCheck());
   }, [favouriteItems]);
 
+  // const toggleFavouriteBtn = async (id) => {
+  //   const item = data.filter((itemId) => itemId._id === id)[0];
+  //   const { price, _id, feature, destination, name, photos } = item;
+  //   const itemId = favouriteItems.filter((item) => item?.itemId === id)[0];
+
+  //   if (!allArr.includes(id)) {
+  //     let url = `${WILL_TRIP_BASE_URL}/favourites`;
+  //     if (user) {
+  //       try {
+  //         await axios.post(url, {
+  //           price,
+  //           itemId: _id,
+  //           feature,
+  //           destination,
+  //           name,
+  //           photos,
+  //           userID: user.id,
+  //           quantity: 1,
+  //         });
+  //         setAllArr([...allArr, id]);
+  //         setFavouriteFetchStatus("idle");
+  //         getFavouriteItems(user);
+  //         dispatch(setLikedBtnColor("text-red-600"));
+  //       } catch (error) {
+  //         return toast.error(error);
+  //       }
+  //     } else {
+  //       navigate("/login");
+  //     }
+  //   } else {
+  //     let url = `${WILL_TRIP_BASE_URL}/favourites/${user?.id}/delete-favourite/${itemId._id}`;
+  //     try {
+  //       let response = await axios.delete(url, {
+  //         headers: {
+  //           Authorization: `Bearer ${user?.token}`,
+  //         },
+  //       });
+  //       if (response.data.status === "success") {
+  //         setFavouriteFetchStatus("idle");
+  //         getFavouriteItems(user);
+  //         setAllArr(allArr.filter((item) => item !== id));
+  //       }
+  //     } catch (error) {
+  //       toast.error(error?.response?.data?.message);
+  //     }
+  //   }
+  // };
+
   const toggleFavouriteBtn = async (id) => {
     const item = data.filter((itemId) => itemId._id === id)[0];
     const { price, _id, feature, destination, name, photos } = item;
     const itemId = favouriteItems.filter((item) => item?.itemId === id)[0];
 
     if (!allArr.includes(id)) {
-      let url = `${WILL_TRIP_BASE_URL}/favourites`;
-      if (user) {
-        try {
-          await axios.post(url, {
-            price,
-            itemId: _id,
-            feature,
-            destination,
-            name,
-            photos,
-            userID: user.id,
-            quantity: 1,
-          });
-          setAllArr([...allArr, id]);
-          setFavouriteFetchStatus("idle");
-          getFavouriteItems(user);
-          dispatch(setLikedBtnColor("text-red-600"));
-        } catch (error) {
-          return toast.error(error);
-        }
+      const response = await addToFavourites(
+        user,
+        id,
+        price,
+        _id,
+        feature,
+        destination,
+        name,
+        photos
+      );
+      if (response) {
+        setAllArr([...allArr, id]);
+        setFavouriteFetchStatus("idle");
+        getFavouriteItems(user);
+        dispatch(setLikedBtnColor("text-red-600"));
       } else {
-        navigate("/login");
+        return toast.error("Unable to add to favourites.");
       }
     } else {
-      let url = `${WILL_TRIP_BASE_URL}/favourites/${user?.id}/delete-favourite/${itemId._id}`;
-      try {
-        let response = await axios.delete(url, {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        });
-        if (response.data.status === "success") {
-          setFavouriteFetchStatus("idle");
-          getFavouriteItems(user);
-          setAllArr(allArr.filter((item) => item !== id));
-        }
-      } catch (error) {
-        toast.error(error?.response?.data?.message);
+      const response = await deleteFromFavourites(user, itemId?._id);
+      if (response) {
+        setFavouriteFetchStatus("idle");
+        getFavouriteItems(user);
+        setAllArr(allArr.filter((item) => item !== id));
+      } else {
+        return toast.error("Unable to remove from favourites.");
       }
     }
   };

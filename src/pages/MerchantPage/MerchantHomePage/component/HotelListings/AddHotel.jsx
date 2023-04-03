@@ -10,6 +10,7 @@ const CreateHotelForm = () => {
     listingsData,
     addHotelOnChange,
     submitListings,
+    requestStatus,
   } = useAddHotelContext();
   return (
     <>
@@ -104,7 +105,7 @@ const CreateHotelForm = () => {
                     ></textarea>
                   </div>
                   <div>
-                    <label htmlFor="">Brief summary of the hotel</label>
+                    <label>Brief summary of the hotel</label>
                     <textarea
                       name="overview"
                       id="overview"
@@ -115,7 +116,7 @@ const CreateHotelForm = () => {
                     ></textarea>
                   </div>
                   <div>
-                    <label htmlFor="">Brief summary of the facilities</label>
+                    <label>Brief summary of the facilities</label>
                     <textarea
                       name="facilities"
                       id="facilities"
@@ -147,7 +148,10 @@ const CreateHotelForm = () => {
                       type="file"
                       id="photos"
                       className="form-input"
-                      style={{color: "#495057", backgroundClip: "padding-box"}}
+                      style={{
+                        color: "#495057",
+                        backgroundClip: "padding-box",
+                      }}
                       placeholder="Upload images"
                       accept=".jpg,.png,.jpeg"
                       multiple
@@ -157,9 +161,10 @@ const CreateHotelForm = () => {
                   <div className="flex justify-center">
                     <button
                       type="submit"
+                      disabled={requestStatus === "pending"}
                       className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-light cursor-pointer w-full"
                     >
-                      submit
+                      {requestStatus === "pending" ? "submitting..." : "submit"}
                     </button>
                   </div>
                 </div>

@@ -13,7 +13,7 @@ const FavouritesItem = ({
   return (
     <div className="bg-whit border border-gray-300">
       <div style={{ flex: 3 }}>
-        <Link to={`/hotel/${fav.name}/${fav.destination}/${fav.itemId}`}>
+        <Link to={`/hotel/${fav.name}/${fav.destination}/${fav.item}`}>
           <div>
             <img src={fav.photos[0]?.url} alt="" />
           </div>
@@ -54,7 +54,7 @@ const FavouritesItem = ({
             </p>
             <div className="flex justify-center items-cente gap-2">
               <Link
-                to={`/hotel/${fav.name}/${fav.destination}/${fav._id}`}
+                to={`/hotel/${fav.name}/${fav.destination}/${fav.itemId}`}
                 className="bg-primary text-xs text-white uppercase py-3 w-full text-center"
               >
                 view hotel

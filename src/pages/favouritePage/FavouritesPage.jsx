@@ -34,6 +34,7 @@ const Favourites = () => {
       if (response.data.status === "success") {
         setFavouriteFetchStatus("idle");
         getFavouriteItems(user);
+        toast.success(response.data.msg);
       }
     } catch (error) {
       toast.error(error?.response?.data?.message);
