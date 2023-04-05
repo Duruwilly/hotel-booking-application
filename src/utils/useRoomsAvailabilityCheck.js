@@ -1,14 +1,14 @@
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { WILL_TRIP_BASE_URL } from "../constants/base-urls";
+import { useAuthContext } from "../context/AuthContext";
 import { useBasketContext } from "../context/BasketItemsContext";
 
 const useRoomsAvailabilityCheck = () => {
-  let { dateSearch } = useSelector(
-    (state) => state.searchState
-  );
+  let { dateSearch } = useSelector((state) => state.searchState);
   // let { basketItems } = useSelector((state) => state.basket);
   let { basketItems } = useBasketContext();
+  let { user } = useAuthContext();
 
   const getDatesInRanges = (startDate, endDate) => {
     // we get the current date from the state
@@ -33,7 +33,6 @@ const useRoomsAvailabilityCheck = () => {
     dateSearch[0]?.startDate,
     dateSearch[0]?.endDate
   );
-
 
   const getDatesInRangesInBasket = (startDate, endDate) => {
     const dates = [];
@@ -74,8 +73,13 @@ const useRoomsAvailabilityCheck = () => {
               });
 
               const res = await axios.put(
-                `${WILL_TRIP_BASE_URL}/rooms/rooms-availability/${roomObj._id}`,
-                { dates }
+                `${WILL_TRIP_BASE_URL}/rooms/update/rooms-availability/${roomObj._id}`,
+                { dates },
+                {
+                  headers: {
+                    Authorization: `Bearer ${user?.token}`,
+                  },
+                }
               );
               return res.data;
             })

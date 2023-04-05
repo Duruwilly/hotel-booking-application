@@ -45,6 +45,7 @@ export const FavouriteProvider = ({ children }) => {
         setFavouriteFetchStatus,
         setFavouriteItems,
         getFavouriteItems,
+        
       }}
     >
       {children}

@@ -9,10 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLikedBtnColor } from "../../../redux/Favourites";
 import useLikedItemCheck from "../../../utils/useLikedItemCheck";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
-import usePriceConversion from "../../../utils/usePriceConversion";
 import { useAuthContext } from "../../../context/AuthContext";
-import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useFavouriteContext } from "../../../context/FavouriteItemsContext";
 
@@ -221,7 +218,7 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
                   : convertPrice === "EUR"
                   ? "£"
                   : "₦"
-              } ${[Math.round(hotel.price * exchangedPrice)]
+              } ${[(hotel.price * exchangedPrice).toFixed(2)]
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
             </p>

@@ -40,7 +40,7 @@ export const BasketProvider = ({ children }) => {
   useEffect(() => {
     if (fetchStatus === "idle") getCartItems();
   }, [fetchStatus]);
-  
+
   return (
     <BasketContext.Provider
       value={{
