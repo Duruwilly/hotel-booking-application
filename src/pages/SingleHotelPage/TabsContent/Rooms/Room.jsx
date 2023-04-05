@@ -204,7 +204,7 @@ const Room = ({ room, feature, addToBasket }) => {
                     : convertPrice === "EUR"
                     ? "£"
                     : "₦"
-                } ${[Math.round(room?.price * days * exchangedPrice)]
+                } ${[(room?.price * days * exchangedPrice).toFixed(2)]
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
               </span>

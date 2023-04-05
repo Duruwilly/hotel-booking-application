@@ -17,6 +17,8 @@ import { useAuthContext } from "../../context/AuthContext";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 import { useBasketContext } from "../../context/BasketItemsContext";
 import { toast } from "react-toastify";
+import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
+import { addBookingData } from "../../redux/bookingData";
 
 const Payment = () => {
   useTitle("Book the world best hotel");
@@ -100,13 +102,10 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
     adult: item?.roomOptions?.adult,
     children: item?.roomOptions?.children,
     days: item?.days,
-    convertedPrice: convertPrice,
-    transaction_id: request_id,
-    userID: item?.userID,
   }));
 
   const clearAllCartItems = async (id) => {
-    let url = `${WILL_TRIP_BASE_URL}/cart/delete-all-item/${user?.id}`;
+    let url = `${WILL_TRIP_BASE_URL}/cart/delete-all-items/${user?.id}`;
     try {
       let response = await axios.delete(url, {
         headers: {
@@ -123,30 +122,45 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
     }
   };
 
+  const config = {
+    public_key: process.env.REACT_APP_FLUTTERWAVE_KEY,
+    tx_ref: request_id,
+    amount: total,
+    currency: "NGN",
+    payment_options: "card,banktransfer,ussd",
+    customer: {
+      email: userPaymentData.email,
+      phone_number: userPaymentData.mobileNumber,
+      name: userPaymentData.firstName,
+    },
+  };
+
+  const handleFlutterPayment = useFlutterwave(config);
+
   const paymentTransaction = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     const url = `${WILL_TRIP_BASE_URL}/transactions/pay`;
-    if (user) {
-      try {
-        const response = await axios.post(url, {
-          ...userPaymentData,
-          bookedRoomsOption: bookedRooms,
-        });
-        if (response?.data.status === "success") {
-          setUserPaymentData(() => ({
-            [e.target.id]: "",
-          }));
-          // add the endpoint to clear the basket here
-          // dispatch(clearBasket());
-          clearAllCartItems()
-          navigate("/transactions");
-        }
-      } catch (error) {
-        setError(error);
+
+    try {
+      const response = await axios.post(url, {
+        ...userPaymentData,
+        bookedRoomsOption: bookedRooms,
+        convertedPrice: convertPrice,
+        transaction_id: request_id,
+        userID: user?.id,
+      });
+      console.log(response.data);
+      if (response?.data.status === "success") {
+        setUserPaymentData(() => ({
+          [e.target.id]: "",
+        }));
+        // add the endpoint to clear the basket here
+        dispatch(addBookingData({ ...response.data }));
+        clearAllCartItems();
+        navigate("/transactions");
       }
-      return;
-    } else {
-      navigate("/login");
+    } catch (error) {
+      setError(error);
     }
   };
 
@@ -233,7 +247,6 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                 </div>
                 <textarea
                   name=""
-                  required
                   id="comment"
                   onChange={onChange}
                   value={userPaymentData.comment}
@@ -252,7 +265,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                       : convertPrice === "EUR"
                       ? "£"
                       : "₦"
-                  } ${[Math.round(total * exchangedPrice)]
+                  } ${[(total * exchangedPrice).toFixed(2)]
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
                 </span>
@@ -268,8 +281,27 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    putBookedRoomsDate();
+                    handleFlutterPayment({
+                      callback: (response) => {
+                        console.log(response);
+                        if (response.status === "successful") {
+                          closePaymentModal(); // this will close the modal programmatically
+                          putBookedRoomsDate();
+                          paymentTransaction();
+                        }
+                      },
+                      onClose: (e) => {
+                        console.log(e);
+                      },
+                    });
                   }}
+                  disabled={
+                    userPaymentData.firstName === "" ||
+                    userPaymentData.lastName === "" ||
+                    userPaymentData.email === "" ||
+                    userPaymentData.mobileNumber === "" ||
+                    userPaymentData.arrivalTime === ""
+                  }
                   className="bg-green-700 text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs flex justify-center items-center gap-3"
                 >
                   <GiPadlock />

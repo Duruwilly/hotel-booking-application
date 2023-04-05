@@ -35,6 +35,8 @@ const SingleHotel = () => {
   const [loading, setLoading] = useState(false);
   const [fetchStatus, setFetchStatus] = useState("idle");
   const [openPhotosModal, setOpenPhotosModal] = useState(false);
+  const [errros, setErrors] = useState(false);
+  const [favouriteCount, setFavouriteCount] = useState();
 
   const heroeBg = {
     width: "100%",
