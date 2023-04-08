@@ -58,6 +58,32 @@ const useRoomsAvailabilityCheck = () => {
     return !isFound[0];
   };
 
+  // const basketItemsDatesCheck = (dateSearch) => {
+  //   const dates = basketItems.map((item) => {
+  //     item.dateSearch.flatMap((date) => {
+  //       const startDate = new Date(date.startDate);
+  //       const endDate = new Date(date.endDate);
+  //       let hello = getDatesInRangesInBasket(startDate, endDate);
+  //       allDates.includes(new Date(hello).getTime());
+  //     });
+  //     // console.log(dates);
+  //   });
+  //   return !dates;
+  // };
+
+  // const basketItemsDatesCheck = (unavailableDates) => {
+  //   const dates = basketItems.map((item) => {
+  //     item.dateSearch.flatMap((date) => {
+  //       const startDate = new Date(date.startDate);
+  //       const endDate = new Date(date.endDate);
+  //       let hello = getDatesInRangesInBasket(startDate, endDate);
+  //       unavailableDates.includes(new Date(hello).getTime());
+  //     });
+  //     // console.log(dates);
+  //   });
+  //   return !dates;
+  // };
+
   // Within the inner Promise.all(), we are using the dateSearch property of the item to get the relevant dates for the roomObj. We are then calling the getDatesInRangesInBasket() function to generate an array of dates between the start and end dates for each date in the dateSearch array. These dates are stored in the dates array.
   const putBookedRoomsDate = async () => {
     try {
@@ -91,7 +117,12 @@ const useRoomsAvailabilityCheck = () => {
     }
   };
 
-  return { getDatesInRanges, isAvailable, putBookedRoomsDate };
+  return {
+    getDatesInRanges,
+    isAvailable,
+    putBookedRoomsDate,
+    // basketItemsDatesCheck,
+  };
 };
 
 export default useRoomsAvailabilityCheck;

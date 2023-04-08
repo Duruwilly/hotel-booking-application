@@ -10,6 +10,7 @@ import { useBasketContext } from "../../../context/BasketItemsContext";
 const BasketItem = (props) => {
   const { user } = useAuthContext();
   const { setFetchStatus, getCartItems } = useBasketContext();
+
   const {
     feature,
     roomOptions,
@@ -20,6 +21,7 @@ const BasketItem = (props) => {
     hotelName,
     exchangedPrice,
     convertPrice,
+   
   } = props;
 
   const deleteCartItems = async (id) => {

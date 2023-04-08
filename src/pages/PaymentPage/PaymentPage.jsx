@@ -4,21 +4,15 @@ import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import TimeInHours from "../../utils/TimeInHours";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import useDaysCalculate from "../../hooks/useDaysCalculate";
 import BookingSummaryCard from "./component/BookingSummaryCard";
 import { useTitle } from "../../hooks/useTitle";
-import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
 import usePriceConversion from "../../utils/usePriceConversion";
-import { useNavigate } from "react-router-dom";
-import { clearBasket } from "../../redux/basketSlice";
 import axios from "axios";
 import { useAuthContext } from "../../context/AuthContext";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 import { useBasketContext } from "../../context/BasketItemsContext";
-import { toast } from "react-toastify";
-import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
-import { addBookingData } from "../../redux/bookingData";
+import PriceConversion from "../../components/PriceConversion/PriceConversion";
+import SearchButtonSpinner from "../../components/Spinner/SearchButtonSpinner";
 
 const Payment = () => {
   useTitle("Book the world best hotel");
@@ -42,6 +36,7 @@ const Payment = () => {
         <div className="m-auto">
           <ProgressBar step={steps} list={list} />
         </div>
+        <PriceConversion />
         <PaymentCard
           convertPrice={convertPrice}
           exchangedPrice={exchangedPrice}
@@ -54,12 +49,8 @@ const Payment = () => {
 export default Payment;
 
 const PaymentCard = ({ convertPrice, exchangedPrice }) => {
-  const { basketItems, total, getCartItems, setFetchStatus } =
-    useBasketContext();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { basketItems, total, loading } = useBasketContext();
   const { user } = useAuthContext();
-  let { putBookedRoomsDate } = useRoomsAvailabilityCheck();
 
   var request_id = new Date();
   let day = String(request_id.getDate()).padStart(2, "0");
@@ -95,7 +86,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
     hotelName: item?.hotelName,
     hotelLocation: item?.hotelCountry,
     roomTitle: item?.title,
-    roomPrice: item?.price,
+    roomPrice: (item?.price * exchangedPrice).toFixed(2),
     roomNumber: item?.roomNumbers[0]?.number,
     bookingStartDate: item?.dateSearch[0]?.startDate,
     bookingEndDate: item?.dateSearch[0]?.endDate,
@@ -103,39 +94,6 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
     children: item?.roomOptions?.children,
     days: item?.days,
   }));
-
-  const clearAllCartItems = async (id) => {
-    let url = `${WILL_TRIP_BASE_URL}/cart/delete-all-items/${user?.id}`;
-    try {
-      let response = await axios.delete(url, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      if (response.data.status === "success") {
-        setFetchStatus("idle");
-        getCartItems(user);
-        toast.success(response?.data?.msg);
-      }
-    } catch (error) {
-      toast.error(error?.response?.data?.message);
-    }
-  };
-
-  const config = {
-    public_key: process.env.REACT_APP_FLUTTERWAVE_KEY,
-    tx_ref: request_id,
-    amount: total,
-    currency: "NGN",
-    payment_options: "card,banktransfer,ussd",
-    customer: {
-      email: userPaymentData.email,
-      phone_number: userPaymentData.mobileNumber,
-      name: userPaymentData.firstName,
-    },
-  };
-
-  const handleFlutterPayment = useFlutterwave(config);
 
   const paymentTransaction = async (e) => {
     // e.preventDefault();
@@ -146,29 +104,35 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
         ...userPaymentData,
         bookedRoomsOption: bookedRooms,
         convertedPrice: convertPrice,
-        transaction_id: request_id,
+        reference_id: request_id,
         userID: user?.id,
+        total: (total * exchangedPrice).toFixed(2),
       });
-      console.log(response.data);
-      if (response?.data.status === "success") {
-        setUserPaymentData(() => ({
-          [e.target.id]: "",
-        }));
-        // add the endpoint to clear the basket here
-        dispatch(addBookingData({ ...response.data }));
-        clearAllCartItems();
-        navigate("/transactions");
+      // window.open(response.data.response.data.link, "_blank");
+      window.location.href = response.data.response.data.link;
+      if (response?.data?.response.status === "success") {
+        setUserPaymentData((state) => {
+          return {
+            ...state,
+            firstName: "",
+            lastName: "",
+            arrivalTime: "",
+            comment: "",
+            email: "",
+            mobileNumber: "",
+          };
+        });
+        // window.location.href = response.data.paymentResponseData.data.link;
       }
     } catch (error) {
       setError(error);
     }
   };
 
-  const inputStyles =
-    "w-full focus:outline-none border border-gray-300 p-3 placeholder:text-sm block";
+  if (loading) return <SearchButtonSpinner />;
   return (
     <div className="py-12">
-      {basketItems.length > 0 ? (
+      {basketItems.length > 0 && (
         <section className="flex flex-col-reverse lg:flex-row gap-6 lg:gap-14">
           <form>
             <div
@@ -180,7 +144,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                 <div className="flex gap-5">
                   <input
                     type="text"
-                    className={inputStyles}
+                    className="form-input"
                     placeholder="First name"
                     id="firstName"
                     value={userPaymentData.firstName}
@@ -189,7 +153,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                   />
                   <input
                     type="text"
-                    className={inputStyles}
+                    className="form-input"
                     placeholder="Last name"
                     id="lastName"
                     value={userPaymentData.lastName}
@@ -200,7 +164,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                 <div className="flex gap-5">
                   <input
                     type="text"
-                    className={inputStyles}
+                    className="form-input"
                     placeholder="Phone number"
                     id="mobileNumber"
                     value={userPaymentData.mobileNumber}
@@ -213,7 +177,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                 </div>
                 <input
                   type="text"
-                  className={inputStyles}
+                  className="form-input"
                   placeholder="Email address"
                   id="email"
                   value={userPaymentData.email}
@@ -250,7 +214,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                   id="comment"
                   onChange={onChange}
                   value={userPaymentData.comment}
-                  className={inputStyles}
+                  className="form-input"
                   placeholder="Add a special request or comment to your booking"
                 ></textarea>
               </div>
@@ -281,19 +245,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    handleFlutterPayment({
-                      callback: (response) => {
-                        console.log(response);
-                        if (response.status === "successful") {
-                          closePaymentModal(); // this will close the modal programmatically
-                          putBookedRoomsDate();
-                          paymentTransaction();
-                        }
-                      },
-                      onClose: (e) => {
-                        console.log(e);
-                      },
-                    });
+                    paymentTransaction();
                   }}
                   disabled={
                     userPaymentData.firstName === "" ||
@@ -322,7 +274,8 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
             ))}
           </div>
         </section>
-      ) : (
+      )}
+      {basketItems.length === 0 && (
         <div className="flex justify-center flex-col items-center">
           <h1 className="font-light text-2xl text-gray-90">
             You have nothing to pay for.

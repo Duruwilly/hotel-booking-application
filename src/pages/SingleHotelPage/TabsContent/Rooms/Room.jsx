@@ -15,7 +15,7 @@ import usePriceConversion from "../../../../utils/usePriceConversion";
 const Room = ({ room, feature, addToBasket }) => {
   let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
   let { days } = useDaysCalculate();
-  let { isAvailable } = useRoomsAvailabilityCheck();
+  let { isAvailable, basketItemsDatesCheck } = useRoomsAvailabilityCheck();
 
   const [activeOpen, setActiveOpen] = useState("");
 
@@ -53,6 +53,11 @@ const Room = ({ room, feature, addToBasket }) => {
       setExchangedPrice(data);
     });
   }, [convertPrice, fetchHotelStatus]);
+
+  // let iretsd = basketItemsDatesCheck(room.roomNumbers[0].unavailableDates);
+
+  // console.log(!iretsd);
+  
 
   return (
     <>
