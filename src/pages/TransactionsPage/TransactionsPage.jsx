@@ -2,24 +2,25 @@ import React, { useEffect, useState } from "react";
 import { IoMdDownload } from "react-icons/io";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
-import { useSelector } from "react-redux";
 import { format } from "date-fns";
+import SearchButtonSpinner from "../../components/Spinner/SearchButtonSpinner";
+import { useBasketContext } from "../../context/BasketItemsContext";
+import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
 const pdf = new jsPDF();
 
 const TransactionsPage = () => {
-  const { id } = useParams();
-  const [transactionsDetails, setTransactionsDetails] = useState({});
+  const [transactionsDetails, setTransactionsDetails] = useState(null);
   const [loading, setLoadingState] = useState(false);
-  const [fetchingState, setFetchingState] = useState("idle");
   const { user } = useAuthContext();
-  const { bookingsData } = useSelector((state) => state.bookings);
-
-  console.log(bookingsData);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [error, setError] = useState();
+  const { getCartItems, setFetchStatus } = useBasketContext();
+  let { putBookedRoomsDate } = useRoomsAvailabilityCheck();
 
   function finalPrint() {
     const input = document.getElementById("main");
@@ -41,32 +42,55 @@ const TransactionsPage = () => {
     });
   }
 
+  const clearAllCartItems = async (id) => {
+    let url = `${WILL_TRIP_BASE_URL}/cart/delete-all-items/${user?.id}`;
+    try {
+      let response = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+      if (response.data.status === "success") {
+        setFetchStatus("idle");
+        getCartItems(user);
+        toast.success(response?.data?.msg);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
   const getTransactions = async () => {
     setLoadingState(true);
-    setFetchingState("pending");
     try {
       const res = await axios.get(
-        `${WILL_TRIP_BASE_URL}/transactions/single-transaction/${user?.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
+        `${WILL_TRIP_BASE_URL}/transactions/payment-callback/${searchParams.get(
+          "status"
+        )}/${searchParams.get("tx_ref")}/${searchParams.get("transaction_id")}`
       );
+      console.log(res);
       if (res?.data?.status === "success") {
         setLoadingState(false);
-        setTransactionsDetails(res?.data?.data);
+        setTransactionsDetails(res?.data);
+        clearAllCartItems();
+        putBookedRoomsDate();
       }
     } catch (error) {
       setLoadingState(false);
-      toast.error(error.response?.data?.message);
+      // toast.error(error.response?.data?.message);
+      setError(error.response?.data?.message);
     }
   };
 
   useEffect(() => {
     getTransactions();
-  }, [fetchingState]);
+  }, [
+    searchParams.get("status"),
+    searchParams.get("tx_ref"),
+    searchParams.get("transaction_id"),
+  ]);
 
+  if (loading) return <SearchButtonSpinner />;
   return (
     <section className="flex justify-center items-center">
       <div className="w-full max-w-screen-sm h-scree px-4 mt- py-5">
@@ -84,29 +108,29 @@ const TransactionsPage = () => {
               <tr>
                 <td>First Name</td>
                 <td className=" capitalize">
-                  {bookingsData?.transaction_data?.firstName}
+                  {transactionsDetails?.transaction_data?.firstName}
                 </td>
               </tr>
               <tr>
                 <td>Last Name</td>
                 <td className=" capitalize">
-                  {bookingsData?.transaction_data.lastName}
+                  {transactionsDetails?.transaction_data?.lastName}
                 </td>
               </tr>
               <tr>
                 <td>Phone</td>
-                <td>{bookingsData?.transaction_data.mobileNumber}</td>
+                <td>{transactionsDetails?.transaction_data?.mobileNumber}</td>
               </tr>
               <tr>
                 <td>Email</td>
-                <td>{bookingsData?.transaction_data.email}</td>
+                <td>{transactionsDetails?.transaction_data?.email}</td>
               </tr>
               <tr>
                 <td>Arrival Time</td>
-                <td>{bookingsData?.transaction_data?.arrivalTime}</td>
+                <td>{transactionsDetails?.transaction_data?.arrivalTime}</td>
               </tr>
 
-              {bookingsData?.transaction_data?.bookedRoomsOption.map(
+              {transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
                 (options) => (
                   <>
                     <tr>
@@ -124,10 +148,11 @@ const TransactionsPage = () => {
                     <tr>
                       <td>Room Price</td>
                       <td>
-                        {bookingsData.transaction_data.convertedPrice === "USD"
+                        {transactionsDetails.transaction_data.convertedPrice ===
+                        "USD"
                           ? "$"
-                          : bookingsData.transaction_data.convertedPrice ===
-                            "EUR"
+                          : transactionsDetails.transaction_data
+                              .convertedPrice === "EUR"
                           ? "£"
                           : "₦"}
                         {[options.roomPrice]
@@ -165,25 +190,42 @@ const TransactionsPage = () => {
                 )
               )}
               <tr>
-                <td>Transaction Date</td>
-                <td>{`${format(
-                  new Date(bookingsData?.transaction_date),
-                  "dd-MM-yyyy"
-                )}`}</td>
+                <td>Total Amount</td>
+                <td>
+                  {transactionsDetails?.transaction_data?.convertedPrice ===
+                  "USD"
+                    ? "$"
+                    : transactionsDetails?.transaction_data?.convertedPrice ===
+                      "EUR"
+                    ? "£"
+                    : "₦"}
+                  {[transactionsDetails?.transaction_data?.total]
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </td>
               </tr>
+              {/* <tr>
+                <td>Transaction Date</td>
+                <td>
+                  {`${format(
+                    new Date(transactionsDetails?.transaction_date),
+                    "dd-MM-yyyy"
+                  )}`}{" "}
+                </td>
+              </tr> */}
               <tr>
                 <td>Transaction ID</td>
                 <td className="text-red-700 text-xl">
-                  {bookingsData?.transaction_data?.transaction_id}
+                  {transactionsDetails?.transaction_data?.reference_id}
                 </td>
               </tr>
               <tr>
                 <td>Transaction Status</td>
-                <td>{bookingsData?.status}</td>
-              </tr>
-              <tr>
-                <td>Transaction Description</td>
-                <td>{bookingsData?.transaction_description}</td>
+                <td>
+                  {transactionsDetails !== null
+                    ? transactionsDetails?.transaction_description
+                    : error}
+                </td>
               </tr>
             </tbody>
           </table>

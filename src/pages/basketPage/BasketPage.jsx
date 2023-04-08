@@ -12,6 +12,7 @@ import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHe
 import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
 import usePriceConversion from "../../utils/usePriceConversion";
 import { useBasketContext } from "../../context/BasketItemsContext";
+import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
 
 const Basket = () => {
   useTitle("Book the world best hotel");
@@ -146,6 +147,9 @@ const Confirmation = ({
   const navigate = useNavigate();
   const [exchangedPrice, setExchangedPrice] = useState(1);
   const { convertPrices } = usePriceConversion();
+  const { basketItemsDatesCheck } = useRoomsAvailabilityCheck();
+
+  // let datesCheck = basketItemsDatesCheck();
 
   useEffect(() => {
     setSteps(() => 1);
@@ -180,6 +184,7 @@ const Confirmation = ({
                 {...basket}
                 exchangedPrice={exchangedPrice}
                 convertPrice={convertPrice}
+                // datesCheck={datesCheck}
               />
             </div>
           ))}
@@ -202,7 +207,8 @@ const Confirmation = ({
           </div>
           <div className="mt-4">
             <button
-              className="bg-green-700 text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs"
+              // disabled={!datesCheck}
+              className="bg-green-700 disabled:bg-opacity-80 text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs"
               onClick={buttonNavigate}
             >
               confirm booking
