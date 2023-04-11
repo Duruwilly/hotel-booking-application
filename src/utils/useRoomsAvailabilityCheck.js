@@ -6,7 +6,6 @@ import { useBasketContext } from "../context/BasketItemsContext";
 
 const useRoomsAvailabilityCheck = () => {
   let { dateSearch } = useSelector((state) => state.searchState);
-  // let { basketItems } = useSelector((state) => state.basket);
   let { basketItems } = useBasketContext();
   let { user } = useAuthContext();
 
@@ -55,34 +54,90 @@ const useRoomsAvailabilityCheck = () => {
         allDates.includes(new Date(date).getTime())
       )
     );
+    // return is not available and if it is false, it is not available
     return !isFound[0];
   };
 
-  // const basketItemsDatesCheck = (dateSearch) => {
-  //   const dates = basketItems.map((item) => {
-  //     item.dateSearch.flatMap((date) => {
-  //       const startDate = new Date(date.startDate);
-  //       const endDate = new Date(date.endDate);
-  //       let hello = getDatesInRangesInBasket(startDate, endDate);
-  //       allDates.includes(new Date(hello).getTime());
-  //     });
-  //     // console.log(dates);
-  //   });
-  //   return !dates;
-  // };
 
-  // const basketItemsDatesCheck = (unavailableDates) => {
-  //   const dates = basketItems.map((item) => {
-  //     item.dateSearch.flatMap((date) => {
-  //       const startDate = new Date(date.startDate);
-  //       const endDate = new Date(date.endDate);
-  //       let hello = getDatesInRangesInBasket(startDate, endDate);
-  //       unavailableDates.includes(new Date(hello).getTime());
-  //     });
-  //     // console.log(dates);
-  //   });
-  //   return !dates;
-  // };
+  //   const checkRoomsAvailability = async (roomId) => {
+  //     try {
+  //       const res = await axios.get(
+  //         `${WILL_TRIP_BASE_URL}/transactions/room-date-check/${roomId}`
+  //       );
+  //       const allDates = res?.data?.data?.flatMap((item) =>
+  //         item.bookedRoomsOption.flatMap((dates) => {
+  //           const startDate = new Date(dates.bookingStartDate);
+  //           const endDate = new Date(dates.bookingEndDate);
+
+  //           let allDatesInRange = getDatesInRangesInBasket(startDate, endDate);
+  //           return allDatesInRange;
+  //         })
+  //       );
+  // console.log(allDates);
+  //       const allDatesInBasket = basketItems.flatMap((item) =>
+  //         item.dateSearch.flatMap((dates) => {
+  //           const startDate = new Date(dates.startDate);
+  //           const endDate = new Date(dates.endDate);
+
+  //           let allDatesInBasketInRange = getDatesInRangesInBasket(
+  //             startDate,
+  //             endDate
+  //           );
+  //           return allDatesInBasketInRange;
+  //         })
+  //       );
+  //       console.log(allDatesInBasket);
+  //       const bookedDates = allDates.some((dates) =>
+  //         allDatesInBasket.includes(new Date(dates).getTime())
+  //       );
+  //       return bookedDates;
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  const checkRoomsAvailability = async (roomId) => {
+    try {
+      const res = await axios.get(
+        `${WILL_TRIP_BASE_URL}/transactions/room-date-check/${roomId}`
+      );
+      console.log(res.data);
+      if (res?.data?.status === "success") {
+        const allDates = res?.data?.data?.flatMap((item) =>
+          item.bookedRoomsOption.flatMap((dates) => {
+            const startDate = new Date(dates.bookingStartDate);
+            const endDate = new Date(dates.bookingEndDate);
+
+            let allDatesInRange = getDatesInRangesInBasket(startDate, endDate);
+            return allDatesInRange;
+          })
+        );
+
+        const basketItemsWithBookingStatus = basketItems.map((item) => {
+          const itemDates = item.dateSearch.flatMap((dates) => {
+            const startDate = new Date(dates.startDate);
+            const endDate = new Date(dates.endDate);
+
+            let allDatesInRange = getDatesInRangesInBasket(startDate, endDate);
+            return allDatesInRange;
+          });
+
+          const isBooked = allDates.some((dates) =>
+            itemDates.includes(new Date(dates).getTime())
+          );
+
+          return {
+            ...item,
+            isBooked,
+          };
+        });
+
+        return basketItemsWithBookingStatus;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // Within the inner Promise.all(), we are using the dateSearch property of the item to get the relevant dates for the roomObj. We are then calling the getDatesInRangesInBasket() function to generate an array of dates between the start and end dates for each date in the dateSearch array. These dates are stored in the dates array.
   const putBookedRoomsDate = async () => {
@@ -121,7 +176,7 @@ const useRoomsAvailabilityCheck = () => {
     getDatesInRanges,
     isAvailable,
     putBookedRoomsDate,
-    // basketItemsDatesCheck,
+    checkRoomsAvailability,
   };
 };
 

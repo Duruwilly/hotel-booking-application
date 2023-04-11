@@ -36,7 +36,6 @@ const SingleHotel = () => {
   const [fetchStatus, setFetchStatus] = useState("idle");
   const [openPhotosModal, setOpenPhotosModal] = useState(false);
   const [errros, setErrors] = useState(false);
-  const [favouriteCount, setFavouriteCount] = useState();
 
   const heroeBg = {
     width: "100%",
@@ -282,6 +281,7 @@ const SingleHotel = () => {
           hotelCountry={singleHotel?.destination}
           // hotelState={singleHotel?.state}
           feature={singleHotel?.feature}
+          hotelAddress={singleHotel?.address}
         />
       ),
       name: "select a room",
@@ -413,7 +413,7 @@ const SingleHotel = () => {
                         : convertPrice === "EUR"
                         ? "£"
                         : "₦"
-                    } ${[Math.round(singleHotel?.price * exchangedPrice)]
+                    } ${[(singleHotel?.price * exchangedPrice).toFixed(2)]
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
                   </p>

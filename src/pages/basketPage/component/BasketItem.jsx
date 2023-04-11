@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { format } from "date-fns";
 import { MdOutlineKingBed, MdOutlineSingleBed } from "react-icons/md";
 import axios from "axios";
@@ -6,10 +6,12 @@ import { useAuthContext } from "../../../context/AuthContext";
 import { WILL_TRIP_BASE_URL } from "../../../constants/base-urls";
 import { toast } from "react-toastify";
 import { useBasketContext } from "../../../context/BasketItemsContext";
+import useRoomsAvailabilityCheck from "../../../utils/useRoomsAvailabilityCheck";
 
 const BasketItem = (props) => {
   const { user } = useAuthContext();
   const { setFetchStatus, getCartItems } = useBasketContext();
+  let { checkRoomsAvailability } = useRoomsAvailabilityCheck();
 
   const {
     feature,
@@ -21,7 +23,9 @@ const BasketItem = (props) => {
     hotelName,
     exchangedPrice,
     convertPrice,
-   
+    // datesCheck,
+    setDatesCheck,
+    // isBooked,
   } = props;
 
   const deleteCartItems = async (id) => {
@@ -41,6 +45,22 @@ const BasketItem = (props) => {
       toast.error(error?.response?.data?.message);
     }
   };
+
+  // let hello = checkRoomsAvailability(props?.itemId)
+  //   .then((isAvailable) => setDatesCheck(isAvailable))
+  //   .catch((error) => console.log(error));
+  useEffect(() => {
+    const roomAvailabilityfunc = async () => {
+      try {
+        const isAvailable = await checkRoomsAvailability(props?.itemId);
+        setDatesCheck(isAvailable);
+        // console.log(isAvailable);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    roomAvailabilityfunc();
+  }, [props?.itemId]);
 
   return (
     <>
@@ -67,7 +87,11 @@ const BasketItem = (props) => {
             {`${format(
               new Date(dateSearch[0]?.startDate),
               "dd MMMM yyyy"
-            )} - ${format(new Date(dateSearch[0]?.endDate), "dd MMMM yyyy")}`}
+            )} - ${format(
+              new Date(dateSearch[0]?.endDate),
+              "dd MMMM yyyy"
+            )}`}{" "}
+            ({days === 1 ? days + " " + "night" : days + " " + "nights"})
           </span>
         </div>
         <div className="flex justify-between items-center pb-6">
@@ -128,6 +152,12 @@ const BasketItem = (props) => {
         >
           Remove
         </span>
+        {/* {isBooked && (
+          <p className="text-red-800 font-light text-sm">
+            room has already been booked. kindly remove this room to proceed or
+            select another room or date
+          </p>
+        )} */}
       </div>
     </>
   );

@@ -49,7 +49,7 @@ const Payment = () => {
 export default Payment;
 
 const PaymentCard = ({ convertPrice, exchangedPrice }) => {
-  const { basketItems, total, loading } = useBasketContext();
+  const { basketItems, total, loading} = useBasketContext();
   const { user } = useAuthContext();
 
   var request_id = new Date();
@@ -83,6 +83,8 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
   };
 
   let bookedRooms = basketItems.map((item) => ({
+    hotelAddress: item?.hotelAddress,
+    feature: item?.feature,
     hotelName: item?.hotelName,
     hotelLocation: item?.hotelCountry,
     roomTitle: item?.title,
@@ -93,6 +95,9 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
     adult: item?.roomOptions?.adult,
     children: item?.roomOptions?.children,
     days: item?.days,
+    roomMaxGuest: item?.maxPeople,
+    hotelID: item?.hotelID,
+    roomID: item?.itemId,
   }));
 
   const paymentTransaction = async (e) => {
@@ -252,7 +257,8 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                     userPaymentData.lastName === "" ||
                     userPaymentData.email === "" ||
                     userPaymentData.mobileNumber === "" ||
-                    userPaymentData.arrivalTime === ""
+                    userPaymentData.arrivalTime === "" 
+                    // datesCheck?.some((item) => item?.isBooked)
                   }
                   className="bg-green-700 text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs flex justify-center items-center gap-3"
                 >

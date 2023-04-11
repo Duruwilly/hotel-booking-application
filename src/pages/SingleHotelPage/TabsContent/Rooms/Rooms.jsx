@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { useBasketContext } from "../../../../context/BasketItemsContext";
 import SearchButtonSpinner from "../../../../components/Spinner/SearchButtonSpinner";
 
-const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
+const Rooms = ({ hotelID, hotelName, hotelCountry, feature, hotelAddress }) => {
   const { user } = useAuthContext();
   let { days } = useDaysCalculate();
   const [data, setData] = useState([]);
@@ -58,17 +58,19 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature }) => {
           days,
           hotelCountry,
           hotelName,
+          hotelAddress,
           feature,
           quantity: 1,
           itemId: _id,
           userID: user.id,
+          hotelID,
         });
         setFetchStatus("idle");
         getCartItems(user);
+        navigate("/basket");
       } catch (error) {
         toast.error(error);
       }
-      // navigate("/basket");
     } else {
       navigate("/login");
     }

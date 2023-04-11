@@ -15,7 +15,9 @@ import usePriceConversion from "../../../../utils/usePriceConversion";
 const Room = ({ room, feature, addToBasket }) => {
   let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
   let { days } = useDaysCalculate();
-  let { isAvailable, basketItemsDatesCheck } = useRoomsAvailabilityCheck();
+  let { isAvailable } = useRoomsAvailabilityCheck();
+
+  // setRoomBookingId(room?.bookingId);
 
   const [activeOpen, setActiveOpen] = useState("");
 
@@ -53,11 +55,6 @@ const Room = ({ room, feature, addToBasket }) => {
       setExchangedPrice(data);
     });
   }, [convertPrice, fetchHotelStatus]);
-
-  // let iretsd = basketItemsDatesCheck(room.roomNumbers[0].unavailableDates);
-
-  // console.log(!iretsd);
-  
 
   return (
     <>
@@ -149,6 +146,7 @@ const Room = ({ room, feature, addToBasket }) => {
                 </span>
               )}
             </div>
+            {/* if false or is not available */}
             {!isAvailable(room.roomNumbers) ? (
               <>
                 <p className="text-red-800 font-semibold text-sm uppercase">
@@ -191,7 +189,7 @@ const Room = ({ room, feature, addToBasket }) => {
                     : convertPrice === "EUR"
                     ? "£"
                     : "₦"
-                } ${[Math.round(room?.price * exchangedPrice)]
+                } ${[(room?.price * exchangedPrice).toFixed(2)]
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
               </span>
@@ -215,7 +213,9 @@ const Room = ({ room, feature, addToBasket }) => {
               </span>
             </p>
             <button
-              onClick={() => addToBasket(room._id)}
+              onClick={() => {
+                addToBasket(room._id);
+              }}
               disabled={!isAvailable(room.roomNumbers)}
               // onClick={() => !isAvailable(room.roomNumbers)}
               className={`${
