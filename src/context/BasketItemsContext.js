@@ -11,6 +11,7 @@ export const BasketProvider = ({ children }) => {
   // const { user } = useAuthContext();
   const [error, setErrors] = useState(false);
   const [fetchStatus, setFetchStatus] = useState("idle");
+  const [datesCheck, setDatesCheck] = useState();
 
   const total = basketItems?.reduce((acc, item) => {
     return acc + item.quantity * item.price * item.days;
@@ -51,6 +52,8 @@ export const BasketProvider = ({ children }) => {
         setFetchStatus,
         setBasketItems,
         getCartItems,
+        setDatesCheck,
+        datesCheck,
       }}
     >
       {children}

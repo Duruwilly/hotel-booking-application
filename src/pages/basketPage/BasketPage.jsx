@@ -12,7 +12,7 @@ import SearchInputHeader from "../../components/PagesSearchHeaders/SearchInputHe
 import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSearchHeader";
 import usePriceConversion from "../../utils/usePriceConversion";
 import { useBasketContext } from "../../context/BasketItemsContext";
-import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
+import SearchButtonSpinner from "../../components/Spinner/SearchButtonSpinner";
 
 const Basket = () => {
   useTitle("Book the world best hotel");
@@ -21,7 +21,8 @@ const Basket = () => {
     "w-full focus:outline-none border border-gray-300 p-3 placeholder:text-sm block rounded-md";
   const { steps, setSteps, list, matches, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
-  const { basketItems, total } = useBasketContext();
+  const { basketItems, total, loading, setDatesCheck, datesCheck } =
+    useBasketContext();
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
@@ -57,6 +58,9 @@ const Basket = () => {
             fetchHotelStatus={fetchHotelStatus}
             basketItems={basketItems}
             total={total}
+            loading={loading}
+            setDatesCheck={setDatesCheck}
+            datesCheck={datesCheck}
           />
         </div>
         {basketItems.length > 0 && openModal && (
@@ -143,13 +147,13 @@ const Confirmation = ({
   fetchHotelStatus,
   basketItems,
   total,
+  loading,
+  setDatesCheck,
+  // datesCheck,
 }) => {
   const navigate = useNavigate();
   const [exchangedPrice, setExchangedPrice] = useState(1);
   const { convertPrices } = usePriceConversion();
-  const { basketItemsDatesCheck } = useRoomsAvailabilityCheck();
-
-  // let datesCheck = basketItemsDatesCheck();
 
   useEffect(() => {
     setSteps(() => 1);
@@ -166,28 +170,58 @@ const Confirmation = ({
     });
   }, [convertPrice, fetchHotelStatus]);
 
+  let maxPeopleCheck = basketItems.map((maxPeople) => maxPeople.maxPeople)[0];
+
+  let guestCheck = basketItems.map((guest) => guest.roomOptions)[0];
+
+  function isKeyValueRepeated(basketItems, keyName, value) {
+    const filteredArray = basketItems.filter((item) => item[keyName] === value);
+    return filteredArray.length > 1;
+  }
+
+  const hotelName = basketItems.map((hotelName) => hotelName.hotelName)[0];
+  const isHotelNameRepeated = isKeyValueRepeated(
+    basketItems,
+    "hotelName",
+    hotelName
+  );
+
+  // console.log(datesCheck);
+
+  if (loading) return <SearchButtonSpinner />;
   return (
     <section className="py-12">
       {basketItems.length > 0 ? (
         <div className="flex flex-col lg:flex-row justify-between items-center">
           <h1 className="text-center text-4xl font-light pb-5 lg:pb-0">
-            Your basket
+            Confirm booking
           </h1>
           <PriceConversion />
         </div>
       ) : null}
-      {basketItems && basketItems.length > 0 ? (
+      {basketItems && basketItems.length > 0 && (
         <div>
-          {basketItems.map((basket) => (
+          {basketItems?.map((basket) => (
             <div key={basket._id}>
               <BasketItem
                 {...basket}
                 exchangedPrice={exchangedPrice}
                 convertPrice={convertPrice}
                 // datesCheck={datesCheck}
+                basketItems={basketItems}
+                setDatesCheck={setDatesCheck}
               />
             </div>
           ))}
+          {(guestCheck.adult + guestCheck.children > maxPeopleCheck &&
+            basketItems.length === 1) ||
+          (guestCheck.adult + guestCheck.children > maxPeopleCheck &&
+            !isHotelNameRepeated) ? (
+            <p className="text-red-800 font-light text-sm">
+              guest exceed the maximum people in this room. Kindly select more
+              than one room before you can proceed.
+            </p>
+          ) : null}
           <div
             className="pt- py-3 flex justify-between items-center"
             style={{ borderBottom: "1px solid rgba(107,114,128,.1)" }}
@@ -207,7 +241,12 @@ const Confirmation = ({
           </div>
           <div className="mt-4">
             <button
-              // disabled={!datesCheck}
+              disabled={
+                (guestCheck.adult + guestCheck.children > maxPeopleCheck &&
+                  basketItems.length === 1) ||
+                (guestCheck.adult + guestCheck.children > maxPeopleCheck &&
+                  !isHotelNameRepeated)
+              }
               className="bg-green-700 disabled:bg-opacity-80 text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs"
               onClick={buttonNavigate}
             >
@@ -215,7 +254,8 @@ const Confirmation = ({
             </button>
           </div>
         </div>
-      ) : (
+      )}
+      {basketItems.length === 0 && (
         <div className="flex justify-center flex-col items-center pt-10">
           <h1 className="font-light text-xl mb- text-gray-90  py-">
             Your basket is currently empty. For inspiration, try our{" "}
