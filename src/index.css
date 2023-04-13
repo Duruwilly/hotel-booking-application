@@ -12,6 +12,11 @@
   text-decoration: none;
 }
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 /* search bars */
 .searchContainer {
   height: 80px;

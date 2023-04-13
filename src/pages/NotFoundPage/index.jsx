@@ -5,7 +5,7 @@ import { useTitle } from "../../hooks/useTitle";
 const NotFoundPage = () => {
   useTitle("404");
   return (
-    <section className="flex justify-center">
+    <section className="flex justify-center flex-1">
       <div className="w-full max-w-screen-lg px-4 py-20">
         <div>
           <h1 className="fone-semibold tracking-widest text-center">

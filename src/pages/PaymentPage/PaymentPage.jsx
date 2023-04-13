@@ -13,13 +13,22 @@ import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 import { useBasketContext } from "../../context/BasketItemsContext";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import SearchButtonSpinner from "../../components/Spinner/SearchButtonSpinner";
+import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
 
 const Payment = () => {
   useTitle("Book the world best hotel");
   const { steps, list, setSteps, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
+
+  const { basketItems, datesCheck, total, setDatesCheck } = useBasketContext();
+
   const [exchangedPrice, setExchangedPrice] = useState(1);
+  const [loadingState, setLoadingState] = useState(true);
+
   const { convertPrices } = usePriceConversion();
+
+  let { checkRoomsAvailability } = useRoomsAvailabilityCheck();
+
   useEffect(() => {
     setSteps(() => 2);
   }, []);
@@ -30,8 +39,38 @@ const Payment = () => {
     });
   }, [convertPrice, fetchHotelStatus]);
 
+  useEffect(() => {
+    if (basketItems?.length > 0) {
+      let roomId = basketItems.map((item) => item.itemId);
+
+      const apiCallsFunc = async () => {
+        try {
+          const newVal = await roomId.map(async (item) => {
+            const room = await checkRoomsAvailability(item);
+
+            return room;
+          });
+
+          Promise.allSettled(newVal).then(async (data) => {
+            await setDatesCheck(() => [...data?.map((item) => item?.value)]);
+            if (datesCheck?.length === basketItems?.length) {
+              setLoadingState(false);
+            }
+          });
+        } catch (error) {
+          console.log({ error });
+        }
+      };
+      apiCallsFunc();
+    } else {
+      setLoadingState(false);
+    }
+  }, [basketItems]);
+
+  if (loadingState) return <SearchButtonSpinner />;
+
   return (
-    <section className="flex justify-center">
+    <section className="flex justify-center flex-1">
       <div className="w-full max-w-screen-xl py- px-4">
         <div className="m-auto">
           <ProgressBar step={steps} list={list} />
@@ -40,6 +79,9 @@ const Payment = () => {
         <PaymentCard
           convertPrice={convertPrice}
           exchangedPrice={exchangedPrice}
+          basketItems={basketItems}
+          total={total}
+          datesCheck={datesCheck}
         />
       </div>
     </section>
@@ -48,8 +90,13 @@ const Payment = () => {
 
 export default Payment;
 
-const PaymentCard = ({ convertPrice, exchangedPrice }) => {
-  const { basketItems, total, loading} = useBasketContext();
+const PaymentCard = ({
+  convertPrice,
+  exchangedPrice,
+  basketItems,
+  total,
+  datesCheck,
+}) => {
   const { user } = useAuthContext();
 
   var request_id = new Date();
@@ -134,10 +181,9 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
     }
   };
 
-  if (loading) return <SearchButtonSpinner />;
   return (
     <div className="py-12">
-      {basketItems.length > 0 && (
+      {datesCheck.length > 0 && (
         <section className="flex flex-col-reverse lg:flex-row gap-6 lg:gap-14">
           <form>
             <div
@@ -257,8 +303,8 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
                     userPaymentData.lastName === "" ||
                     userPaymentData.email === "" ||
                     userPaymentData.mobileNumber === "" ||
-                    userPaymentData.arrivalTime === "" 
-                    // datesCheck?.some((item) => item?.isBooked)
+                    userPaymentData.arrivalTime === "" ||
+                    datesCheck?.some((item) => item?.isBooked)
                   }
                   className="bg-green-700 text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs flex justify-center items-center gap-3"
                 >
@@ -273,7 +319,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
             <h1 className="bg-primary text-center py-5 text-white capitalize text-2xl">
               booking summary
             </h1>
-            {basketItems.map((basket) => (
+            {datesCheck.map((basket) => (
               <div key={basket._id}>
                 <BookingSummaryCard {...basket} />
               </div>
@@ -281,7 +327,7 @@ const PaymentCard = ({ convertPrice, exchangedPrice }) => {
           </div>
         </section>
       )}
-      {basketItems.length === 0 && (
+      {datesCheck.length === 0 && (
         <div className="flex justify-center flex-col items-center">
           <h1 className="font-light text-2xl text-gray-90">
             You have nothing to pay for.

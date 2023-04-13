@@ -3,8 +3,16 @@ import React from "react";
 import { MdOutlineKingBed, MdOutlineSingleBed } from "react-icons/md";
 
 const BookingSummaryCard = (props) => {
-  const { title, feature, roomOptions, dateSearch, hotelCountry, hotelName, maxPeople } =
-    props;
+  const {
+    title,
+    feature,
+    roomOptions,
+    dateSearch,
+    hotelCountry,
+    hotelName,
+    maxPeople,
+    isBooked,
+  } = props;
   return (
     <div className="p-4 bg-white border border-gray-300 h-fit">
       <h2 className="text-3xl font-normal capitalize">{hotelName}</h2>
@@ -90,6 +98,12 @@ const BookingSummaryCard = (props) => {
           <p className="text-red-800 capitalize font-semibold">free includes</p>
           <span>{feature}</span>
         </div>
+        {isBooked && (
+          <p className="text-red-800 font-light text-sm">
+            room has already been booked. kindly remove this room to proceed or
+            select another room or date
+          </p>
+        )}
       </div>
     </div>
   );

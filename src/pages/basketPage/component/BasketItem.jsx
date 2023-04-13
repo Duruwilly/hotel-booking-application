@@ -23,8 +23,6 @@ const BasketItem = (props) => {
     hotelName,
     exchangedPrice,
     convertPrice,
-    // datesCheck,
-    setDatesCheck,
     // isBooked,
   } = props;
 
@@ -39,28 +37,13 @@ const BasketItem = (props) => {
       if (response.data.status === "success") {
         setFetchStatus("idle");
         getCartItems(user);
+
         toast.success(response?.data?.msg);
       }
     } catch (error) {
       toast.error(error?.response?.data?.message);
     }
   };
-
-  // let hello = checkRoomsAvailability(props?.itemId)
-  //   .then((isAvailable) => setDatesCheck(isAvailable))
-  //   .catch((error) => console.log(error));
-  useEffect(() => {
-    const roomAvailabilityfunc = async () => {
-      try {
-        const isAvailable = await checkRoomsAvailability(props?.itemId);
-        setDatesCheck(isAvailable);
-        // console.log(isAvailable);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    roomAvailabilityfunc();
-  }, [props?.itemId]);
 
   return (
     <>
@@ -97,19 +80,19 @@ const BasketItem = (props) => {
         <div className="flex justify-between items-center pb-6">
           <p className="text-gray-400 capitalize">guests</p>
           <span className="font-extralight capitalize">{`${
-            roomOptions.adult + roomOptions.children === 1
-              ? `${roomOptions.adult + roomOptions.children} guests`
-              : `${roomOptions.adult + roomOptions.children} guests`
+            roomOptions?.adult + roomOptions?.children === 1
+              ? `${roomOptions?.adult + roomOptions?.children} guests`
+              : `${roomOptions?.adult + roomOptions?.children} guests`
           }`}</span>
         </div>
         <div className="flex justify-between items-center pb-6">
           <p className="text-gray-400 capitalize">beds</p>
           <span className="flex justify-cente items-center gap-1 text-sm font-semibold">
-            {props.maxPeople === 1 || props.maxPeople === 2 ? (
+            {props?.maxPeople === 1 || props?.maxPeople === 2 ? (
               <span className="flex justify-cente items-center gap-1 text-sm font-semibold">
                 <MdOutlineKingBed className="text-3xl" /> x 1
               </span>
-            ) : props.maxPeople === 3 ? (
+            ) : props?.maxPeople === 3 ? (
               <span className="flex justify-cente items-center gap-1 text-sm font-semibold">
                 <MdOutlineKingBed className="text-3xl" /> x 1{" "}
                 <MdOutlineSingleBed className="text-3xl" /> x1{" "}

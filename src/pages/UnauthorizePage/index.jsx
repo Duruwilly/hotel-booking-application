@@ -5,7 +5,7 @@ import { useTitle } from "../../hooks/useTitle";
 const Unauthorize = () => {
   useTitle("unauthorize");
   return (
-    <section className="flex justify-center items-cente">
+    <section className="flex justify-center items-center flex-1">
       <div className="w-full max-w-screen-lg px-4 py-20">
         <div>
           <h1 className="font-semibold tracking-widest text-center">

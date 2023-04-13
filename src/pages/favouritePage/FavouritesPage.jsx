@@ -61,7 +61,7 @@ const Favourites = () => {
         </div>
       </section>
       {loading && <Spinner />}
-      <section className="flex justify-center">
+      <section className="flex justify-center flex-1">
         <div className="w-full max-w-screen-xl">
           {favouriteItems.length > 0 && (
             <div className="grid lg:grid-cols-3 wishlist-item gap-4 py-10 px-4">
