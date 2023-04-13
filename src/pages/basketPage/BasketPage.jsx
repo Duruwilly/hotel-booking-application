@@ -62,7 +62,7 @@ const Basket = () => {
             }
           });
         } catch (error) {
-          console.log({ error });
+          console.log(error);
         }
       };
 
@@ -72,7 +72,7 @@ const Basket = () => {
       setLoadingState(false);
     };
   }, [basketItems]);
-  console.log(basketItems);
+
   if (loading) return <SearchButtonSpinner />;
   return (
     <>

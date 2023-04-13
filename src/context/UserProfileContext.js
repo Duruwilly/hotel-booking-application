@@ -29,8 +29,8 @@ export const UserContextProvider = ({ children }) => {
         setLoadingState(false);
         setUserProfileDetails(res?.data?.data);
       }
-      getCartItems(user);
-      getFavouriteItems(user);
+      // getCartItems(user);
+      // getFavouriteItems(user);
       //   toast.success(res.data.msg);
     } catch (error) {
       setLoadingState(false);
