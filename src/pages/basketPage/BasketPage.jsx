@@ -22,7 +22,7 @@ const Basket = () => {
     "w-full focus:outline-none border border-gray-300 p-3 placeholder:text-sm block rounded-md";
   const { steps, setSteps, list, matches, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
-  const { basketItems, total, setDatesCheck, datesCheck, setFetchStatus } =
+  const { basketItems, total, setDatesCheck, datesCheck, loading } =
     useBasketContext();
   const [openModal, setOpenModal] = useState(false);
 
@@ -31,12 +31,11 @@ const Basket = () => {
   const [fetchingStatus, setFetchingStatus] = useState("idle");
 
   const [loadingState, setLoadingState] = useState(true);
-  const basketRef = useRef(null);
 
   useEffect(() => {
     setTimeout(() => {
       setOpenModal(true);
-    }, 20000);
+    }, 120000);
   }, []);
 
   useEffect(() => {
@@ -72,14 +71,12 @@ const Basket = () => {
     return () => {
       setLoadingState(false);
     };
-
   }, [basketItems]);
-
-  if (loadingState) return <SearchButtonSpinner />;
-
+  console.log(basketItems);
+  if (loading) return <SearchButtonSpinner />;
   return (
     <>
-      {datesCheck.length > 0 ? (
+      {basketItems.length > 0 ? (
         <div className="flex justify-center">
           <div className="w-full max-w-screen-lg">
             <ProgressBar step={steps} list={list} />
@@ -147,14 +144,16 @@ const Confirmation = ({
   // CHECK THE GUEST TO BE LODGED IN A ROOM
   let guestCheck = basketItems?.map((guest) => guest?.roomOptions)[0];
 
-  //
-  function isKeyValueRepeated(basketItems, keyName, value) {
+  // CHECK IF HOTEL NAME IS REPEATED OR GREATER THAN ONE
+  function isHotelKeyValueRepeated(basketItems, keyName, value) {
     const filteredArray = basketItems.filter((item) => item[keyName] === value);
     return filteredArray.length > 1;
   }
 
+  // GET THE NAMES OF THE HOTEL IN THE BASKET
   const hotelName = basketItems?.map((hotelName) => hotelName?.hotelName)[0];
-  const isHotelNameRepeated = isKeyValueRepeated(
+
+  const isHotelNameRepeated = isHotelKeyValueRepeated(
     basketItems,
     "hotelName",
     hotelName
