@@ -102,9 +102,10 @@ const Navbar = () => {
 
   useEffect(() => {
     getUserDetails();
-    getCartItems();
-    getFavouriteItems();
+    getCartItems(user);
+    getFavouriteItems(user);
   }, [user?.token]);
+  
   return (
     <>
       <header

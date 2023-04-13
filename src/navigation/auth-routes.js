@@ -29,5 +29,5 @@ export const authRoutes = [
   {
     path: "/merchant-login",
     component: MerchantLoginPage,
-  },4
+  },
 ];

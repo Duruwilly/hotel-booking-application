@@ -63,8 +63,8 @@ const LoginRegisterPage = () => {
         loginUserDetails
       );
       dispatch({ type: "SUCCESS", payload: res.data });
-      setFetchStatus("idle");
-      setFavouriteFetchStatus("idle");
+      // setFetchStatus("idle");
+      // setFavouriteFetchStatus("idle");
       setFetchingState("idle");
       // navigate("/");
     } catch (error) {
