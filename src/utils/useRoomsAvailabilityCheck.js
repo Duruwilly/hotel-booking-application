@@ -58,7 +58,6 @@ const useRoomsAvailabilityCheck = () => {
     return !isFound[0];
   };
 
-
   //   const checkRoomsAvailability = async (roomId) => {
   //     try {
   //       const res = await axios.get(
@@ -101,7 +100,7 @@ const useRoomsAvailabilityCheck = () => {
       const res = await axios.get(
         `${WILL_TRIP_BASE_URL}/transactions/room-date-check/${roomId}`
       );
-      console.log(res.data);
+
       if (res?.data?.status === "success") {
         const allDates = res?.data?.data?.flatMap((item) =>
           item.bookedRoomsOption.flatMap((dates) => {
@@ -113,8 +112,12 @@ const useRoomsAvailabilityCheck = () => {
           })
         );
 
-        const basketItemsWithBookingStatus = basketItems.map((item) => {
-          const itemDates = item.dateSearch.flatMap((dates) => {
+        const basketItemWithRoomId = basketItems.find(
+          (item) => item?.itemId === roomId
+        );
+
+        if (basketItemWithRoomId) {
+          const itemDates = basketItemWithRoomId.dateSearch.flatMap((dates) => {
             const startDate = new Date(dates.startDate);
             const endDate = new Date(dates.endDate);
 
@@ -127,12 +130,12 @@ const useRoomsAvailabilityCheck = () => {
           );
 
           return {
-            ...item,
+            ...basketItemWithRoomId,
             isBooked,
           };
-        });
+        }
 
-        return basketItemsWithBookingStatus;
+        return basketItemWithRoomId;
       }
     } catch (error) {
       console.log(error);

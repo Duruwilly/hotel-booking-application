@@ -142,7 +142,7 @@ const HotelsList = () => {
         <Spinner />
       ) : (
         <section
-          className="flex justify-center"
+          className="flex justify-center flex-1"
           onClick={() => setDropdownHeader(false)}
         >
           <div className="w-full max-w-screen-xl py-5 px-4">

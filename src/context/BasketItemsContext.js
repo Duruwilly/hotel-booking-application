@@ -11,12 +11,11 @@ export const BasketProvider = ({ children }) => {
   // const { user } = useAuthContext();
   const [error, setErrors] = useState(false);
   const [fetchStatus, setFetchStatus] = useState("idle");
-  const [datesCheck, setDatesCheck] = useState();
+  const [datesCheck, setDatesCheck] = useState([]);
 
   const total = basketItems?.reduce((acc, item) => {
     return acc + item.quantity * item.price * item.days;
   }, 0);
-  // console.log(user);
 
   const getCartItems = async (user) => {
     setLoading(true);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
@@ -13,6 +13,7 @@ import ToggledSearchHeader from "../../components/PagesSearchHeaders/ToggledSear
 import usePriceConversion from "../../utils/usePriceConversion";
 import { useBasketContext } from "../../context/BasketItemsContext";
 import SearchButtonSpinner from "../../components/Spinner/SearchButtonSpinner";
+import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
 
 const Basket = () => {
   useTitle("Book the world best hotel");
@@ -21,14 +22,21 @@ const Basket = () => {
     "w-full focus:outline-none border border-gray-300 p-3 placeholder:text-sm block rounded-md";
   const { steps, setSteps, list, matches, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
-  const { basketItems, total, loading, setDatesCheck, datesCheck } =
+  const { basketItems, total, setDatesCheck, datesCheck, setFetchStatus } =
     useBasketContext();
   const [openModal, setOpenModal] = useState(false);
+
+  let { checkRoomsAvailability } = useRoomsAvailabilityCheck();
+
+  const [fetchingStatus, setFetchingStatus] = useState("idle");
+
+  const [loadingState, setLoadingState] = useState(true);
+  const basketRef = useRef(null);
 
   useEffect(() => {
     setTimeout(() => {
       setOpenModal(true);
-    }, 10000);
+    }, 20000);
   }, []);
 
   useEffect(() => {
@@ -37,9 +45,41 @@ const Basket = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (basketItems.length > 0) {
+      let roomId = basketItems.map((item) => item.itemId);
+      const apiCallsFunc = async () => {
+        try {
+          const newVal = await roomId.map(async (item) => {
+            const room = await checkRoomsAvailability(item);
+
+            return room;
+          });
+
+          Promise.allSettled(newVal).then(async (data) => {
+            await setDatesCheck(() => [...data?.map((item) => item?.value)]);
+            if (datesCheck?.length === basketItems?.length) {
+              setLoadingState(false);
+            }
+          });
+        } catch (error) {
+          console.log({ error });
+        }
+      };
+
+      apiCallsFunc();
+    }
+    return () => {
+      setLoadingState(false);
+    };
+
+  }, [basketItems]);
+
+  if (loadingState) return <SearchButtonSpinner />;
+
   return (
     <>
-      {basketItems.length > 0 ? (
+      {datesCheck.length > 0 ? (
         <div className="flex justify-center">
           <div className="w-full max-w-screen-lg">
             <ProgressBar step={steps} list={list} />
@@ -50,7 +90,7 @@ const Basket = () => {
       ) : (
         <ToggledSearchHeader />
       )}
-      <section className="flex justify-center relative">
+      <section className="flex justify-center relative flex-1">
         <div className="w-full max-w-screen-sm px-4">
           <Confirmation
             setSteps={setSteps}
@@ -58,81 +98,13 @@ const Basket = () => {
             fetchHotelStatus={fetchHotelStatus}
             basketItems={basketItems}
             total={total}
-            loading={loading}
-            setDatesCheck={setDatesCheck}
             datesCheck={datesCheck}
+            setFetchingStatus={setFetchingStatus}
+            fetchingStatus={fetchingStatus}
           />
         </div>
         {basketItems.length > 0 && openModal && (
-          <div
-            className=" w-screen h-screen fixed top-0 left-0 flex items-center justify-center z-[100] px-2"
-            style={{ background: "rgba(255, 255, 255, 0.6)" }}
-          >
-            <div className="bg-white relative w-full max-w-screen-sm shadow-md">
-              <div style={paymentBg}></div>
-              <FaTimes
-                onClick={() => setOpenModal(false)}
-                className="text-white absolute top-4 right-4 text-3xl cursor-pointer"
-              />
-              <div>
-                <div className="py-8">
-                  <h1 className="text-3xl text-center uppercase font-normal">
-                    need some time?
-                  </h1>
-                  <p
-                    className="text-center text-base pt-6 pb-4"
-                    style={{ color: "#4e4e4e" }}
-                  >
-                    If you're still thinking it over, just fill in the below and
-                    we'll email you the details.
-                  </p>
-                  <form>
-                    <div className=" space-y-6 px-8">
-                      <div className="flex modalInputs gap-5">
-                        <input
-                          type="text"
-                          className={inputStyles}
-                          placeholder="First name"
-                          id="firstName"
-                        />
-                        <input
-                          type="text"
-                          className={inputStyles}
-                          placeholder="Last name"
-                          id="lastName"
-                        />
-                      </div>
-                      <div className="flex modalInputs gap-5">
-                        <input
-                          type="text"
-                          className={inputStyles}
-                          placeholder="Phone number"
-                          id="mobileNumber"
-                        />
-                        <select
-                          name="country"
-                          id="country"
-                          className={`${inputStyles} text-sm`}
-                        >
-                          <option value="">Select Country</option>
-                          {countries?.map((country, index) => (
-                            <option value={country?.name} key={index}>
-                              {country?.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="flex justify-center">
-                        <button className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-light cursor-pointer w-full">
-                          submit
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Modal countries={countries} setOpenModal={setOpenModal} />
         )}
       </section>
     </>
@@ -147,9 +119,8 @@ const Confirmation = ({
   fetchHotelStatus,
   basketItems,
   total,
-  loading,
-  setDatesCheck,
-  // datesCheck,
+  setFetchingStatus,
+  fetchingStatus,
 }) => {
   const navigate = useNavigate();
   const [exchangedPrice, setExchangedPrice] = useState(1);
@@ -170,28 +141,28 @@ const Confirmation = ({
     });
   }, [convertPrice, fetchHotelStatus]);
 
-  let maxPeopleCheck = basketItems.map((maxPeople) => maxPeople.maxPeople)[0];
+  // CHECK THE MAX PEOPLE IN EACH BASKET ITEM
+  let maxPeopleCheck = basketItems?.map((maxPeople) => maxPeople?.maxPeople)[0];
 
-  let guestCheck = basketItems.map((guest) => guest.roomOptions)[0];
+  // CHECK THE GUEST TO BE LODGED IN A ROOM
+  let guestCheck = basketItems?.map((guest) => guest?.roomOptions)[0];
 
+  //
   function isKeyValueRepeated(basketItems, keyName, value) {
     const filteredArray = basketItems.filter((item) => item[keyName] === value);
     return filteredArray.length > 1;
   }
 
-  const hotelName = basketItems.map((hotelName) => hotelName.hotelName)[0];
+  const hotelName = basketItems?.map((hotelName) => hotelName?.hotelName)[0];
   const isHotelNameRepeated = isKeyValueRepeated(
     basketItems,
     "hotelName",
     hotelName
   );
 
-  // console.log(datesCheck);
-
-  if (loading) return <SearchButtonSpinner />;
   return (
     <section className="py-12">
-      {basketItems.length > 0 ? (
+      {basketItems?.length > 0 ? (
         <div className="flex flex-col lg:flex-row justify-between items-center">
           <h1 className="text-center text-4xl font-light pb-5 lg:pb-0">
             Confirm booking
@@ -207,15 +178,15 @@ const Confirmation = ({
                 {...basket}
                 exchangedPrice={exchangedPrice}
                 convertPrice={convertPrice}
-                // datesCheck={datesCheck}
                 basketItems={basketItems}
-                setDatesCheck={setDatesCheck}
+                setFetchingStatus={setFetchingStatus}
+                fetchingStatus={fetchingStatus}
               />
             </div>
           ))}
-          {(guestCheck.adult + guestCheck.children > maxPeopleCheck &&
-            basketItems.length === 1) ||
-          (guestCheck.adult + guestCheck.children > maxPeopleCheck &&
+          {(guestCheck?.adult + guestCheck?.children > maxPeopleCheck &&
+            basketItems?.length === 1) ||
+          (guestCheck?.adult + guestCheck?.children > maxPeopleCheck &&
             !isHotelNameRepeated) ? (
             <p className="text-red-800 font-light text-sm">
               guest exceed the maximum people in this room. Kindly select more
@@ -242,9 +213,9 @@ const Confirmation = ({
           <div className="mt-4">
             <button
               disabled={
-                (guestCheck.adult + guestCheck.children > maxPeopleCheck &&
-                  basketItems.length === 1) ||
-                (guestCheck.adult + guestCheck.children > maxPeopleCheck &&
+                (guestCheck?.adult + guestCheck?.children > maxPeopleCheck &&
+                  basketItems?.length === 1) ||
+                (guestCheck?.adult + guestCheck?.children > maxPeopleCheck &&
                   !isHotelNameRepeated)
               }
               className="bg-green-700 disabled:bg-opacity-80 text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs"
@@ -267,5 +238,79 @@ const Confirmation = ({
         </div>
       )}
     </section>
+  );
+};
+
+const Modal = ({ countries, setOpenModal }) => {
+  return (
+    <div
+      className=" w-screen h-screen fixed top-0 left-0 flex items-center justify-center z-[100] px-2"
+      style={{ background: "rgba(255, 255, 255, 0.6)" }}
+    >
+      <div className="bg-white relative w-full max-w-screen-sm shadow-md">
+        <div style={paymentBg}></div>
+        <FaTimes
+          onClick={() => setOpenModal(false)}
+          className="text-white absolute top-4 right-4 text-3xl cursor-pointer"
+        />
+        <div>
+          <div className="py-8">
+            <h1 className="text-3xl text-center uppercase font-normal">
+              need some time?
+            </h1>
+            <p
+              className="text-center text-base pt-6 pb-4"
+              style={{ color: "#4e4e4e" }}
+            >
+              If you're still thinking it over, just fill in the below and we'll
+              email you the details.
+            </p>
+            <form>
+              <div className=" space-y-6 px-8">
+                <div className="flex modalInputs gap-5">
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="First name"
+                    id="firstName"
+                  />
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Last name"
+                    id="lastName"
+                  />
+                </div>
+                <div className="flex modalInputs gap-5">
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Phone number"
+                    id="mobileNumber"
+                  />
+                  <select
+                    name="country"
+                    id="country"
+                    className="form-input text-sm"
+                  >
+                    <option value="">Select Country</option>
+                    {countries?.map((country, index) => (
+                      <option value={country?.name} key={index}>
+                        {country?.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex justify-center">
+                  <button className="bg-red-900 py-4 px-9 uppercase text-white text-xs font-light cursor-pointer w-full">
+                    submit
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
