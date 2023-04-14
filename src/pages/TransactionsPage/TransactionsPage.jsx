@@ -94,10 +94,10 @@ const TransactionsPage = () => {
   ]);
 
   // CHECK IF HOTEL NAME IS REPEATED OR GREATER THAN ONE
-  function isHotelKeyValueRepeated(hotelName, keyName, value) {
+  const isHotelNameKeyValueRepeated = (hotelName, keyName, value) => {
     const filteredArray = hotelName?.filter((item) => item[keyName] === value);
     return filteredArray?.length > 1;
-  }
+  };
 
   // GET THE NAMES OF THE HOTEL IN THE BASKET
   const hotelName =
@@ -105,19 +105,19 @@ const TransactionsPage = () => {
       (hotelName) => hotelName?.hotelName
     )[0];
 
-  const isHotelNameRepeated = isHotelKeyValueRepeated(
+  const isHotelNameRepeated = isHotelNameKeyValueRepeated(
     transactionsDetails?.transaction_data?.bookedRoomsOption,
     "hotelName",
     hotelName
   );
 
   // CHECK IF HOTEL ADDRESS IS REPEATED OR GREATER THAN ONE
-  function isHotelKeyValueRepeated(hotelAddress, keyName, value) {
+  const isHotelAddressKeyValueRepeated = (hotelAddress, keyName, value) => {
     const filteredArray = hotelAddress?.filter(
       (item) => item[keyName] === value
     );
     return filteredArray?.length > 1;
-  }
+  };
 
   // GET THE ADDRESS OF THE HOTEL IN THE BASKET
   const hotelAddress =
@@ -125,7 +125,7 @@ const TransactionsPage = () => {
       (hotelAddress) => hotelAddress?.hotelAddress
     )[0];
 
-  const isHotelAddressRepeated = isHotelKeyValueRepeated(
+  const isHotelAddressRepeated = isHotelAddressKeyValueRepeated(
     transactionsDetails?.transaction_data?.bookedRoomsOption,
     "hotelAddress",
     hotelAddress
@@ -210,7 +210,9 @@ const TransactionsPage = () => {
                           Your payment has been confirmed and the people at{" "}
                           {
                             transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
-                              (hotelName) => hotelName.hotelName
+                              (hotelName) =>
+                                hotelName.hotelName.charAt(0).toUpperCase() +
+                                hotelName.hotelName.slice(1)
                             )[0]
                           }
                         </>
@@ -218,7 +220,9 @@ const TransactionsPage = () => {
                         <>
                           Your payment has been confirmed and the people at{" "}
                           {transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
-                            (hotelName) => hotelName.hotelName
+                            (hotelName) =>
+                              hotelName.hotelName.charAt(0).toUpperCase() +
+                              hotelName.hotelName.slice(1)
                           )}
                         </>
                       )}{" "}
