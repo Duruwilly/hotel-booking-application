@@ -93,149 +93,60 @@ const TransactionsPage = () => {
     searchParams.get("transaction_id"),
   ]);
 
+  // CHECK IF HOTEL NAME IS REPEATED OR GREATER THAN ONE
+  function isHotelKeyValueRepeated(hotelName, keyName, value) {
+    const filteredArray = hotelName?.filter((item) => item[keyName] === value);
+    return filteredArray?.length > 1;
+  }
+
+  // GET THE NAMES OF THE HOTEL IN THE BASKET
+  const hotelName =
+    transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+      (hotelName) => hotelName?.hotelName
+    )[0];
+
+  const isHotelNameRepeated = isHotelKeyValueRepeated(
+    transactionsDetails?.transaction_data?.bookedRoomsOption,
+    "hotelName",
+    hotelName
+  );
+
+  // CHECK IF HOTEL ADDRESS IS REPEATED OR GREATER THAN ONE
+  function isHotelKeyValueRepeated(hotelAddress, keyName, value) {
+    const filteredArray = hotelAddress?.filter(
+      (item) => item[keyName] === value
+    );
+    return filteredArray?.length > 1;
+  }
+
+  // GET THE ADDRESS OF THE HOTEL IN THE BASKET
+  const hotelAddress =
+    transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+      (hotelAddress) => hotelAddress?.hotelAddress
+    )[0];
+
+  const isHotelAddressRepeated = isHotelKeyValueRepeated(
+    transactionsDetails?.transaction_data?.bookedRoomsOption,
+    "hotelAddress",
+    hotelAddress
+  );
+
+  // GET THE HOTEL BOOKING DATES
+  const bookingDates =
+    transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+      (bookingDates) =>
+        `${format(
+          new Date(bookingDates.bookingStartDate),
+          "dd MMM yyyy"
+        )} to ${format(new Date(bookingDates.bookingEndDate), "dd MMM yyyy")}`
+    );
+
+  // IF THERE ARE MORE THAN ONE CHECK-IN AND CHECK-OUT, ADD A WORD "AND" IN BETWEEN
+  const formattedBookingDates =
+    bookingDates?.slice(0, -1).join(", ") + " and " + bookingDates?.slice(-1);
+
   if (loading) return <SearchButtonSpinner />;
   return (
-    // <section className="flex justify-center items-center">
-    //   <div className="w-full max-w-screen-sm h-scree px-4 mt- py-5">
-    //     <div
-    //       className="flex justify-end items-center text-red-900"
-    //       onClick={finalPrint}
-    //     >
-    //       <h1 className="cursor-pointer">Dowload Receipt</h1>
-    //       <IoMdDownload />
-    //     </div>
-    //     <div id="main">
-    //       <h1 className="font-bold text-xl py-2">Transaction Details</h1>
-    //       <table>
-    //         <tbody>
-    //           <tr>
-    //             <td>First Name</td>
-    //             <td className=" capitalize">
-    //               {transactionsDetails?.transaction_data?.firstName}
-    //             </td>
-    //           </tr>
-    //           <tr>
-    //             <td>Last Name</td>
-    //             <td className=" capitalize">
-    //               {transactionsDetails?.transaction_data?.lastName}
-    //             </td>
-    //           </tr>
-    //           <tr>
-    //             <td>Phone</td>
-    //             <td>{transactionsDetails?.transaction_data?.mobileNumber}</td>
-    //           </tr>
-    //           <tr>
-    //             <td>Email</td>
-    //             <td>{transactionsDetails?.transaction_data?.email}</td>
-    //           </tr>
-    //           <tr>
-    //             <td>Arrival Time</td>
-    //             <td>{transactionsDetails?.transaction_data?.arrivalTime}</td>
-    //           </tr>
-
-    //           {transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
-    //             (options) => (
-    //               <>
-    //                 <tr>
-    //                   <td>Hotel Name</td>
-    //                   <td>{options.hotelName}</td>
-    //                 </tr>
-    //                 <tr>
-    //                   <td>Hotel Location</td>
-    //                   <td className="capitalize">{options.hotelLocation}</td>
-    //                 </tr>
-    //                 <tr>
-    //                   <td>Room Title</td>
-    //                   <td className="capitalize">{options.roomTitle}</td>
-    //                 </tr>
-    //                 <tr>
-    //                   <td>Room Price</td>
-    //                   <td>
-    //                     {transactionsDetails.transaction_data.convertedPrice ===
-    //                     "USD"
-    //                       ? "$"
-    //                       : transactionsDetails.transaction_data
-    //                           .convertedPrice === "EUR"
-    //                       ? "£"
-    //                       : "₦"}
-    //                     {[options.roomPrice]
-    //                       .toString()
-    //                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-    //                   </td>
-    //                 </tr>
-    //                 <tr>
-    //                   <td>Room Number</td>
-    //                   <td>{options.roomNumber}</td>
-    //                 </tr>
-    //                 <tr>
-    //                   <td>Booking Dates</td>
-    //                   <td>{`${format(
-    //                     new Date(options.bookingStartDate),
-    //                     "dd MMMM yyyy"
-    //                   )} - ${format(
-    //                     new Date(options.bookingEndDate),
-    //                     "dd MMMM yyyy"
-    //                   )}`}</td>
-    //                 </tr>
-    //                 <tr>
-    //                   <td>Adult</td>
-    //                   <td>{options.adult}</td>
-    //                 </tr>
-    //                 <tr>
-    //                   <td>Children</td>
-    //                   <td>{options.children}</td>
-    //                 </tr>
-    //                 <tr>
-    //                   <td>Days</td>
-    //                   <td>{options.days}</td>
-    //                 </tr>
-    //               </>
-    //             )
-    //           )}
-    //           <tr>
-    //             <td>Total Amount</td>
-    //             <td>
-    //               {transactionsDetails?.transaction_data?.convertedPrice ===
-    //               "USD"
-    //                 ? "$"
-    //                 : transactionsDetails?.transaction_data?.convertedPrice ===
-    //                   "EUR"
-    //                 ? "£"
-    //                 : "₦"}
-    //               {[transactionsDetails?.transaction_data?.total]
-    //                 .toString()
-    //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-    //             </td>
-    //           </tr>
-    //           {/* <tr>
-    //             <td>Transaction Date</td>
-    //             <td>
-    //               {`${format(
-    //                 new Date(transactionsDetails?.transaction_date),
-    //                 "dd-MM-yyyy"
-    //               )}`}{" "}
-    //             </td>
-    //           </tr> */}
-    //           <tr>
-    //             <td>Transaction ID</td>
-    //             <td className="text-red-700 text-xl">
-    //               {transactionsDetails?.transaction_data?.reference_id}
-    //             </td>
-    //           </tr>
-    //           <tr>
-    //             <td>Transaction Status</td>
-    //             <td>
-    //               {transactionsDetails !== null
-    //                 ? transactionsDetails?.transaction_description
-    //                 : error}
-    //             </td>
-    //           </tr>
-    //         </tbody>
-    //       </table>
-    //     </div>
-    //   </div>
-    // </section>
-
     <>
       <section className="flex justify-center items-center">
         <div className="w-full max-w-screen-md px-4 mt- py-5">
@@ -249,19 +160,39 @@ const TransactionsPage = () => {
           <div className="bg-white" id="main">
             <main className="border-t-8 border-t-red-800">
               <div className="bg-primary py-6 text-white text-center">
-                {transactionsDetails !== null && (
-                  <p className=" capitalize">
-                    {transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
-                      (hotelName) => hotelName.hotelName
-                    )}{" "}
-                    hotel
-                  </p>
-                )}
-                <span>
-                  {transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
-                    (hotelName) => hotelName.hotelAddress.toUpperCase()
-                  )}
-                </span>
+                {transactionsDetails !== null &&
+                  (isHotelNameRepeated ? (
+                    transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+                      (hotelName) => (
+                        <h2 className="capitalize">
+                          {hotelName.hotelName} hotel
+                        </h2>
+                      )
+                    )[0]
+                  ) : (
+                    <>
+                      {transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+                        (hotelName) => (
+                          <h2 className="capitalize">
+                            {hotelName.hotelName} hotel
+                          </h2>
+                        )
+                      )}
+                    </>
+                  ))}
+                <>
+                  {isHotelAddressRepeated
+                    ? transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+                        (hotelAddress) => (
+                          <p>{hotelAddress.hotelAddress.toUpperCase()}</p>
+                        )
+                      )[0]
+                    : transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+                        (hotelAddress) => (
+                          <p>{hotelAddress.hotelAddress.toUpperCase()}</p>
+                        )
+                      )}
+                </>
               </div>
               <div className="px-5 pt-9 space-y-4">
                 {transactionsDetails !== null && (
@@ -274,34 +205,47 @@ const TransactionsPage = () => {
                   <>
                     {" "}
                     <p>
-                      Your payment has been confirmed and the people at{" "}
-                      {transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
-                        (hotelName) => hotelName.hotelName
+                      {isHotelNameRepeated ? (
+                        <>
+                          Your payment has been confirmed and the people at{" "}
+                          {
+                            transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+                              (hotelName) => hotelName.hotelName
+                            )[0]
+                          }
+                        </>
+                      ) : (
+                        <>
+                          Your payment has been confirmed and the people at{" "}
+                          {transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+                            (hotelName) => hotelName.hotelName
+                          )}
+                        </>
                       )}{" "}
                       hotel will be delighted to have you from{" "}
-                      {transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
-                        (bookingDates) => (
-                          <>
-                            {format(
-                              new Date(bookingDates.bookingStartDate),
-                              "dd MMM yyyy"
-                            )}{" "}
-                            to{" "}
-                            {format(
-                              new Date(bookingDates.bookingEndDate),
-                              "dd MMM yyyy"
-                            )}
-                          </>
-                        )
-                      )}{" "}
-                      Thank you for choosing us.
+                      {formattedBookingDates} Thank you for choosing us.
                     </p>
                     <p>
-                      Enjoy and feel the difference with{" "}
-                      {transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
-                        (hotelName) =>
-                          hotelName.hotelName.charAt(0).toUpperCase() +
-                          hotelName.hotelName.slice(1)
+                      {isHotelNameRepeated ? (
+                        <>
+                          Enjoy and feel the difference with{" "}
+                          {
+                            transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+                              (hotelName) =>
+                                hotelName.hotelName.charAt(0).toUpperCase() +
+                                hotelName.hotelName.slice(1)
+                            )[0]
+                          }
+                        </>
+                      ) : (
+                        <>
+                          Enjoy and feel the difference with{" "}
+                          {transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+                            (hotelName) =>
+                              hotelName.hotelName.charAt(0).toUpperCase() +
+                              hotelName.hotelName.slice(1)
+                          )}
+                        </>
                       )}{" "}
                       Hotel.
                     </p>{" "}
