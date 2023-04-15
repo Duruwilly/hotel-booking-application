@@ -21,7 +21,6 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature, hotelAddress }) => {
   const navigate = useNavigate();
   let { roomOptions, dateSearch } = useSelector((state) => state.searchState);
   const { setFetchStatus, getCartItems } = useBasketContext();
-
   // fetches rooms
   useEffect(() => {
     const controller = new AbortController();
@@ -48,7 +47,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature, hotelAddress }) => {
     const url = `${WILL_TRIP_BASE_URL}/cart`;
     if (user) {
       try {
-        await axios.post(url, {
+        const response = await axios.post(url, {
           price,
           maxPeople,
           roomNumbers,
@@ -68,11 +67,17 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature, hotelAddress }) => {
         setFetchStatus("idle");
         getCartItems(user);
         navigate("/basket");
+        console.log(response);
+        toast.error(response.data.msg);
       } catch (error) {
         toast.error(error);
       }
     } else {
-      navigate("/login");
+      // Redirect to login page with return_url parameter
+      const returnURL = `/hotel/${hotelName}/${hotelCountry}/${hotelID}`;
+      const loginURL = `/login?return_url=${returnURL}`;
+      window.location.href = loginURL;
+      // navigate("/login");
     }
   };
 

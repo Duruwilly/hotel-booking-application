@@ -175,7 +175,7 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="text-gray-300 text-sm hidden lg:block">
-                <Link to="/register" className="px-4 border-r-2 border-white">
+                <Link to="/login" className="px-4 border-r-2 border-white">
                   Register
                 </Link>
                 <Link to="/login" className="px-4">

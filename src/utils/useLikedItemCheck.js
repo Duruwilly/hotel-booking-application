@@ -19,14 +19,17 @@ const useLikedItemCheck = () => {
 
   const addToFavourites = async (
     user,
-    id,
     price,
     _id,
     feature,
     destination,
     name,
-    photos
+    photos,
+    hotelLocation,
+    searchFrom,
+    searchTo
   ) => {
+    console.log(searchFrom);
     if (user) {
       try {
         const response = await axios.post(`${WILL_TRIP_BASE_URL}/favourites`, {
@@ -44,7 +47,12 @@ const useLikedItemCheck = () => {
         return false;
       }
     } else {
-      navigate("/login");
+      // Redirect to login page with return_url parameter
+      const returnURL = `/destinations/hotels?query=${hotelLocation}&date_from=${searchFrom}&date_to=${searchTo}`;
+
+      const loginURL = `/login?return_url=${returnURL}`;
+      window.location.href = loginURL;
+      // navigate("/login");
     }
   };
 

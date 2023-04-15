@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { RegisterSignupBtn } from "../../components/button/RegisterSignupBtn";
 import { useAuthContext } from "../../context/AuthContext";
@@ -28,6 +28,7 @@ const LoginRegisterPage = () => {
   const [passwordErrors, setPasswordErrors] = useState({});
   const [emailErrors, setEmailErrors] = useState({});
   const [countries, setCountries] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const toggleTab = (index) => {
     setActiveTab(index);
@@ -67,6 +68,9 @@ const LoginRegisterPage = () => {
       // setFavouriteFetchStatus("idle");
       setFetchingState("idle");
       // navigate("/");
+      if (searchParams.get("return_url")) {
+        navigate(searchParams.get("return_url"));
+      }
     } catch (error) {
       dispatch({ type: "FAILED", payload: error?.response?.data });
       localStorage.removeItem("user");
@@ -105,7 +109,7 @@ const LoginRegisterPage = () => {
       );
       // setLoading(false);
       dispatch({ type: "SUCCESS", payload: res.data });
-      navigate("/");
+      // navigate("/");
     } catch (error) {
       // setLoading(false);
       // setError(error.response.data);
