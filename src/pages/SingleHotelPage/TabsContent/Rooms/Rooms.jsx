@@ -66,8 +66,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature, hotelAddress }) => {
         });
         setFetchStatus("idle");
         getCartItems(user);
-        navigate("/basket");
-        console.log(response);
+        navigate("/confirmation");
         toast.error(response.data.msg);
       } catch (error) {
         toast.error(error);

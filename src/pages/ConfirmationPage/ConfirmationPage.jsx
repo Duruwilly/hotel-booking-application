@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import PriceConversion from "../../components/PriceConversion/PriceConversion";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import { useMediaQueriesContext } from "../../context/MediaQueryContext";
-import BasketItem from "./component/BasketItem";
+import Items from "./component/Items";
 import { paymentBg } from "../../BgImageStyles/styles";
 import { useTitle } from "../../hooks/useTitle";
 import { FaTimes } from "react-icons/fa";
@@ -177,7 +177,7 @@ const Confirmation = ({
         <div>
           {basketItems?.map((basket) => (
             <div key={basket._id}>
-              <BasketItem
+              <Items
                 {...basket}
                 exchangedPrice={exchangedPrice}
                 convertPrice={convertPrice}

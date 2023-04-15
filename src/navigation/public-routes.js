@@ -20,7 +20,7 @@ const TravelTeamProfilePage = lazy(() =>
 );
 // const RegisterPage = lazy(() => import("../pages/RegisterPage/RegisterPage"));
 // const LoginPage = lazy(() => import("../pages/LoginPage/LoginPage"));
-const BasketPage = lazy(() => import("../pages/basketPage/BasketPage"));
+const ConfirmationPage = lazy(() => import("../pages/ConfirmationPage/ConfirmationPage"));
 const PaymentPage = lazy(() => import("../pages/PaymentPage/PaymentPage"));
 const WishlistsPage = lazy(() =>
   import("../pages/favouritePage/FavouritesPage")
@@ -107,8 +107,8 @@ export const publicRoutes = [
   //   component: LoginPage,
   // },
   {
-    path: "/basket",
-    component: BasketPage,
+    path: "/confirmation",
+    component: ConfirmationPage,
   },
   {
     path: "/payment",

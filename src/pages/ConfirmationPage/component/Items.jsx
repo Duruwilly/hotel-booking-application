@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { useBasketContext } from "../../../context/BasketItemsContext";
 import useRoomsAvailabilityCheck from "../../../utils/useRoomsAvailabilityCheck";
 
-const BasketItem = (props) => {
+const Items = (props) => {
   const { user } = useAuthContext();
   const { setFetchStatus, getCartItems } = useBasketContext();
   let { checkRoomsAvailability } = useRoomsAvailabilityCheck();
@@ -146,4 +146,4 @@ const BasketItem = (props) => {
   );
 };
 
-export default BasketItem;
+export default Items;
