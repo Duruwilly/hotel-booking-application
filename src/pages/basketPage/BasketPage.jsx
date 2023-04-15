@@ -14,12 +14,16 @@ import usePriceConversion from "../../utils/usePriceConversion";
 import { useBasketContext } from "../../context/BasketItemsContext";
 import SearchButtonSpinner from "../../components/Spinner/SearchButtonSpinner";
 import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
+import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
+import { useAuthContext } from "../../context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Basket = () => {
   useTitle("Book the world best hotel");
   const [countries, setCountries] = useState([]);
-  const inputStyles =
-    "w-full focus:outline-none border border-gray-300 p-3 placeholder:text-sm block rounded-md";
+  const { user } = useAuthContext();
+
   const { steps, setSteps, list, matches, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
   const { basketItems, total, setDatesCheck, datesCheck, loading } =
@@ -44,34 +48,34 @@ const Basket = () => {
     });
   }, []);
 
-  useEffect(() => {
-    if (basketItems.length > 0) {
-      let roomId = basketItems.map((item) => item.itemId);
-      const apiCallsFunc = async () => {
-        try {
-          const newVal = await roomId.map(async (item) => {
-            const room = await checkRoomsAvailability(item);
+  // useEffect(() => {
+  //   if (basketItems.length > 0) {
+  //     let roomId = basketItems.map((item) => item.itemId);
+  //     const apiCallsFunc = async () => {
+  //       try {
+  //         const newVal = await roomId.map(async (item) => {
+  //           const room = await checkRoomsAvailability(item);
 
-            return room;
-          });
+  //           return room;
+  //         });
 
-          Promise.allSettled(newVal).then(async (data) => {
-            await setDatesCheck(() => [...data?.map((item) => item?.value)]);
-            if (datesCheck?.length === basketItems?.length) {
-              setLoadingState(false);
-            }
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      };
+  //         Promise.allSettled(newVal).then(async (data) => {
+  //           await setDatesCheck(() => [...data?.map((item) => item?.value)]);
+  //           if (datesCheck?.length === basketItems?.length) {
+  //             setLoadingState(false);
+  //           }
+  //         });
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     };
 
-      apiCallsFunc();
-    }
-    return () => {
-      setLoadingState(false);
-    };
-  }, [basketItems]);
+  //     apiCallsFunc();
+  //   }
+  //   return () => {
+  //     setLoadingState(false);
+  //   };
+  // }, [basketItems]);
 
   if (loading) return <SearchButtonSpinner />;
   return (

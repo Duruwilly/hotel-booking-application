@@ -44,16 +44,16 @@ const MobileNav = ({ toggle, userProfileDetails, handleLogout }) => {
             </ul>
           </div>
         ) : (
-          <>
-            <div className="pb-5" onClick={toggle}>
-              <Link to="/register">
+          <div onClick={toggle}>
+            <div className="pb-5">
+              <Link to="/login">
                 <MobileNavBtn text="Register" />
               </Link>
             </div>
             <Link to="/login">
               <MobileNavBtn text="Login" />
             </Link>
-          </>
+          </div>
         )}
         <div
           className="text-gray-300 flex flex-col justify-center items-center py-5"

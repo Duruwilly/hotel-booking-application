@@ -13,7 +13,16 @@ import { useAuthContext } from "../../../context/AuthContext";
 import { toast } from "react-toastify";
 import { useFavouriteContext } from "../../../context/FavouriteItemsContext";
 
-const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
+const SearchList = ({
+  roomOptions,
+  hotel,
+  days,
+  data,
+  exchangedPrice,
+  hotelLocation,
+  searchFrom,
+  searchTo,
+}) => {
   const { convertPrice } = useMediaQueriesContext();
   const { user } = useAuthContext();
   const dispatch = useDispatch();
@@ -92,7 +101,10 @@ const SearchList = ({ roomOptions, hotel, days, data, exchangedPrice }) => {
         feature,
         destination,
         name,
-        photos
+        photos,
+        hotelLocation,
+        searchFrom,
+        searchTo
       );
       if (response) {
         setAllArr([...allArr, id]);

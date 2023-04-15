@@ -240,6 +240,9 @@ const HotelsList = () => {
                       days={days}
                       data={data.responseData}
                       exchangedPrice={exchangedPrice}
+                      hotelLocation={searchParams.get("query")}
+                      searchFrom={searchParams.get("date_from")}
+                      searchTo={searchParams.get("date_to")}
                     />
                   </div>
                 ))}
