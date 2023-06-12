@@ -75,13 +75,6 @@ const Heroe = () => {
                     onClick={toggleDate}
                     className="pl-8 w-full py-[1.65rem] cursor-pointer"
                   >
-                    {/* {`${format(
-                      new Date(dateSearch[0].startDate),
-                      "dd/MM/yyyy"
-                    )} to ${format(
-                      new Date(dateSearch[0].endDate),
-                      "dd/MM/yyyy"
-                    )}`} */}
                     {searchQueryDates[0].searchQueryStartDates === undefined &&
                     searchQueryDates[0].searchQueryEndDates === undefined
                       ? "check-in - check-out"
@@ -95,22 +88,6 @@ const Heroe = () => {
                   </span>
                   {openDate && (
                     <div>
-                      {/* <DateRange
-                        editableDateInputs={true}
-                        onChange={(item) => {
-                          dispatch(setDate({ ...item.selection }));
-                        }}
-                        moveRangeOnFirstSelection={false}
-                        ranges={[
-                          {
-                            startDate: new Date(dateSearch[0].startDate),
-                            endDate: new Date(dateSearch[0].endDate),
-                            key: dateSearch[0].key,
-                          },
-                        ]}
-                        className="date"
-                        minDate={new Date()}
-                      /> */}
                       <DateRange
                         editableDateInputs={true}
                         onChange={(item) => {

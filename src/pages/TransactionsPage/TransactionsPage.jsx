@@ -22,7 +22,8 @@ const TransactionsPage = () => {
   const { user } = useAuthContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const [error, setError] = useState();
-  const { getCartItems, setFetchStatus } = useBasketContext();
+  const { getCartItems, setFetchStatus, clearAllCartItems } =
+    useBasketContext();
   let { putBookedRoomsDate } = useRoomsAvailabilityCheck();
   let { bookingsData } = useSelector((state) => state.bookings);
 
@@ -46,23 +47,23 @@ const TransactionsPage = () => {
     });
   }
 
-  const clearAllCartItems = async (id) => {
-    let url = `${WILL_TRIP_BASE_URL}/cart/delete-all-items/${user?.id}`;
-    try {
-      let response = await axios.delete(url, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      if (response.data.status === "success") {
-        setFetchStatus("idle");
-        getCartItems(user);
-        toast.success(response?.data?.msg);
-      }
-    } catch (error) {
-      toast.error(error?.response?.data?.message);
-    }
-  };
+  // const clearAllCartItems = async () => {
+  //   let url = `${WILL_TRIP_BASE_URL}/cart/delete-all-items/${user?.id}`;
+  //   try {
+  //     let response = await axios.delete(url, {
+  //       headers: {
+  //         Authorization: `Bearer ${user?.token}`,
+  //       },
+  //     });
+  //     if (response.data.status === "success") {
+  //       setFetchStatus("idle");
+  //       getCartItems(user);
+  //       toast.success(response?.data?.msg);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error?.response?.data?.message);
+  //   }
+  // };
 
   const getTransactions = async () => {
     setLoadingState(true);
@@ -75,12 +76,14 @@ const TransactionsPage = () => {
       if (res?.data?.status === "success") {
         setLoadingState(false);
         setTransactionsDetails(res?.data);
-        clearAllCartItems();
+        clearAllCartItems(user);
         putBookedRoomsDate();
       }
     } catch (error) {
       setLoadingState(false);
       // toast.error(error.response?.data?.message);
+      // come here later to add the ref from the error
+      // setError(error.response?.data);
       setError(error.response?.data?.message);
     }
   };

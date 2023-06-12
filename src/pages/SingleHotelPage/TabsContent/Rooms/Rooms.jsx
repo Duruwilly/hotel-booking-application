@@ -26,7 +26,7 @@ const Rooms = ({ hotelID, hotelName, hotelCountry, feature, hotelAddress }) => {
     const controller = new AbortController();
     const fetchRoom = async () => {
       try {
-        let url = `http://localhost:8800/api/v1/hotels/room/${hotelID}`;
+        let url = `${WILL_TRIP_BASE_URL}/hotels/room/${hotelID}`;
         const res = await axios.get(url);
         setData(res.data.data);
         setLoading(false);

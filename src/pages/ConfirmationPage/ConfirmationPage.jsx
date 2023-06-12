@@ -18,6 +18,7 @@ import { WILL_TRIP_BASE_URL } from "../../constants/base-urls";
 import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { AiOutlineClockCircle } from "react-icons/ai";
 
 const Basket = () => {
   useTitle("Book the world best hotel");
@@ -26,8 +27,17 @@ const Basket = () => {
 
   const { steps, setSteps, list, matches, convertPrice, fetchHotelStatus } =
     useMediaQueriesContext();
-  const { basketItems, total, setDatesCheck, datesCheck, loading } =
-    useBasketContext();
+  const {
+    basketItems,
+    total,
+    setDatesCheck,
+    datesCheck,
+    loading,
+    timer,
+    getDeadTime,
+    clearTimer,
+    clearAllCartItems,
+  } = useBasketContext();
   const [openModal, setOpenModal] = useState(false);
 
   let { checkRoomsAvailability } = useRoomsAvailabilityCheck();
@@ -102,6 +112,11 @@ const Basket = () => {
             datesCheck={datesCheck}
             setFetchingStatus={setFetchingStatus}
             fetchingStatus={fetchingStatus}
+            timer={timer}
+            getDeadTime={getDeadTime}
+            clearTimer={clearTimer}
+            clearAllCartItems={clearAllCartItems}
+            user={user}
           />
         </div>
         {basketItems.length > 0 && openModal && (
@@ -122,6 +137,11 @@ const Confirmation = ({
   total,
   setFetchingStatus,
   fetchingStatus,
+  timer,
+  getDeadTime,
+  clearTimer,
+  clearAllCartItems,
+  user,
 }) => {
   const navigate = useNavigate();
   const [exchangedPrice, setExchangedPrice] = useState(1);
@@ -163,15 +183,44 @@ const Confirmation = ({
     hotelName
   );
 
+  const clearAllCart = () => {
+    if (timer === "00:00") {
+      clearAllCartItems(user);
+    }
+  };
+
+  clearAllCart();
+
+  useEffect(() => {
+    clearTimer(getDeadTime());
+  }, []);
+
   return (
     <section className="py-12">
       {basketItems?.length > 0 ? (
-        <div className="flex flex-col lg:flex-row justify-between items-center">
-          <h1 className="text-center text-4xl font-light pb-5 lg:pb-0">
-            Confirm booking
-          </h1>
-          <PriceConversion />
-        </div>
+        <>
+          <div
+            className="block py-4 mb-3"
+            style={{ backgroundColor: "rgb(197, 224, 188)" }}
+          >
+            <span className="flex items-center justify-center gap-2">
+              <AiOutlineClockCircle />
+              <p className="capitalize font-semibold">
+                reserve your room before time runs out!
+              </p>
+            </span>
+          </div>
+          <div className="flex flex-col lg:flex-row justify-between items-center mb-2">
+            <h1 className="text-center text-4xl font-light pb-5 lg:pb-0">
+              Confirm booking
+            </h1>
+            <PriceConversion />
+          </div>
+          <span className=" float-right flex justify-center items-center gap-1 text-red-800 font-bold text-sm">
+            <AiOutlineClockCircle />
+            <p>Room(s) held for {timer}</p>
+          </span>
+        </>
       ) : null}
       {basketItems && basketItems.length > 0 && (
         <div>
@@ -221,7 +270,7 @@ const Confirmation = ({
                 (guestCheck?.adult + guestCheck?.children > maxPeopleCheck &&
                   !isHotelNameRepeated)
               }
-              className="bg-green-700 disabled:bg-opacity-80 text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs"
+              className="bg-green-700 disabled:bg-opacity-80 disabled:cursor-not-allowed text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs cursor-pointer"
               onClick={buttonNavigate}
             >
               confirm booking
@@ -231,8 +280,9 @@ const Confirmation = ({
       )}
       {basketItems.length === 0 && (
         <div className="flex justify-center flex-col items-center pt-10">
-          <h1 className="font-light text-xl mb- text-gray-90  py-">
-            Your basket is currently empty. For inspiration, try our{" "}
+          <h1 className="font-light text-xl">
+            Your session timed out or you have no reservations. For inspiration,
+            try our{" "}
             <Link to="/" className="text-red-800">
               popular searches in the home page{" "}
             </Link>

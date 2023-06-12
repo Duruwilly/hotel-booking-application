@@ -35,7 +35,7 @@ const TopHotels = () => {
     <section className="flex flex-col items-center mt-20">
       <h2 className="text-3xl mb-5 flex">Top hotels</h2>
       <div className="w-full max-w-screen-lg justify-center items-center px-4">
-        <OwlCarousel className=" owl-carousel owl-theme" {...options}>
+        <OwlCarousel className="owl-carousel owl-theme" {...options}>
           {/* start top hotel */}
           <div className="border border-gray-300 block rounded-b-lg">
             <Link
