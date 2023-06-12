@@ -12,6 +12,7 @@ import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { useAuthContext } from "../../../context/AuthContext";
 import { toast } from "react-toastify";
 import { useFavouriteContext } from "../../../context/FavouriteItemsContext";
+import LazyImage from "../../../components/lazyImage/LazyImage";
 
 const SearchList = ({
   roomOptions,
@@ -154,7 +155,7 @@ const SearchList = ({
   };
 
   return (
-    <div className="bg-white border border-gray-200 flex flex-col hotelList-card-container mb-7">
+    <div className="bg-white border border-gray-200 h-fit min-h-[300px] flex flex-col hotelList-card-container mb-7">
       <div style={{ flex: 3, position: "relative" }}>
         <Link to={`/hotel/${hotel.name}/${hotel.destination}/${hotel._id}`}>
           <div>
@@ -163,6 +164,13 @@ const SearchList = ({
               alt=""
               className=" object-cover"
             />
+            {/* <LazyImage
+              id={hotel?._id}
+              key={hotel?._id}
+              width="800"
+              height="1000"
+              src={hotel.photos[sliderNumber]?.url}
+            /> */}
           </div>
         </Link>
 

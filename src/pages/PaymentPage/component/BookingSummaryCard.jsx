@@ -98,12 +98,12 @@ const BookingSummaryCard = (props) => {
           <p className="text-red-800 capitalize font-semibold">free includes</p>
           <span>{feature}</span>
         </div>
-        {isBooked && (
+        {/* {isBooked && (
           <p className="text-red-800 font-light text-sm">
             room has already been booked. kindly remove this room to proceed or
             select another room or date
           </p>
-        )}
+        )} */}
       </div>
     </div>
   );

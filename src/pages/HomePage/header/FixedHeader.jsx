@@ -5,7 +5,7 @@ import { RxPerson } from "react-icons/rx";
 import { useMediaQueriesContext } from "../../../context/MediaQueryContext";
 import Button from "../../../components/button/SearchButton";
 import { DateRange } from "react-date-range";
-import { format, parse, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import {

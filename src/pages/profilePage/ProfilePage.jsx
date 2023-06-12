@@ -121,7 +121,7 @@ const ProfilePage = () => {
         </div>
       </section>
       <section className="fle justify-cente">
-        <div className="w-full max-w-screen-x px-">
+        <div className="w-full max-w-screen-x">
           <div className="flex justify-center">
             {screenMatches && (
               <div style={{ flex: 1 }} className="pl-4">

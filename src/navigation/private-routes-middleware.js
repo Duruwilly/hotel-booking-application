@@ -1,9 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
 import Spinner from "../components/Spinner/Spinner";
-import { AuthCheckAccess, useCheckAccess } from "../utils/AuthCheckAccess";
+import { AuthCheckAccess } from "../utils/AuthCheckAccess";
 
 const PrivateRouteMiddleware = () => {
-  // const { loggedIn, checkingStatus } = useCheckAccess();
   const { loggedIn, checkingStatus } = AuthCheckAccess();
 
   if (checkingStatus) {

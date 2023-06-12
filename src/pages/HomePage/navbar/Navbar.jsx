@@ -197,7 +197,7 @@ const Navbar = () => {
               <span className="tooltiptext">Favourite</span>
             </div>
             <div className="relative tooltip">
-              <Link to="/basket" className="">
+              <Link to="/confirmation" className="">
                 <div className="h-10 w-10 flex items-center justify-center rounded-full bg-red-900 text-white cursor-pointer relative toolti">
                   <BsBagCheck />
                 </div>
@@ -207,7 +207,7 @@ const Navbar = () => {
                   </div>
                 )}
               </Link>
-              <span className="tooltiptext">Basket</span>
+              <span className="tooltiptext">Reservations</span>
             </div>
           </div>
           {/* mobile nav */}
