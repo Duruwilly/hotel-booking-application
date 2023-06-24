@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { IoMdDownload } from "react-icons/io";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -12,8 +17,7 @@ import SearchButtonSpinner from "../../components/Spinner/SearchButtonSpinner";
 import { useBasketContext } from "../../context/BasketItemsContext";
 import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
 import { useSelector } from "react-redux";
-import logo from "../../assets/logo/logo2.png";
-import logder from "../../assets/images/lodger.jpg";
+import { FaCheck } from "react-icons/fa";
 const pdf = new jsPDF();
 
 const TransactionsPage = () => {
@@ -24,8 +28,17 @@ const TransactionsPage = () => {
   const [error, setError] = useState();
   const { getCartItems, setFetchStatus, clearAllCartItems } =
     useBasketContext();
+
+  const navigate = useNavigate();
+
   let { putBookedRoomsDate } = useRoomsAvailabilityCheck();
+
   let { bookingsData } = useSelector((state) => state.bookings);
+
+  const [cancelledMsg, setCancelledMsg] = useState("");
+
+  const [transactionDetailsFetched, setTransactionDetailsFetched] =
+    useState("idle");
 
   function finalPrint() {
     const input = document.getElementById("main");
@@ -78,13 +91,12 @@ const TransactionsPage = () => {
         setTransactionsDetails(res?.data);
         clearAllCartItems(user);
         putBookedRoomsDate();
+        setTransactionDetailsFetched("pending");
       }
     } catch (error) {
       setLoadingState(false);
       // toast.error(error.response?.data?.message);
-      // come here later to add the ref from the error
-      // setError(error.response?.data);
-      setError(error.response?.data?.message);
+      setError(error.response?.data);
     }
   };
 
@@ -95,6 +107,24 @@ const TransactionsPage = () => {
     searchParams.get("tx_ref"),
     searchParams.get("transaction_id"),
   ]);
+
+  const cancelBookings = async () => {
+    try {
+      const res = await axios.put(
+        `${WILL_TRIP_BASE_URL}/transactions/cancel-transaction/${searchParams.get(
+          "tx_ref"
+        )}`
+      );
+      if (res?.data?.status === "success") {
+        setCancelledMsg(res?.data?.msg);
+        // setSearchParams()
+        // toast.success(res?.data?.msg);
+        // getTransactions();
+      }
+    } catch (error) {
+      toast.error(error.response?.data.message);
+    }
+  };
 
   // CHECK IF HOTEL NAME IS REPEATED OR GREATER THAN ONE
   const isHotelNameKeyValueRepeated = (hotelName, keyName, value) => {
@@ -153,13 +183,73 @@ const TransactionsPage = () => {
     <>
       <section className="flex justify-center items-center">
         <div className="w-full max-w-screen-md px-4 mt- py-5">
-          <div
-            className="flex justify-end items-center text-red-900 mb-3"
-            onClick={finalPrint}
-          >
-            <h1 className="cursor-pointer">Dowload Receipt</h1>
-            <IoMdDownload />
+          {/* <span>
+              <FaCheck className="text-4xl font-extrabold text-green-600" />
+            </span> */}
+          {transactionsDetails?.transaction_description ===
+            "TRANSACTION SUCCESSFUL" && cancelledMsg === "" ? (
+            <div className="flex flex-col justify-center items-center my-4">
+              <span>
+                <FaCheck className="text-4xl font-extrabold text-green-600" />
+              </span>
+              <h4 className="font-bold text-xl text-[#434b52] mb-4">
+                Your stay is booked!
+              </h4>
+              <p className="text-sm font-light mb-4">
+                We have sent a confirmation mail to{" "}
+                {transactionsDetails?.transaction_data?.email}
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
+          {/* {cancelledMsg !== "" && (
+            <div className="flex flex-col justify-center items-center my-4">
+              <span>
+                <FaCheck className="text-4xl font-extrabold text-green-600" />
+              </span>
+              <h4 className="font-bold text-xl text-[#434b52] mb-4">
+                {cancelledMsg}
+              </h4>
+              <p className="text-sm font-light mb-4">
+                We have sent a cancelled confirmation mail to{" "}
+                {transactionsDetails?.transaction_data?.email}
+              </p>
+            </div>
+          )} */}
+          <div className="flex justify-center items-center gap-2 mb-2">
+            <div
+              className="border rounded py-1 px-4 border-red-700 flex justify-end items-center text-red-700 hover:bg-red-700 hover:text-white duration-500 cursor-pointer text-sm"
+              onClick={finalPrint}
+            >
+              <h1 className="">Download this receipt</h1>
+              <IoMdDownload />
+            </div>
+            {/* {transactionsDetails?.transaction_description ===
+              "TRANSACTION SUCCESSFUL" && (
+              <div
+                className="border rounded py-1 px-4 border-red-700 flex justify-end items-center text-red-700 hover:bg-red-700 hover:text-white duration-500 cursor-pointer text-sm"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Are you sure you want to cancel this reservation?"
+                    )
+                  ) {
+                    // function here
+                    cancelBookings();
+                    navigate(
+                      `/transactions?status=cancelled&tx_ref=${searchParams.get(
+                        "tx_ref"
+                      )}&transaction_id=${searchParams.get("transaction_id")}`
+                    );
+                  }
+                }}
+              >
+                <h1 className="">Cancel my reservation</h1>
+              </div>
+            )} */}
           </div>
+
           <div className="bg-white" id="main">
             <main className="border-t-8 border-t-red-800">
               <div className="bg-primary py-6 text-white text-center">
@@ -199,7 +289,7 @@ const TransactionsPage = () => {
               </div>
               <div className="px-5 pt-9 space-y-4">
                 {transactionsDetails !== null && (
-                  <h3>
+                  <h3 className="capitalize">
                     Dear {transactionsDetails?.transaction_data?.lastName}{" "}
                     {transactionsDetails?.transaction_data?.firstName}
                   </h3>
@@ -548,7 +638,9 @@ const TransactionsPage = () => {
                     transaction id:
                   </p>
                   <span className="capitalize text-sm" style={{ flex: 4 }}>
-                    {transactionsDetails?.transaction_data?.reference_id}
+                    {transactionsDetails?.transaction_data?.reference_id
+                      ? transactionsDetails?.transaction_data?.reference_id
+                      : error?.ref}
                   </span>
                 </div>
                 <div className="flex pb-2">
@@ -561,7 +653,7 @@ const TransactionsPage = () => {
                   <span className="capitalize text-sm" style={{ flex: 4 }}>
                     {transactionsDetails !== null
                       ? transactionsDetails?.transaction_description
-                      : error}
+                      : error?.message}
                   </span>
                 </div>
               </div>
