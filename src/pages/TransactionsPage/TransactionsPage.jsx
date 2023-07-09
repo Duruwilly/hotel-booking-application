@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoMdDownload } from "react-icons/io";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -29,8 +24,7 @@ const TransactionsPage = () => {
   const { user } = useAuthContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const [error, setError] = useState();
-  const { getCartItems, setFetchStatus, clearAllCartItems } =
-    useBasketContext();
+  const { clearAllCartItems } = useBasketContext();
 
   const navigate = useNavigate();
 
@@ -39,9 +33,6 @@ const TransactionsPage = () => {
   let { bookingsData } = useSelector((state) => state.bookings);
 
   const [cancelledMsg, setCancelledMsg] = useState("");
-
-  const [transactionDetailsFetched, setTransactionDetailsFetched] =
-    useState("idle");
 
   function finalPrint() {
     const input = document.getElementById("main");
@@ -62,44 +53,6 @@ const TransactionsPage = () => {
       pdf.save(`WillTripBooking.pdf`);
     });
   }
-
-  // const clearAllCartItems = async () => {
-  //   let url = `${WILL_TRIP_BASE_URL}/cart/delete-all-items/${user?.id}`;
-  //   try {
-  //     let response = await axios.delete(url, {
-  //       headers: {
-  //         Authorization: `Bearer ${user?.token}`,
-  //       },
-  //     });
-  //     if (response.data.status === "success") {
-  //       setFetchStatus("idle");
-  //       getCartItems(user);
-  //       toast.success(response?.data?.msg);
-  //     }
-  //   } catch (error) {
-  //     toast.error(error?.response?.data?.message);
-  //   }
-  // };
-
-  // // when we click on the button, we send an event and out socket send the event to the user
-  // const handleNotification = () => {
-  //   const bookingOptions = transactionsDetails?.transaction_data;
-  //   // this send an event to the server when the user carry out an notification functionality
-  //   socket.emit("sendNotification", {
-  //     senderID: user?.id,
-  //     receiverName: "dashboard",
-  //     roomNumber: transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
-  //       (option) => option.roomNumber
-  //     ),
-  //     roomTitle: transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
-  //       (option) => option.roomTitle
-  //     ),
-  //     firstName: bookingOptions?.firstName,
-  //     lastName: bookingOptions?.lastName,
-  //     bookingID: bookingOptions?._id,
-  //     bookedAt: new Date(),
-  //   });
-  // };
 
   const handleNotification = () => {
     const { transaction_data: bookingOptions } = transactionsDetails || {};
@@ -139,11 +92,9 @@ const TransactionsPage = () => {
         clearAllCartItems(user);
         putBookedRoomsDate();
         // handleNotification();
-        setTransactionDetailsFetched("pending");
       }
     } catch (error) {
       setLoadingState(false);
-      // toast.error(error.response?.data?.message);
       setError(error.response?.data);
     }
   };
@@ -282,7 +233,7 @@ const TransactionsPage = () => {
           <div className="flex justify-center items-center gap-2 mb-2">
             <div
               className="border rounded py-1 px-4 border-red-700 flex justify-end items-center text-red-700 hover:bg-red-700 hover:text-white duration-500 cursor-pointer text-sm"
-              onClick={() => handleNotification()}
+              onClick={() => finalPrint()}
             >
               <h1 className="">Download this receipt</h1>
               <IoMdDownload />
