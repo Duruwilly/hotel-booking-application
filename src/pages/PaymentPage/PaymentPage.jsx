@@ -145,6 +145,9 @@ const PaymentCard = ({
   request_id = year + month + day + hour + minute + randomNumber;
 
   const [error, setError] = useState(false);
+
+  const [paymentStatus, setPaymentStatus] = useState(false);
+
   const [userPaymentData, setUserPaymentData] = useState({
     firstName: "",
     lastName: "",
@@ -177,10 +180,12 @@ const PaymentCard = ({
     roomMaxGuest: item?.maxPeople,
     hotelID: item?.hotelID,
     roomID: item?.itemId,
+    roomMaxPeople: item?.maxPeople
   }));
 
   const paymentTransaction = async (e) => {
     // e.preventDefault();
+    setPaymentStatus("true");
     const url = `${WILL_TRIP_BASE_URL}/transactions/pay`;
 
     try {
@@ -206,10 +211,14 @@ const PaymentCard = ({
             mobileNumber: "",
           };
         });
+        setPaymentStatus("false");
         // window.location.href = response.data.paymentResponseData.data.link;
+      } else {
+        setPaymentStatus(false);
       }
     } catch (error) {
       setError(error);
+      setPaymentStatus(false);
     }
   };
 
@@ -369,7 +378,8 @@ const PaymentCard = ({
                       userPaymentData.lastName === "" ||
                       userPaymentData.email === "" ||
                       userPaymentData.mobileNumber === "" ||
-                      userPaymentData.arrivalTime === ""
+                      userPaymentData.arrivalTime === "" ||
+                      paymentStatus === true
                     }
                     className="bg-green-700 disabled:bg-opacity-80 disabled:cursor-not-allowed text-white relative w-full  py-4 font-medium rounded-sm focus:outline-none uppercase tracking-widest text-xs flex justify-center items-center gap-3 cursor-pointer"
                   >

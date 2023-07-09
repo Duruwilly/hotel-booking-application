@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { useMediaQueriesContext } from "./context/MediaQueryContext";
@@ -15,6 +15,7 @@ import PrivateRouteMiddleware from "./navigation/private-routes-middleware";
 import { AuthCheckAccess, useCheckAccess } from "./utils/AuthCheckAccess";
 import { authRoutes } from "./navigation/auth-routes";
 import { useAuthContext } from "./context/AuthContext";
+
 const FooterList = lazy(() => import("./pages/HomePage/footer/FooterList"));
 // import {
 //   Home,

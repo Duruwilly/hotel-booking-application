@@ -18,9 +18,12 @@ import { useBasketContext } from "../../context/BasketItemsContext";
 import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
 import { useSelector } from "react-redux";
 import { FaCheck } from "react-icons/fa";
+import { io } from "socket.io-client";
 const pdf = new jsPDF();
 
 const TransactionsPage = () => {
+  const [socket, setSocket] = useState(null);
+
   const [transactionsDetails, setTransactionsDetails] = useState(null);
   const [loading, setLoadingState] = useState(false);
   const { user } = useAuthContext();
@@ -78,6 +81,50 @@ const TransactionsPage = () => {
   //   }
   // };
 
+  // // when we click on the button, we send an event and out socket send the event to the user
+  // const handleNotification = () => {
+  //   const bookingOptions = transactionsDetails?.transaction_data;
+  //   // this send an event to the server when the user carry out an notification functionality
+  //   socket.emit("sendNotification", {
+  //     senderID: user?.id,
+  //     receiverName: "dashboard",
+  //     roomNumber: transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+  //       (option) => option.roomNumber
+  //     ),
+  //     roomTitle: transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
+  //       (option) => option.roomTitle
+  //     ),
+  //     firstName: bookingOptions?.firstName,
+  //     lastName: bookingOptions?.lastName,
+  //     bookingID: bookingOptions?._id,
+  //     bookedAt: new Date(),
+  //   });
+  // };
+
+  const handleNotification = () => {
+    const { transaction_data: bookingOptions } = transactionsDetails || {};
+
+    const roomNumbers =
+      bookingOptions?.bookedRoomsOption?.map((option) => option.roomNumber) ||
+      [];
+    const roomTitles =
+      bookingOptions?.bookedRoomsOption?.map((option) => option.roomTitle) ||
+      [];
+
+    const notificationData = {
+      senderID: user?.id,
+      receiverName: "dashboard",
+      roomNumbers,
+      roomTitles,
+      firstName: bookingOptions?.firstName,
+      lastName: bookingOptions?.lastName,
+      bookingID: bookingOptions?._id,
+      bookedAt: new Date(),
+    };
+
+    socket.emit("sendNotification", notificationData);
+  };
+
   const getTransactions = async () => {
     setLoadingState(true);
     try {
@@ -91,6 +138,7 @@ const TransactionsPage = () => {
         setTransactionsDetails(res?.data);
         clearAllCartItems(user);
         putBookedRoomsDate();
+        // handleNotification();
         setTransactionDetailsFetched("pending");
       }
     } catch (error) {
@@ -107,6 +155,20 @@ const TransactionsPage = () => {
     searchParams.get("tx_ref"),
     searchParams.get("transaction_id"),
   ]);
+
+  useEffect(() => {
+    const socketInstance = io("http://localhost:8200");
+    setSocket(socketInstance);
+    return () => {
+      // Clean up the socket connection when the component unmounts
+      socketInstance.disconnect();
+    };
+  }, []);
+
+  // this send event to the server when a user logs in
+  useEffect(() => {
+    socket?.emit("newUser", user?.id);
+  }, [socket, user?.id]);
 
   const cancelBookings = async () => {
     try {
@@ -220,7 +282,7 @@ const TransactionsPage = () => {
           <div className="flex justify-center items-center gap-2 mb-2">
             <div
               className="border rounded py-1 px-4 border-red-700 flex justify-end items-center text-red-700 hover:bg-red-700 hover:text-white duration-500 cursor-pointer text-sm"
-              onClick={finalPrint}
+              onClick={() => handleNotification()}
             >
               <h1 className="">Download this receipt</h1>
               <IoMdDownload />
