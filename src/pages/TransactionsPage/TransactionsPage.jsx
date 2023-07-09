@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoMdDownload } from "react-icons/io";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -11,7 +11,6 @@ import { format } from "date-fns";
 import SearchButtonSpinner from "../../components/Spinner/SearchButtonSpinner";
 import { useBasketContext } from "../../context/BasketItemsContext";
 import useRoomsAvailabilityCheck from "../../utils/useRoomsAvailabilityCheck";
-import { useSelector } from "react-redux";
 import { FaCheck } from "react-icons/fa";
 import { io } from "socket.io-client";
 const pdf = new jsPDF();
@@ -19,43 +18,22 @@ const pdf = new jsPDF();
 const TransactionsPage = () => {
   const [socket, setSocket] = useState(null);
 
-  const [transactionsDetails, setTransactionsDetails] = useState(null);
-  const [loading, setLoadingState] = useState(false);
+  const [state, setState] = useState({
+    transactionsDetails: null,
+    loading: false,
+    error: null,
+    cancelledMsg: "",
+  });
+
   const { user } = useAuthContext();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [error, setError] = useState();
   const { clearAllCartItems } = useBasketContext();
 
-  const navigate = useNavigate();
-
-  let { putBookedRoomsDate } = useRoomsAvailabilityCheck();
-
-  let { bookingsData } = useSelector((state) => state.bookings);
-
-  const [cancelledMsg, setCancelledMsg] = useState("");
-
-  function finalPrint() {
-    const input = document.getElementById("main");
-    const width = pdf.internal.pageSize.getWidth();
-    const height = pdf.internal.pageSize.getHeight();
-    html2canvas(input, {
-      allowTaint: true,
-      useCORS: true,
-    }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: [width, height],
-      });
-      pdf.addImage(imgData, "JPEG", 0, 0, width, height);
-      //   pdf.output("dataurlnewwindow");
-      pdf.save(`WillTripBooking.pdf`);
-    });
-  }
+  const { putBookedRoomsDate } = useRoomsAvailabilityCheck();
 
   const handleNotification = () => {
-    const { transaction_data: bookingOptions } = transactionsDetails || {};
+    const { transaction_data: bookingOptions } =
+      state.transactionsDetails || {};
 
     const roomNumbers =
       bookingOptions?.bookedRoomsOption?.map((option) => option.roomNumber) ||
@@ -75,11 +53,11 @@ const TransactionsPage = () => {
       bookedAt: new Date(),
     };
 
-    socket.emit("sendNotification", notificationData);
+    socket?.emit("sendNotification", notificationData);
   };
 
   const getTransactions = async () => {
-    setLoadingState(true);
+    setState({ ...state, loading: true });
     try {
       const res = await axios.get(
         `${WILL_TRIP_BASE_URL}/transactions/payment-callback/${searchParams.get(
@@ -87,36 +65,31 @@ const TransactionsPage = () => {
         )}/${searchParams.get("tx_ref")}/${searchParams.get("transaction_id")}`
       );
       if (res?.data?.status === "success") {
-        setLoadingState(false);
-        setTransactionsDetails(res?.data);
+        setState({ ...state, loading: false, transactionsDetails: res?.data });
         clearAllCartItems(user);
         putBookedRoomsDate();
         // handleNotification();
       }
     } catch (error) {
-      setLoadingState(false);
-      setError(error.response?.data);
+      setState({ ...state, loading: false, error: error.response?.data });
     }
   };
 
   useEffect(() => {
     getTransactions();
+    // handleNotification();
+    const socketInstance = io("http://localhost:8200");
+    setSocket(socketInstance);
+
+    return () => {
+      socketInstance.disconnect();
+    };
   }, [
     searchParams.get("status"),
     searchParams.get("tx_ref"),
     searchParams.get("transaction_id"),
   ]);
 
-  useEffect(() => {
-    const socketInstance = io("http://localhost:8200");
-    setSocket(socketInstance);
-    return () => {
-      // Clean up the socket connection when the component unmounts
-      socketInstance.disconnect();
-    };
-  }, []);
-
-  // this send event to the server when a user logs in
   useEffect(() => {
     socket?.emit("newUser", user?.id);
   }, [socket, user?.id]);
@@ -129,7 +102,7 @@ const TransactionsPage = () => {
         )}`
       );
       if (res?.data?.status === "success") {
-        setCancelledMsg(res?.data?.msg);
+        setState({ ...state, cancelledMsg: res?.data?.msg });
         // setSearchParams()
         // toast.success(res?.data?.msg);
         // getTransactions();
@@ -139,39 +112,26 @@ const TransactionsPage = () => {
     }
   };
 
-  // CHECK IF HOTEL NAME IS REPEATED OR GREATER THAN ONE
-  const isHotelNameKeyValueRepeated = (hotelName, keyName, value) => {
-    const filteredArray = hotelName?.filter((item) => item[keyName] === value);
+  const isKeyValueRepeated = (array, keyName, value) => {
+    const filteredArray = array?.filter((item) => item[keyName] === value);
     return filteredArray?.length > 1;
   };
 
-  // GET THE NAMES OF THE HOTEL IN THE BASKET
-  const hotelName =
-    transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
-      (hotelName) => hotelName?.hotelName
-    )[0];
+  const { transactionsDetails, loading, cancelledMsg, error } = state;
 
-  const isHotelNameRepeated = isHotelNameKeyValueRepeated(
+  // CHECK IF HOTEL NAME IS REPEATED OR GREATER THAN ONE
+  const hotelName =
+    transactionsDetails?.transaction_data?.bookedRoomsOption?.[0]?.hotelName;
+  const isHotelNameRepeated = isKeyValueRepeated(
     transactionsDetails?.transaction_data?.bookedRoomsOption,
     "hotelName",
     hotelName
   );
 
   // CHECK IF HOTEL ADDRESS IS REPEATED OR GREATER THAN ONE
-  const isHotelAddressKeyValueRepeated = (hotelAddress, keyName, value) => {
-    const filteredArray = hotelAddress?.filter(
-      (item) => item[keyName] === value
-    );
-    return filteredArray?.length > 1;
-  };
-
-  // GET THE ADDRESS OF THE HOTEL IN THE BASKET
   const hotelAddress =
-    transactionsDetails?.transaction_data?.bookedRoomsOption?.map(
-      (hotelAddress) => hotelAddress?.hotelAddress
-    )[0];
-
-  const isHotelAddressRepeated = isHotelAddressKeyValueRepeated(
+    transactionsDetails?.transaction_data?.bookedRoomsOption?.[0]?.hotelAddress;
+  const isHotelAddressRepeated = isKeyValueRepeated(
     transactionsDetails?.transaction_data?.bookedRoomsOption,
     "hotelAddress",
     hotelAddress
@@ -190,6 +150,26 @@ const TransactionsPage = () => {
   // IF THERE ARE MORE THAN ONE CHECK-IN AND CHECK-OUT, ADD A WORD "AND" IN BETWEEN
   const formattedBookingDates =
     bookingDates?.slice(0, -1).join(", ") + " and " + bookingDates?.slice(-1);
+
+  const finalPrint = () => {
+    const input = document.getElementById("main");
+    const width = pdf.internal.pageSize.getWidth();
+    const height = pdf.internal.pageSize.getHeight();
+    html2canvas(input, {
+      allowTaint: true,
+      useCORS: true,
+    }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: [width, height],
+      });
+      pdf.addImage(imgData, "JPEG", 0, 0, width, height);
+      //   pdf.output("dataurlnewwindow");
+      pdf.save(`WillTripBooking.pdf`);
+    });
+  };
 
   if (loading) return <SearchButtonSpinner />;
   return (
